@@ -1,3 +1,6 @@
+@import url(./signin.css);
+@import url(./signup.css);
+
 * {
   margin: 0;
   padding: 0;
@@ -741,7 +744,7 @@ body {
   display: grid;
   -ms-grid-columns: auto 1fr;
   grid-template-columns: auto 1fr;
-  grid-template-areas: "image author" "image album";
+  grid-template-areas: "image author""image album";
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
@@ -762,8 +765,10 @@ body {
   justify-content: center;
   margin-right: 12px;
   -ms-grid-row: 1;
+  grid-row: 1;
   -ms-grid-row-span: 2;
   -ms-grid-column: 1;
+  grid-column: 1;
   grid-area: image;
 }
 
@@ -776,7 +781,9 @@ body {
 
 .track-play__author {
   -ms-grid-row: 1;
+  grid-row: 1;
   -ms-grid-column: 2;
+  grid-column: 2;
   grid-area: author;
   min-width: 49px;
 }
@@ -792,7 +799,9 @@ body {
 
 .track-play__album {
   -ms-grid-row: 2;
+  grid-row: 2;
   -ms-grid-column: 2;
+  grid-column: 2;
   grid-area: album;
   min-width: 49px;
 }
@@ -876,4 +885,10 @@ body {
 
 .volume__progress-line {
   width: 109px;
+}
+
+
+h1.modal__error_title {
+  color: #696969;
+  text-align: center;
 }
