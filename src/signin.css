@@ -32,7 +32,7 @@ ul li {
   src: local("StratosSkyeng"), local("StratosSkyeng"),
     url("../public/fonts/StratosSkyeng.woff2") format("woff2"),
     url("../public/fonts/StratosSkyeng.woff") format("woff");
-    /* url("../fonts/StratosSkyeng.ttf") format("truetype"); */
+  /* url("../fonts/StratosSkyeng.ttf") format("truetype"); */
   font-weight: 400;
   font-style: normal;
 }
