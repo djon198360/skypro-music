@@ -1,3 +1,5 @@
+import CreateMenuItemLi from "./MenuItem";
+
 function NavMenuLeftRender() {
   return (
     <nav className="main__nav nav">
@@ -20,14 +22,6 @@ function NavMenuLeftRender() {
   );
 }
 
-function CreateMenuItemLi(props) {
-  return (
-    <li className="menu__item">
-      <a href={props.url} className="menu__link">
-        {props.text}
-      </a>
-    </li>
-  );
-}
+
 
 export default NavMenuLeftRender;

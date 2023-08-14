@@ -5,6 +5,7 @@
 /node_modules2
 /.pnp
 .pnp.js
+*.txt
 
 # testing
 /coverage
@@ -23,3 +24,4 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 instruction.txt
+22.prettierrc.json
