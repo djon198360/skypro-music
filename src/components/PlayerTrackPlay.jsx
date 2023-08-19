@@ -1,5 +1,8 @@
+
+
 function TrackPlayRender(props) {
     return (
+      
         <div className="player__track-play track-play">
               <div className="track-play__contain">
                 <div className="track-play__image">
@@ -25,7 +28,7 @@ function TrackPlayRender(props) {
                 <Dislike />
 
               </div>
-            </div>
+            </div> 
     );
 }
 

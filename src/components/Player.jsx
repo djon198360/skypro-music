@@ -1,6 +1,8 @@
 import TrackPlayRender from "./PlayerTrackPlay";
 
-function PlayerRender() {
+import { SkeletonTrackPlayRender } from "./Skeleton";
+
+function PlayerRender(loading) {
   return (
     <div className="bar">
       <div className="bar__content">
@@ -34,8 +36,8 @@ function PlayerRender() {
                 </svg>
               </div>
             </div>
-
-            <TrackPlayRender author_link="http://" author_text= "Ты та..." album_link="http://" album_text="Баста" />
+            {loading.children[1] ? <SkeletonTrackPlayRender /> :<TrackPlayRender author_link="http://" author_text= "Ты та..." album_link="http://" album_text="Баста" />}
+            
 
           </div>
           <div className="bar__volume-block volume">
