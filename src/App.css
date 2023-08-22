@@ -313,6 +313,20 @@ body {
   margin-right: 10px;
 }
 
+.filter__popap {
+  color:#d3d3d3;
+  /* visibility: hidden; */
+  display: inline-flex;
+  padding: 34px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 12px;
+  background: #313131;
+  width: auto;
+  height: auto;
+}
+
 .content__title {
   display: -webkit-box;
   display: -ms-flexbox;
