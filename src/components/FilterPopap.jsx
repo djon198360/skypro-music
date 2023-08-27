@@ -1,11 +1,14 @@
+
 import { dataArray } from "./data";
 
-function FilterPopapRender(props) {
-const filters = props.filter;
+function FilterPopapRender(event) {
+ 
+  const filters = event.event;
+
   switch (filters) {
     case "author":
       return (
-        <div>
+        <div className="filter__popap_item">
           {dataArray.map(({ author,id }) => (
             <div key={id} className="filter__popap__content">
               <a className="filter__popap_a"  href="http://">
@@ -19,7 +22,7 @@ const filters = props.filter;
 
     case "genre":
       return (
-        <div>
+        <div className="filter__popap_item">
           {dataArray.map(({ genre, id }) => (
             <div key={id} className="filter__popap__content">
               <a key={id} className="filter__popap_a" href="http://">
@@ -33,15 +36,25 @@ const filters = props.filter;
 
     case "year":
       return (
-        <div>
-          {dataArray.map((year) => (
-            <div key={year.id} className="filter__popap__content">
+        <div className="filter__popap_item">
+         
+            <div className="filter__popap__content">
+            <a className="filter__popap_a" href="http://">
+          По умолчанию
+
+              </a></div>
+              <div className="filter__popap__content">
               <a className="filter__popap_a" href="http://">
-                {year.release_date}
+          Сначала новые
+
+              </a></div>
+              <div className="filter__popap__content">
+              <a className="filter__popap_a" href="http://">
+          Сначала старые
 
               </a>
             </div>
-          ))}
+         
         </div>
       );
       

@@ -1,82 +1,65 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import FilterPopapRender from "./FilterPopap";
 
+
 function FilterRender(props) {
-  const [author, setStateAuthor] = useState(false);
-  const [year, setStateYear] = useState(false);
-  const [genre, setStateGenre] = useState(false);
 
-  useEffect(() => {}, [author, year, genre]);
+const [author,setAuthor] = useState(false);
+const [year,setYear] = useState(false);
+const [genre,setGenre] = useState(false);
 
-  function Popap(event) {
-    const filterShowHide = event.target.dataset.name;
-    if (filterShowHide === "author") {
-      if (author) {
-        setStateAuthor(false);
-      } else {
 
-        setStateAuthor(true);
-        setStateGenre(false);
-        setStateYear(false);
-       
-      }
-
-    }
-    if (filterShowHide === "year") {
-      if (year) {
-        setStateYear(false);
-      } else {
-        setStateYear(true);
-        setStateAuthor(false);
-        setStateGenre(false);
-    
-      }
-    }
-    if (filterShowHide === "genre") {
-      setStateGenre((prev) => prev);
-      setStateYear(false);
-      setStateAuthor(false);
-    }
+const handle = (event) => {
+  const popapName= event.target.dataset.name;
+  if (popapName === "author" && author === false) {
+   
+    setAuthor((prev) => !prev); setGenre(false);setYear(false);
   }
-  console.log(`author ${author}`);
-  console.log(`year ${year}`);
-  console.log(`genre ${genre}`);
+   else {setAuthor(false);}
+  if(popapName === "year" && year === false)  {
+    setYear((prev) => !prev); setGenre(false);setAuthor(false);} 
+    else {setYear(false)}
+  if(popapName === "genre" && genre === false) {
+    setGenre((prev) => !prev);setYear(false);setAuthor(false);} 
+    else {setGenre(false)}
+}
+
+/* useEffect(() => {
+
+  console.log("Huki")
+     setAuthor(author)
+     setYear(year)
+     setGenre(genre)
+   
+   
+ console.log(`${author} автор`)
+ console.log(`${year} год`)
+ console.log(`${genre} жанр`)
+ }, [author,year,genre]); */
+
   return (
     <div className="filter__block">
       <input
         id={props.class}
         className={`filter__${props.class}`}
         type="radio"
-        data-name={props.name}
         name="filter"
-        value={props.name.isChecked}
+        value={props.name}
       />
       <label
         data-name={props.name}
-        onClick={Popap}
+        onClick={handle}
         htmlFor={props.class}
         aria-hidden="true"
         className={`filter__button button-${props.class} _btn-text`}
       >
         {props.title}
+        {author}{year}{genre}
       </label>
-      {author && !genre && !year && (
-        <div className={`filter__popap popap_${author}`}>
-          <FilterPopapRender filter={props.class} />
-        </div>
-      )}
-      {genre && !author && !genre && (
-        <div className="filter__popap">
-          <FilterPopapRender filter={props.class} />
-        </div>
-      )}
-      {year && (
-        <div className="filter__popap">
-          <FilterPopapRender filter={props.class} />
-        </div>
-      )}
+    
+{author ? <div className={`${author ? 'filter__popap' :'filter__author'}`}><FilterPopapRender event={props.name} state={author}/></div> :null}
+{year ? <div className={`${year ? 'filter__popap' :'filter__author'}`}><FilterPopapRender event={props.name} state={year}/></div>:null}
+{genre ? <div className="filter__popap"><FilterPopapRender event={props.name} state={genre}/></div> :null}
     </div>
   );
 }
