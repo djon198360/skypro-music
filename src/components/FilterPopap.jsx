@@ -1,10 +1,9 @@
-/* eslint-disable prefer-destructuring */
+
 import { dataArray } from "./data";
 
 
-
-
 function FilterPopapRender(props) {
+
   switch (props.filter) {
     case "author":
       return (
@@ -23,7 +22,7 @@ function FilterPopapRender(props) {
     case "genre":
       return (
         <div>
-          {[...new Set(dataArray)].map(({ genre, id }) => (
+          {dataArray.map(({ genre, id }) => (
             <div key={id} className="filter__popap__content">
               <a key={id} className="filter__popap_a" href="http://">
                 {genre}
