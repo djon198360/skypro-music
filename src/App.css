@@ -338,7 +338,13 @@ body {
   width: auto;
   height: 188px;
 }
+.popap_true{
+  visibility: visible;
 
+}
+.popap_false{
+  visibility: hidden;
+}
 .content__title {
   display: -webkit-box;
   display: -ms-flexbox;

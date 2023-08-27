@@ -1,16 +1,14 @@
-
 import { dataArray } from "./data";
 
-
 function FilterPopapRender(props) {
-
-  switch (props.filter) {
+const filters = props.filter;
+  switch (filters) {
     case "author":
       return (
         <div>
           {dataArray.map(({ author,id }) => (
             <div key={id} className="filter__popap__content">
-              <a className="filter__popap_a" href="http://">
+              <a className="filter__popap_a"  href="http://">
               {author}
               </a>
             </div>
