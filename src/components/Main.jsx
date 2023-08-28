@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState, useEffect } from "react";
+import { useState, useEffect ,StrictMode} from "react";
 import NavMenuLeftRender from "./NavLeft";
 import SearchFormRender from "./SearchForm";
 import TrackFilterRender from "./TrackFilter";
@@ -32,7 +32,7 @@ function MainPageRender() {
         <div className="main__centerblock centerblock">
           <SearchFormRender />
           <h2 className="centerblock__h2">Треки</h2>
-          <TrackFilterRender />
+          <StrictMode><TrackFilterRender /></StrictMode>
           <div className="centerblock__content">
             <TrackDescriptionCaptionRender />
             {

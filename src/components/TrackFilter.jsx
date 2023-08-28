@@ -1,13 +1,13 @@
+import { StrictMode } from "react";
 import FilterRender from "./FilterRender";
 
+
 function TrackFilterRender() {
-  return (
+  return (<StrictMode>
     <div className="centerblock__filter filter">
       <div className="filter__title">Искать по:</div>
-      <FilterRender title="исполнителю" name="author" class="author" />
-      <FilterRender title="году выпуска" name="year" class="year" />
-      <FilterRender title="жанру" name="genre" class="genre" />
+       <FilterRender />
     </div>
-  );
+    </StrictMode> );
 }
 export default TrackFilterRender;

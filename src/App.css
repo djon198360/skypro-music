@@ -62,7 +62,7 @@ body {
   background-color: #181818;
 }
 
-._btn-text:hover {
+._btn-text:hover,.filter__popap_a:hover {
   border-color: #d9b6ff;
   color: #d9b6ff;
   cursor: pointer;
@@ -74,7 +74,7 @@ body {
   cursor: pointer;
 }
 
-._btn-text:active {
+._btn-text:active,._btn-text.active {
   border-color: #ad61ff;
   color: #ad61ff;
   cursor: pointer;
@@ -292,10 +292,11 @@ body {
 }
 .filter__block {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+}
+.filter__items {
+  position: relative;
 }
 .filter__title {
   font-style: normal;
@@ -325,7 +326,7 @@ body {
 .filter__author:checked+label,.filter__genre:checked+label,.filter__year:checked+label{
   background-color: #ad61ff;
 }
-
+.checked{background-color: #ad61ff;}
 .filter__button:not(:last-child) {
   margin-right: 10px;
 }
@@ -340,7 +341,9 @@ body {
   background-color: #d3d3d3;
   border-radius: 3px 0 3px 0;
 }
+
 .filter__popap {
+  position: absolute;
   color: #d3d3d3;
   display: inline-flex;
   flex-direction: column;
@@ -353,23 +356,24 @@ body {
   
 }
 .filter__popap_item{
+  width: 100%;
   display: flex;
-  justify-content: center;
   gap: 24px;
   scrollbar-color: #4B4949;
   scrollbar-width: 4px;
   overflow: auto;
-  height: 188px;
+  height: auto;
+    max-height: 240px;
   flex-direction: column;
   align-items: flex-start;
 }
-
-.popap_true{
-  visibility: visible;
-
-}
-.popap_false{
-  visibility: hidden;
+.filter__popap_a {
+  color: #FFF;
+  font-family: StratosSkyeng;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
 }
 .content__title {
   display: -webkit-box;
