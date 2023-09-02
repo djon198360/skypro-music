@@ -50,7 +50,6 @@ body {
 .wrapper {
   width: 100%;
   min-height: 100%;
-  /* overflow: hidden; */
   background-color: #383838;
 }
 
@@ -643,7 +642,7 @@ body {
 }
 
 .bar {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;

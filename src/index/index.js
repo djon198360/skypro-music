@@ -1,10 +1,7 @@
-import { StrictMode } from "react";
-import { createGlobalStyle } from "styled-components";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import App from "./App"
 
-const GlobalStyle = createGlobalStyle`
+import  {createGlobalStyle}  from "styled-components";
+
+const GlobalStyle = createGlobalStyle `
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -65,20 +62,4 @@ body {
   color: #ffffff;
 }
 `;
-
-
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
- 
-  <StrictMode>
-    <BrowserRouter>
-    <GlobalStyle />
-      <App />
-      
-    </BrowserRouter>
-  </StrictMode>
-
-  
-);
-
+export default GlobalStyle;
