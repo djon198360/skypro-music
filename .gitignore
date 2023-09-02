@@ -7,7 +7,7 @@
 .pnp.js
 *.txt
 /Новая папка
-
+.vscode
 # testing
 /coverage
 

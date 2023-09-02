@@ -1,6 +1,7 @@
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import * as S from "../PlayList/style"
 import * as Z from "../SideBar/style"
+import * as SS from "../PlayerTrackPlay/style"
 import "react-loading-skeleton/dist/skeleton.css";
 
 export function SkeletonTrackRender() {
@@ -64,25 +65,28 @@ export function SkeletonSideBarRender() {
 export function SkeletonTrackPlayRender() {
   return (
     <SkeletonTheme baseColor="#202020" highlightColor="#444">
-      <div className="player__track-play track-play">
-        <div className="track-play__contain">
-          <div className="track-play__image">
+          <SS.PlayerTrackPlay>
+      <SS.TrackPlayContain>
+        <SS.TrackPlayImage>
             <Skeleton height={50} width={50} />
-          </div>
-          <div className="track-play__author">
-            <a className="track-play__author-link" href="http://">
+            </SS.TrackPlayImage>
+            <SS.TrackPlayAuthor>
+          <SS.TrackPlayLink href="http://">
               <Skeleton height={24} width={50} />
-            </a>
-          </div>
-          <div className="track-play__album">
-            <a className="track-play__album-link" href="http://">
+              </SS.TrackPlayLink>
+        </SS.TrackPlayAuthor>
+        <SS.TrackPlayAlbum>
+          <SS.TrackPlayLink href="http://">
               <Skeleton height={24} width={50} />
-            </a>
-          </div>
-        </div>
+              </SS.TrackPlayLink>
+        </SS.TrackPlayAlbum>
+      </SS.TrackPlayContain>
 
-        <div className="track-play__like-dis"></div>
-      </div>
+      <SS.TrackPlayLikeDis>
+      </SS.TrackPlayLikeDis>
+
+ 
+      </SS.PlayerTrackPlay>
     </SkeletonTheme>
   );
 }
