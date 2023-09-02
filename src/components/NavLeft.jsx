@@ -1,3 +1,4 @@
+
 import CreateMenuItemLi from "./MenuItem";
 
 function NavMenuLeftRender() {
@@ -21,7 +22,6 @@ function NavMenuLeftRender() {
     </nav>
   );
 }
-
 
 
 export default NavMenuLeftRender;
