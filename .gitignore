@@ -6,6 +6,7 @@
 /.pnp
 .pnp.js
 *.txt
+*.css
 /Новая папка
 .vscode
 # testing
