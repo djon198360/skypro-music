@@ -1,3 +1,4 @@
+import { NavLink as NavLinkStandart } from "react-router-dom";
 import { styled } from "styled-components";
 
 export const ContainerSignup = styled.div`
@@ -38,9 +39,7 @@ export const ModalFormLogin = styled.form`
   }
 `;
 
-export const ModalFormLink = styled.a.attrs((props) => ({
-    "href" : props.href
-}))``;
+export const ModalFormLink = styled(NavLinkStandart)``;
 export const ModalLogo = styled.div`
   width: 140px;
   height: 21px;
@@ -127,7 +126,7 @@ justify-content: center;
 }
 `
 
-export const ModalBtnSignupLink = styled.a`
+export const ModalBtnSignupLink = styled(NavLinkStandart)`
  width: 100%;
   height: 100%;
   font-style: normal;

@@ -7,17 +7,17 @@ export function SideBarRender() {
       <S.SidebarBlock>
         <S.SidebarList>
           <SideBarBlockRender
-            href="/#"
+            to="/category/1"
             img="./img/playlist01.png"
             alt="Плелист дня"
           />
           <SideBarBlockRender
-            href="/#"
+            to="/category/2"
             img="./img/playlist02.png"
             alt="100 танцевальных хитов"
           />
           <SideBarBlockRender
-            href="/#"
+            to="/category/3"
             img="./img/playlist03.png"
             alt="Инди-заряд"
           />
@@ -42,7 +42,7 @@ export function PersonalSideBarRender({ userName }) {
 export function SideBarBlockRender(props) {
   return (
     <S.SidebarItem>
-      <S.SidebarLink href={props.href}>
+      <S.SidebarLink to={props.to}>
         <S.SidebarImg src={props.img} alt={props.alt} />
       </S.SidebarLink>
     </S.SidebarItem>

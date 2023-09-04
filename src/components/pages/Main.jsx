@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState, useEffect ,StrictMode} from "react";
+import { useState, useEffect, StrictMode } from "react";
 import NavMenuLeftRender from "../NavLeft/NavLeft";
 import SearchFormRender from "../SearchForm/SearchForm";
 import TrackFilterRender from "../TrackFilter/TrackFilter";
@@ -8,13 +8,12 @@ import PlayListItemRender from "../PlayList/PlayList";
 import { SideBarRender } from "../SideBar/SideBar";
 import PlayerRender from "../Player/Player";
 import FooterRender from "../Footer/Footer";
-import { SkeletonTrackRender, SkeletonSideBarRender } from "../Skeleton/Skeleton";
-
-import { dataArray}  from "../data";
-
-import * as S from "./Style"
-
-
+import {
+  SkeletonTrackRender,
+  SkeletonSideBarRender,
+} from "../Skeleton/Skeleton";
+import { dataArray } from "../data";
+import * as S from "./SMain";
 
 function MainPageRender() {
   const [loading, setLoading] = useState(true);
@@ -33,23 +32,32 @@ function MainPageRender() {
         <S.mainCenterblock>
           <SearchFormRender />
           <S.H2>Треки</S.H2>
-          <StrictMode><TrackFilterRender /></StrictMode>
+          <StrictMode>
+            <TrackFilterRender />
+          </StrictMode>
           <S.centerblockContent>
             <TrackDescriptionCaptionRender />
-            {
-              loading ? (
-                <SkeletonTrackRender />
-              ) : dataArray.map((list) => 
-                <PlayListItemRender key={list.id} listName={list.name} listAuthor={list.author} listAlbum={list.album} ListDuration_in_seconds={list.duration_in_seconds}/>    
-              )
-            }
+            {loading ? (
+              <SkeletonTrackRender />
+            ) : (
+              dataArray.map((list) => (
+                <PlayListItemRender
+                  key={list.id}
+                  listName={list.name}
+                  listAuthor={list.author}
+                  listAlbum={list.album}
+                  ListDuration_in_seconds={list.duration_in_seconds}
+                />
+              ))
+            )}
           </S.centerblockContent>
-          </S.mainCenterblock>
+        </S.mainCenterblock>
         {loading ? <SkeletonSideBarRender /> : <SideBarRender />}
-        </S.Main>
+      </S.Main>
       <PlayerRender> {loading}</PlayerRender>
       <FooterRender />
-      </S.Container>
+    </S.Container>
   );
 }
+
 export default MainPageRender;

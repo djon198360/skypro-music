@@ -21,9 +21,9 @@ function NavMenuLeftRender() {
       {visible && (
         <S.NavMenu>
           <S.MenuList>
-            <CreateMenuItemLi url="/#" text="Главная" />
+            <CreateMenuItemLi url="/" text="Главная" />
             <CreateMenuItemLi url="/#" text="Мой плейлист" />
-            <CreateMenuItemLi url="../signin" text="Войти" />
+            <CreateMenuItemLi url="../login" text="Войти" />
           </S.MenuList>
         </S.NavMenu>
       )}

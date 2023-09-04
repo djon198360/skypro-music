@@ -75,7 +75,6 @@ root.render(
     <BrowserRouter>
     <GlobalStyle />
       <App />
-      
     </BrowserRouter>
   </StrictMode>
 

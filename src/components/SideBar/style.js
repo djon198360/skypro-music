@@ -1,3 +1,4 @@
+import { NavLink as NavLinkStandart } from "react-router-dom";
 import { styled } from "styled-components";
 
 export const MainSidebar = styled.div`
@@ -77,7 +78,7 @@ export const SidebarItem = styled.div`
   }
 `;
 
-export const SidebarLink = styled.a`
+export const SidebarLink = styled(NavLinkStandart)`
   width: 100%;
   height: 100%;
 `;

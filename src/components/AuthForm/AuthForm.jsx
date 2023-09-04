@@ -1,5 +1,5 @@
-import * as S from "../Signup/style"
-import ContainerEnter from "../Signin/style"
+import * as S from "../pages/SSignup"
+import ContainerEnter from "../pages/SSIgnin"
 
 function AuthFormRender() {
   return (
@@ -22,10 +22,10 @@ function AuthFormRender() {
             placeholder="Пароль"
           />
 <S.ModalBtnSignupEnt type="button">
-            <S.ModalBtnSignupLink href="/">Войти</S.ModalBtnSignupLink>
+            <S.ModalBtnSignupLink href="/login">Войти</S.ModalBtnSignupLink>
           </S.ModalBtnSignupEnt>
           <S.ModalBtnSignupEnt type="button">
-            <S.ModalBtnSignupLink href="/">Зарегистрироваться</S.ModalBtnSignupLink>
+            <S.ModalBtnSignupLink href="/register">Зарегистрироваться</S.ModalBtnSignupLink>
           </S.ModalBtnSignupEnt>
         </S.ModalFormLogin>
       </S.ModalBlock>
