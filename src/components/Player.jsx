@@ -35,6 +35,7 @@ function PlayerRender() {
               </div>
             </div>
 
+
             <TrackPlayRender author_link="http://" author_text= "Ты та..." album_link="http://" album_text="Баста" />
 
           </div>
@@ -45,6 +46,7 @@ function PlayerRender() {
                   <use xlinkHref="./img/icon/sprite.svg#icon-volume"></use>
                 </svg>
               </div>
+
               <div className="volume__progress _btn">
                 <input
                   className="volume__progress-line _btn"
