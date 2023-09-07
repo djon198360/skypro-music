@@ -11,6 +11,7 @@ import {
 } from "../Skeleton/Skeleton";
 import { dataArray } from "../data";
 import * as S from "./SMain";
+import * as SS from "../SideBar/style"
 
 function CategoryPageRender() {
   const [loading, setLoading] = useState(true);
@@ -47,7 +48,7 @@ function CategoryPageRender() {
             )}
           </S.centerblockContent>
         </S.mainCenterblock>
-         {loading ? <SkeletonSideBarRender /> : <PersonalSideBarRender userName="Разработчик SkyPro" />}
+         {loading ? <SkeletonSideBarRender /> : <SS.MainSidebar><PersonalSideBarRender userName="Разработчик SkyPro" /></SS.MainSidebar>}
       </S.Main>
       <PlayerRender> {loading}</PlayerRender>
       <FooterRender />

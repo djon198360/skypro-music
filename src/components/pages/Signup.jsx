@@ -22,7 +22,7 @@ function SignupRender() {
             placeholder="Повторите пароль"
           />
           <S.ModalBtnSignupEnt type="button">
-            <S.ModalBtnSignupLink to="/register">
+            <S.ModalBtnSignupLink >
               Зарегистрироваться
             </S.ModalBtnSignupLink>
           </S.ModalBtnSignupEnt>
