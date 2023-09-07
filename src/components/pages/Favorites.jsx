@@ -1,39 +1,36 @@
-/* eslint-disable no-unused-vars */
-import { useState, useEffect, StrictMode } from "react";
+import { useState, useEffect } from "react";
 import NavMenuLeftRender from "../NavLeft/NavLeft";
 import SearchFormRender from "../SearchForm/SearchForm";
-import TrackFilterRender from "../TrackFilter/TrackFilter";
 import TrackDescriptionCaptionRender from "../TrackDescriptionCaption/TrackDescriptionCaption";
 import PlayListItemRender from "../PlayList/PlayList";
-import { SideBarRender } from "../SideBar/SideBar";
 import PlayerRender from "../Player/Player";
 import FooterRender from "../Footer/Footer";
+import { PersonalSideBarRender } from "../SideBar/SideBar";
 import {
-  SkeletonTrackRender,
-  SkeletonSideBarRender,
+  SkeletonTrackRender,SkeletonSideBarRender
 } from "../Skeleton/Skeleton";
 import { dataArray } from "../data";
 import * as S from "./SMain";
+import * as SS from "../SideBar/style"
 
-function MainPageRender({token,setToken}) {
+function FavoritesPageRender({token}) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
+    // Cancel the timer while unmounting
     return () => clearTimeout(timer);
   }, []);
-  console.log("main");
+
+  
   return (
     <S.Container>
       <S.Main>
-        <NavMenuLeftRender token={token} setToken={setToken} />
+        <NavMenuLeftRender token={token}/>
         <S.mainCenterblock>
           <SearchFormRender />
-          <S.H2>Треки</S.H2>
-          <StrictMode>
-            <TrackFilterRender />
-          </StrictMode>
+          <S.H2>Мои треки</S.H2>
           <S.centerblockContent>
             <TrackDescriptionCaptionRender />
             {loading ? (
@@ -51,7 +48,7 @@ function MainPageRender({token,setToken}) {
             )}
           </S.centerblockContent>
         </S.mainCenterblock>
-        {loading ? <SkeletonSideBarRender /> : <SideBarRender />}
+         {loading ? <SkeletonSideBarRender /> : <SS.MainSidebar><PersonalSideBarRender userName="Разработчик SkyPro" /></SS.MainSidebar>}
       </S.Main>
       <PlayerRender> {loading}</PlayerRender>
       <FooterRender />
@@ -59,4 +56,4 @@ function MainPageRender({token,setToken}) {
   );
 }
 
-  export default MainPageRender;
+export default FavoritesPageRender;
