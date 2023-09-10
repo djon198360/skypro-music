@@ -5,7 +5,7 @@ function SignupRender() {
     <S.ContainerSignup>
       <S.ModalBlock>
         <S.ModalFormLogin>
-          <S.ModalFormLink to="../">
+          <S.ModalFormLink to="/">
             <S.ModalLogo>
               <S.ModalLogoImg src="../img/logo_modal.png" alt="logo" />
             </S.ModalLogo>

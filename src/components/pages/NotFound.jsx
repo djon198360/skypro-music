@@ -7,7 +7,7 @@ function NotFoundRender() {
     <ContainerEnter>
       <S.ModalBlock>
         <S.ModalFormLogin>
-          <S.ModalFormLink href="../">
+          <S.ModalFormLink to="/">
             <S.ModalLogo>
               <S.ModalLogoImg src="../img/logo_modal.png" alt="logo" />
             </S.ModalLogo>
@@ -15,7 +15,7 @@ function NotFoundRender() {
 
           <ModalErrorTitle>Такой страницы нет</ModalErrorTitle>
           <S.ModalBtnSignupEnt type="button">
-            <S.ModalBtnSignupLink href="/">
+            <S.ModalBtnSignupLink to="/">
               Перейти на главную
             </S.ModalBtnSignupLink>
           </S.ModalBtnSignupEnt>

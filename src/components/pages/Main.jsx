@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState, useEffect, StrictMode } from "react";
+import { useState, useEffect, StrictMode, useContext } from "react";
 import NavMenuLeftRender from "../NavLeft/NavLeft";
 import SearchFormRender from "../SearchForm/SearchForm";
 import TrackFilterRender from "../TrackFilter/TrackFilter";
@@ -14,8 +14,10 @@ import {
 } from "../Skeleton/Skeleton";
 import { dataArray } from "../data";
 import * as S from "./SMain";
+import Context from "../AuthForm/AuthForm";
 
-function MainPageRender({token,setToken}) {
+function MainPageRender() {
+
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -23,11 +25,11 @@ function MainPageRender({token,setToken}) {
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
-  console.log("main");
+
   return (
     <S.Container>
       <S.Main>
-        <NavMenuLeftRender token={token} setToken={setToken} />
+        <NavMenuLeftRender />
         <S.mainCenterblock>
           <SearchFormRender />
           <S.H2>Треки</S.H2>

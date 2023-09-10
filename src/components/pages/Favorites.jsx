@@ -13,7 +13,7 @@ import { dataArray } from "../data";
 import * as S from "./SMain";
 import * as SS from "../SideBar/style"
 
-function FavoritesPageRender({token}) {
+function FavoritesPageRender() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -27,7 +27,7 @@ function FavoritesPageRender({token}) {
   return (
     <S.Container>
       <S.Main>
-        <NavMenuLeftRender token={token}/>
+        <NavMenuLeftRender />
         <S.mainCenterblock>
           <SearchFormRender />
           <S.H2>Мои треки</S.H2>

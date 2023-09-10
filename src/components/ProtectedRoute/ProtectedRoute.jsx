@@ -1,13 +1,16 @@
 /* eslint-disable react/jsx-boolean-value */
 /* eslint-disable react/function-component-definition */
-import { Navigate, Outlet } from "react-router-dom";
+// , Outlet
+import { Navigate, Outlet} from "react-router-dom";
 
-const ProtectedRoute = ({ redirectPath = "register", isAllowed }) => {
+const ProtectedRoute = ({ redirectPath = "login", isAllowed }) => {
+ // const location = useLocation();
+ // const from = location.state?.from?.pathname || '/'; 
   if (!isAllowed) {
     return <Navigate to={redirectPath} replace={true} />;
   }
 
-  return <Outlet />;
+  return  <Outlet />;
 };
 
 export default ProtectedRoute;

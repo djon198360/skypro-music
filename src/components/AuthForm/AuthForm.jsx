@@ -1,11 +1,16 @@
+import { createContext } from "react";
 
-const Logaut = () => {
-  localStorage.removeItem("user");
-  /* const [token, setToken] = useState(user);
-  setToken(user);
-  console.log(`del ${token}`); */
+
+export const Context = createContext(false);
+
+export const Login = () => {
+  localStorage.setItem("user", "test");
+  const user = localStorage.getItem("user")
   
-}; 
+  return user;
+};
+export const Logaut = () => {
+  localStorage.removeItem("user");
+};
 
-
-export default Logaut;
+export default Context;

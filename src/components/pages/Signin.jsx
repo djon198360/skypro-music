@@ -1,12 +1,28 @@
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import * as S from "./SSignup";
 import ContainerEnter from "./SSIgnin";
+import { Context, Login } from "../AuthForm/AuthForm";
 
 function SigninRender() {
+  const [token, setToken] = useContext(Context);
+
+  const navigate = useNavigate();
+  const Authentication = (tokens) => {
+    setToken(tokens);
+
+    if (!token) {
+      navigate("/register", { replace: true });
+    } else {
+      navigate("/", { replace: true });
+    }
+  };
+
   return (
     <ContainerEnter>
       <S.ModalBlock>
         <S.ModalFormLogin>
-          <S.ModalFormLink to="../">
+          <S.ModalFormLink to="/">
             <S.ModalLogo>
               <S.ModalLogoImg src="../img/logo_modal.png" alt="logo" />
             </S.ModalLogo>
@@ -18,7 +34,13 @@ function SigninRender() {
             placeholder="Пароль"
           />
           <S.ModalBtnSignupEnt type="button">
-            <S.ModalBtnSignupLink to="/login">Войти</S.ModalBtnSignupLink>
+            <S.ModalBtnSignupLink
+              onClick={() => {
+                Authentication(Login());
+              }}
+            >
+              Войти
+            </S.ModalBtnSignupLink>
           </S.ModalBtnSignupEnt>
           <S.ModalBtnSignupEnt type="button">
             <S.ModalBtnSignupLink to="/register">
