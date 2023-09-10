@@ -12,7 +12,7 @@ function TrackPlayRender(props) {
             $fill="transparent"
             $stroke="#4e4e4e"
           >
-            <S.Use xlinkHref="./img/icon/sprite.svg#icon-note" />
+            <S.Use xlinkHref="../img/icon/sprite.svg#icon-note" />
           </S.TrackPlaySvg>
         </S.TrackPlayImage>
         <S.TrackPlayAuthor>
@@ -45,7 +45,7 @@ function Dislike() {
         $stroke="#696969"
         alt="dislike"
       >
-        <S.Use xlinkHref="./img/icon/sprite.svg#icon-dislike" />
+        <S.Use xlinkHref="../img/icon/sprite.svg#icon-dislike" />
       </S.TrackPlaySvg>
     </S.TrackPlayDis>
   );
@@ -61,7 +61,7 @@ function Like() {
         $stroke="#696969"
         alt="dislike"
       >
-        <S.Use xlinkHref="./img/icon/sprite.svg#icon-like" />
+        <S.Use xlinkHref="../img/icon/sprite.svg#icon-like" />
       </S.TrackPlaySvg>
     </S.TrackPlayLike>
   );

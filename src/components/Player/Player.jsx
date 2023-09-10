@@ -17,7 +17,7 @@ function PlayerRender(loading) {
                   $fill="#d9d9d9"
                   alt="prev"
                 >
-                  <S.Use xlinkHref="./img/icon/sprite.svg#icon-prev" />
+                  <S.Use xlinkHref="../img/icon/sprite.svg#icon-prev" />
                 </S.PlayerBtnSvg>
               </S.PlayerControlsBtnPrev>
               <S.PlayerControlsBtnPlay>
@@ -27,7 +27,7 @@ function PlayerRender(loading) {
                   $fill="#d9d9d9"
                   alt="play"
                 >
-                  <S.Use xlinkHref="./img/icon/sprite.svg#icon-play" />
+                  <S.Use xlinkHref="../img/icon/sprite.svg#icon-play" />
                 </S.PlayerBtnSvg>
               </S.PlayerControlsBtnPlay>
               <S.PlayerControlsBtnNext>
@@ -37,7 +37,7 @@ function PlayerRender(loading) {
                   $fill="#d9d9d9"
                   alt="next"
                 >
-                  <S.Use xlinkHref="./img/icon/sprite.svg#icon-next" />
+                  <S.Use xlinkHref="../img/icon/sprite.svg#icon-next" />
                 </S.PlayerBtnSvg>
               </S.PlayerControlsBtnNext>
               <S.PlayerControlsBtnRepeat>
@@ -48,7 +48,7 @@ function PlayerRender(loading) {
                   $stroke="#696969"
                   alt="repeat"
                 >
-                  <S.Use xlinkHref="./img/icon/sprite.svg#icon-repeat" />
+                  <S.Use xlinkHref="../img/icon/sprite.svg#icon-repeat" />
                 </S.PlayerBtnSvg>
               </S.PlayerControlsBtnRepeat>
               <S.PlayerControlsBtnShuffle>
@@ -59,7 +59,7 @@ function PlayerRender(loading) {
                   $stroke="#696969"
                   alt="shuffle"
                 >
-                  <S.Use xlinkHref="./img/icon/sprite.svg#icon-shuffle" />
+                  <S.Use xlinkHref="../img/icon/sprite.svg#icon-shuffle" />
                 </S.PlayerBtnSvg>
               </S.PlayerControlsBtnShuffle>
             </S.PlayerControls>
@@ -83,7 +83,7 @@ function PlayerRender(loading) {
                   $fill="transparent"
                   alt="volume"
                 >
-                  <S.Use xlinkHref="./img/icon/sprite.svg#icon-volume" />
+                  <S.Use xlinkHref="../img/icon/sprite.svg#icon-volume" />
                 </S.PlayerBtnSvg>
               </S.VolumeImage>
               <S.VolumeProgress>
