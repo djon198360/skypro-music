@@ -18,7 +18,7 @@ const playlist = props.props;
         <S.TrackTitle>
           <S.TrackTitleImage>
             <S.TrackTitleSvg alt="music">
-              <S.Use xlinkHref="./img/icon/sprite.svg#icon-note"/>
+              <S.Use xlinkHref="../img/icon/sprite.svg#icon-note"/>
             </S.TrackTitleSvg>
           </S.TrackTitleImage>
           <S.TrackTitleText>

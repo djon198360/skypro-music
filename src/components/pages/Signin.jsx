@@ -8,14 +8,9 @@ function SigninRender() {
   const [token, setToken] = useContext(Context);
 
   const navigate = useNavigate();
-  const Authentication = (tokens) => {
-    setToken(tokens);
-
-    if (!token) {
-      navigate("/register", { replace: true });
-    } else {
-      navigate("/", { replace: true });
-    }
+  const Authentication = (user) => {
+    setToken(user);
+    return token;
   };
 
   return (
@@ -27,25 +22,34 @@ function SigninRender() {
               <S.ModalLogoImg src="../img/logo_modal.png" alt="logo" />
             </S.ModalLogo>
           </S.ModalFormLink>
-          <S.ModalInputLogin type="text" name="login" placeholder="Почта" />
+          <S.ModalInputLogin type="text" name="login" placeholder="Почта" autoComplete="username" />
           <S.ModalInputPasswordFirst
             type="password"
             name="password"
             placeholder="Пароль"
+            autoComplete="current-password"
           />
-          <S.ModalBtnSignupEnt type="button">
-            <S.ModalBtnSignupLink
+          <S.ModalBtnSignupEnt
+            type="button"
+            onClick={() => {
+              Authentication(Login());
+              navigate("/", { replace: true });
+            }}
+          //  to="/"
+          >
+            Войти
+            {/* <S.ModalBtnSignupLink
               onClick={() => {
-                Authentication(Login());
-              }}
+                Authentication(Login()); navigate("/", { replace: true });
+              }} to="/" 
             >
               Войти
-            </S.ModalBtnSignupLink>
+            </S.ModalBtnSignupLink> */}
           </S.ModalBtnSignupEnt>
-          <S.ModalBtnSignupEnt type="button">
-            <S.ModalBtnSignupLink to="/register">
+          <S.ModalBtnSignupEnt type="button" >
+                   <S.ModalBtnSignupLink to="/register">
               Зарегистрироваться
-            </S.ModalBtnSignupLink>
+            </S.ModalBtnSignupLink> 
           </S.ModalBtnSignupEnt>
         </S.ModalFormLogin>
       </S.ModalBlock>
