@@ -43,7 +43,7 @@ export const SidebarPersonal = styled.div`
   flex-direction: row;
   -webkit-box-align: center;
   -ms-flex-align: center;
-  align-items: center;
+  // align-items: center;
   -webkit-box-pack: end;
   -ms-flex-pack: end;
   justify-content: flex-end;
