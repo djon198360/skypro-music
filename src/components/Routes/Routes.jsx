@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, useContext } from "react";
 import { Routes, Route } from "react-router-dom";
 import MainPageRender from "../pages/Main";
 import SignupRender from "../pages/Signup";
@@ -7,20 +7,21 @@ import NotFoundRender from "../pages/NotFound";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import CategoryPageRender from "../pages/Category";
 import FavoritesPageRender from "../pages/Favorites";
+import Context from "../AuthForm/AuthForm";
 
-function AppRoutes({ token, setToken }) {
-  console.log("route");
+function AppRoutes() {
+  const [token] = useContext(Context); 
   return (
     <StrictMode>
       <Routes>
-        <Route path="/login" element={<SigninRender setToken={setToken} />} />
+        <Route path="/login" element={<SigninRender />} />
         <Route path="/register" element={<SignupRender />} />
         <Route path="*" element={<NotFoundRender />} />
-        {/* Если авторизован то пускать */}
-        <Route element={<ProtectedRoute isAllowed={Boolean(token)} />}>
-          <Route path="/" element={<MainPageRender token={token} />} />
-          <Route path="/favorites" element={<FavoritesPageRender token={token}/>} />
-          <Route path="/category/:id" element={<CategoryPageRender token={token}/>} />
+       
+        <Route element={<ProtectedRoute isAllowed={Boolean(token)} />}> {/* Если токен есть */}
+          <Route path="/" element={<MainPageRender />} />
+          <Route path="/favorites" element={<FavoritesPageRender />} />
+          <Route path="/category/:id" element={<CategoryPageRender />} />
         </Route>
       </Routes>
     </StrictMode>

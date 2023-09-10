@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import {useLocation } from "react-router";
 import NavMenuLeftRender from "../NavLeft/NavLeft";
 import SearchFormRender from "../SearchForm/SearchForm";
 import TrackDescriptionCaptionRender from "../TrackDescriptionCaption/TrackDescriptionCaption";
@@ -7,30 +8,32 @@ import PlayerRender from "../Player/Player";
 import FooterRender from "../Footer/Footer";
 import { PersonalSideBarRender } from "../SideBar/SideBar";
 import {
-  SkeletonTrackRender,SkeletonSideBarRender
+  SkeletonTrackRender,
+  SkeletonSideBarRender,
 } from "../Skeleton/Skeleton";
 import { dataArray } from "../data";
 import * as S from "./SMain";
-import * as SS from "../SideBar/style"
+import * as SS from "../SideBar/style";
 
 function CategoryPageRender() {
   const [loading, setLoading] = useState(true);
+  const location = useLocation()
+ 
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
-    // Cancel the timer while unmounting
     return () => clearTimeout(timer);
   }, []);
 
-  
+
   return (
     <S.Container>
       <S.Main>
         <NavMenuLeftRender />
         <S.mainCenterblock>
           <SearchFormRender />
-          <S.H2>Треки</S.H2>
+          <S.H2>{location.state}</S.H2>
           <S.centerblockContent>
             <TrackDescriptionCaptionRender />
             {loading ? (
@@ -48,7 +51,13 @@ function CategoryPageRender() {
             )}
           </S.centerblockContent>
         </S.mainCenterblock>
-         {loading ? <SkeletonSideBarRender /> : <SS.MainSidebar><PersonalSideBarRender userName="Разработчик SkyPro" /></SS.MainSidebar>}
+        {loading ? (
+          <SkeletonSideBarRender />
+        ) : (
+          <SS.MainSidebar>
+            <PersonalSideBarRender userName="Разработчик SkyPro" />
+          </SS.MainSidebar>
+        )}
       </S.Main>
       <PlayerRender> {loading}</PlayerRender>
       <FooterRender />
