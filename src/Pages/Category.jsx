@@ -1,24 +1,24 @@
-/* eslint-disable no-unused-vars */
-import { useState, useEffect, StrictMode, useContext } from "react";
-import NavMenuLeftRender from "../NavLeft/NavLeft";
-import SearchFormRender from "../SearchForm/SearchForm";
-import TrackFilterRender from "../TrackFilter/TrackFilter";
-import TrackDescriptionCaptionRender from "../TrackDescriptionCaption/TrackDescriptionCaption";
-import PlayListItemRender from "../PlayList/PlayList";
-import { SideBarRender } from "../SideBar/SideBar";
-import PlayerRender from "../Player/Player";
-import FooterRender from "../Footer/Footer";
+import { useState, useEffect } from "react";
+import {useLocation } from "react-router";
+import NavMenuLeftRender from  "../components/NavLeft/NavLeft" // "../NavLeft/NavLeft";
+import SearchFormRender from "../components/SearchForm/SearchForm";
+import TrackDescriptionCaptionRender from "../components/TrackDescriptionCaption/TrackDescriptionCaption";
+import PlayListItemRender from "../components/PlayList/PlayList";
+import PlayerRender from "../components/Player/Player";
+import FooterRender from "../components/Footer/Footer";
+import { PersonalSideBarRender } from "../components/SideBar/SideBar";
 import {
   SkeletonTrackRender,
   SkeletonSideBarRender,
-} from "../Skeleton/Skeleton";
-import { dataArray } from "../data";
+} from "../components/Skeleton/Skeleton";
+import { dataArray } from "../components/data";
 import * as S from "./SMain";
-import Context from "../AuthForm/AuthForm";
+import * as SS from "../components/SideBar/style";
 
-function MainPageRender() {
-
+function CategoryPageRender() {
   const [loading, setLoading] = useState(true);
+  const location = useLocation()
+ 
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -26,16 +26,14 @@ function MainPageRender() {
     return () => clearTimeout(timer);
   }, []);
 
+
   return (
     <S.Container>
       <S.Main>
         <NavMenuLeftRender />
         <S.mainCenterblock>
           <SearchFormRender />
-          <S.H2>Треки</S.H2>
-          <StrictMode>
-            <TrackFilterRender />
-          </StrictMode>
+          <S.H2>{location.state}</S.H2>
           <S.centerblockContent>
             <TrackDescriptionCaptionRender />
             {loading ? (
@@ -53,7 +51,13 @@ function MainPageRender() {
             )}
           </S.centerblockContent>
         </S.mainCenterblock>
-        {loading ? <SkeletonSideBarRender /> : <SideBarRender />}
+        {loading ? (
+          <SkeletonSideBarRender />
+        ) : (
+          <SS.MainSidebar>
+            <PersonalSideBarRender userName="Разработчик SkyPro" />
+          </SS.MainSidebar>
+        )}
       </S.Main>
       <PlayerRender> {loading}</PlayerRender>
       <FooterRender />
@@ -61,4 +65,4 @@ function MainPageRender() {
   );
 }
 
-  export default MainPageRender;
+export default CategoryPageRender;

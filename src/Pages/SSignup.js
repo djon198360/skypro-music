@@ -100,7 +100,9 @@ export const ModalInputPasswordFirst = styled(ModalInput)``;
 export const ModalInputPasswordDouble = styled(ModalInput)``;
 export const ModalBtnSignupEnt = styled.button.attrs((props) => ({
   type: props.type,
+  
 }))`
+height: 62px;
   background-color: #580ea2;
   border-radius: 6px;
   margin-left: 4px;
@@ -116,7 +118,7 @@ export const ModalBtnSignupEnt = styled.button.attrs((props) => ({
   -ms-flex-pack: center;
   justify-content: center;
   width: 100%;
-  height: 100%;
+ 
   font-style: normal;
   font-weight: 400;
   font-size: 18px;

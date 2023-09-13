@@ -22,7 +22,10 @@ const playlist = props.props;
             </S.TrackTitleSvg>
           </S.TrackTitleImage>
           <S.TrackTitleText>
-            <S.TrackTitleLink href="http://">
+            <S.TrackTitleLink  onClick={() => {
+                  playlist.setCurrentTrack({url:playlist.listUrl,author:playlist.listAuthor,name:playlist.listName})
+                  
+                }} >
               {playlist.listName}
               <S.TrackTitleSpan />
             </S.TrackTitleLink>

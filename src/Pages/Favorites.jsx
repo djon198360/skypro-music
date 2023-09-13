@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
-import NavMenuLeftRender from "../NavLeft/NavLeft";
-import SearchFormRender from "../SearchForm/SearchForm";
-import TrackDescriptionCaptionRender from "../TrackDescriptionCaption/TrackDescriptionCaption";
-import PlayListItemRender from "../PlayList/PlayList";
-import PlayerRender from "../Player/Player";
-import FooterRender from "../Footer/Footer";
-import { PersonalSideBarRender } from "../SideBar/SideBar";
+import NavMenuLeftRender from "../components/NavLeft/NavLeft";
+import SearchFormRender from "../components/SearchForm/SearchForm";
+import TrackDescriptionCaptionRender from "../components/TrackDescriptionCaption/TrackDescriptionCaption";
+import PlayListItemRender from "../components/PlayList/PlayList";
+import PlayerRender from "../components/Player/Player";
+import FooterRender from "../components/Footer/Footer";
+import { PersonalSideBarRender } from "../components/SideBar/SideBar";
 import {
   SkeletonTrackRender,SkeletonSideBarRender
-} from "../Skeleton/Skeleton";
-import { dataArray } from "../data";
+} from "../components/Skeleton/Skeleton";
+import { dataArray } from "../components/data";
 import * as S from "./SMain";
-import * as SS from "../SideBar/style"
+import * as SS from "../components/SideBar/style"
 
 function FavoritesPageRender() {
   const [loading, setLoading] = useState(true);

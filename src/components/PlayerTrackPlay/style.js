@@ -16,7 +16,7 @@ export const TrackPlayContain = styled.div`
   display: grid;
   -ms-grid-columns: auto 1fr;
   grid-template-columns: auto 1fr;
-  grid-template-areas: "image author" "image album";
+  grid-template-areas:  "image album" "image author";
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
@@ -67,8 +67,8 @@ export const Use = styled.use.attrs((props) => ({
 }))``;
 
 export const TrackPlayAuthor = styled.div`
-  -ms-grid-row: 1;
-  grid-row: 1;
+  -ms-grid-row: 2;
+  grid-row: 2;
   -ms-grid-column: 2;
   grid-column: 2;
   grid-area: author;
@@ -87,8 +87,8 @@ export const TrackPlayLink = styled.a.attrs((props) => ({
 `;
 
 export const TrackPlayAlbum = styled.div`
-  -ms-grid-row: 2;
-  grid-row: 2;
+  -ms-grid-row: 1;
+  grid-row: 1;
   -ms-grid-column: 2;
   grid-column: 2;
   grid-area: album;

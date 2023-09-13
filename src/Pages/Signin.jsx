@@ -1,14 +1,16 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./SSignup";
 import ContainerEnter from "./SSIgnin";
-import { Context, Login } from "../AuthForm/AuthForm";
+import { Context, checkAuthData } from "../components/AuthForm/AuthForm";
 
 function SigninRender() {
   const [token, setToken] = useContext(Context);
-
+  const [login, setLogin] = useState();
+  const [pass, setPass] = useState();
   const navigate = useNavigate();
-  const Authentication = (user) => {
+
+  const onAuthSuccess = (user) => {
     setToken(user);
     return token;
   };
@@ -22,34 +24,33 @@ function SigninRender() {
               <S.ModalLogoImg src="../img/logo_modal.png" alt="logo" />
             </S.ModalLogo>
           </S.ModalFormLink>
-          <S.ModalInputLogin type="text" name="login" placeholder="Почта" autoComplete="username" />
+          <S.ModalInputLogin
+            type="text"
+            name="login"
+            placeholder="Почта"
+            autoComplete="username"
+            onChange={(event) => setLogin(event.target.value)}
+          />
           <S.ModalInputPasswordFirst
             type="password"
             name="password"
             placeholder="Пароль"
             autoComplete="current-password"
+            onChange={(event) => setPass(event.target.value)}
           />
           <S.ModalBtnSignupEnt
             type="button"
             onClick={() => {
-              Authentication(Login());
+              onAuthSuccess(checkAuthData(login, pass));
               navigate("/", { replace: true });
             }}
-          //  to="/"
           >
             Войти
-            {/* <S.ModalBtnSignupLink
-              onClick={() => {
-                Authentication(Login()); navigate("/", { replace: true });
-              }} to="/" 
-            >
-              Войти
-            </S.ModalBtnSignupLink> */}
           </S.ModalBtnSignupEnt>
-          <S.ModalBtnSignupEnt type="button" >
-                   <S.ModalBtnSignupLink to="/register">
+          <S.ModalBtnSignupEnt type="button">
+            <S.ModalBtnSignupLink to="/register">
               Зарегистрироваться
-            </S.ModalBtnSignupLink> 
+            </S.ModalBtnSignupLink>
           </S.ModalBtnSignupEnt>
         </S.ModalFormLogin>
       </S.ModalBlock>

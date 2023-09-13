@@ -2,7 +2,7 @@ import TrackPlayRender from "../PlayerTrackPlay/PlayerTrackPlay";
 import { SkeletonTrackPlayRender } from "../Skeleton/Skeleton";
 import * as S from "./style";
 
-function PlayerRender(loading) {
+function PlayerRender(props) {
   return (
     <S.Bar>
       <S.BarContent>
@@ -63,14 +63,14 @@ function PlayerRender(loading) {
                 </S.PlayerBtnSvg>
               </S.PlayerControlsBtnShuffle>
             </S.PlayerControls>
-            {loading.children[1] ? (
+            {props.loading ? (
               <SkeletonTrackPlayRender />
             ) : (
               <TrackPlayRender
+                name_link="http://"
+                name_text={props.current ? props.current.name : null}
                 author_link="http://"
-                author_text="Ты та..."
-                album_link="http://"
-                album_text="Баста"
+                author_text={props.current ? props.current.author : null}
               />
             )}
           </S.BarPlayer>
@@ -87,7 +87,7 @@ function PlayerRender(loading) {
                 </S.PlayerBtnSvg>
               </S.VolumeImage>
               <S.VolumeProgress>
-                <S.VolumeProgressLine type="range"   />
+                <S.VolumeProgressLine type="range" />
               </S.VolumeProgress>
             </S.VolumeContent>
           </S.BarVolumeBlock>

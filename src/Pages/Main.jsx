@@ -17,12 +17,12 @@ import * as S from "./SMain";
 import Context from "../components/AuthForm/AuthForm";
 
 function MainPageRender() {
-
+const [currentTrack,setCurrentTrack] = useState(null)
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-          getAllTrack().then((todos) => {console.log(todos)}) 
+         /*  getAllTrack().then((todos) => {console.log(todos)}) 
  setAllTrack(todos)
- 
+ */
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -32,7 +32,7 @@ function MainPageRender() {
   return (
     <S.Container>
       <S.Main>
-        <NavMenuLeftRender />
+        {/* <NavMenuLeftRender /> */}
         <S.mainCenterblock>
           <SearchFormRender />
           <S.H2>Треки</S.H2>
@@ -45,12 +45,15 @@ function MainPageRender() {
               <SkeletonTrackRender />
             ) : (
               dataArray.map((list) => (
-                <PlayListItemRender
+                <PlayListItemRender 
+                 setCurrentTrack = {setCurrentTrack}
                   key={list.id}
                   listName={list.name}
                   listAuthor={list.author}
                   listAlbum={list.album}
                   ListDuration_in_seconds={list.duration_in_seconds}
+                  listUrl = {list.track_file}
+                  
                 />
               ))
             )}
@@ -58,9 +61,10 @@ function MainPageRender() {
         </S.mainCenterblock>
         {loading ? <SkeletonSideBarRender /> : <SideBarRender />}
       </S.Main>
-      <PlayerRender> {loading}</PlayerRender>
+      {currentTrack ? <PlayerRender current = {currentTrack} loading={loading}> </PlayerRender>: null}
       <FooterRender />
     </S.Container>
+    
   );
 }
 
