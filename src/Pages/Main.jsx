@@ -12,27 +12,35 @@ import {
   SkeletonTrackRender,
   SkeletonSideBarRender,
 } from "../components/Skeleton/Skeleton";
-import { dataArray } from "../components/data";
 import * as S from "./SMain";
-import Context from "../components/AuthForm/AuthForm";
+import { setCurrentTrackContext } from "../components/AuthForm/AuthForm";
+import { getAllTrack } from "../Api";
 
 function MainPageRender() {
-const [currentTrack,setCurrentTrack] = useState(null)
+  const [currentTrack, setCurrentTrack] = useContext(setCurrentTrackContext);
+  const [allTrack, setAllTrack] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-         /*  getAllTrack().then((todos) => {console.log(todos)}) 
- setAllTrack(todos)
- */
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
+    getAllTrack().then((arrayTrack) => {
+      try {
+        setAllTrack(arrayTrack);
+      } catch (error) {
+        setAllTrack(error);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    //  const timer = setTimeout(() => {
+    //     setLoading(false);
+    //    }, 1000);
+    //   return () => clearTimeout(timer);
   }, []);
 
   return (
     <S.Container>
       <S.Main>
-        {/* <NavMenuLeftRender /> */}
+        <NavMenuLeftRender />
         <S.mainCenterblock>
           <SearchFormRender />
           <S.H2>Треки</S.H2>
@@ -44,16 +52,15 @@ const [currentTrack,setCurrentTrack] = useState(null)
             {loading ? (
               <SkeletonTrackRender />
             ) : (
-              dataArray.map((list) => (
-                <PlayListItemRender 
-                 setCurrentTrack = {setCurrentTrack}
+              allTrack.map((list) => (
+                <PlayListItemRender
+                  setCurrentTrack={setCurrentTrack}
                   key={list.id}
                   listName={list.name}
                   listAuthor={list.author}
                   listAlbum={list.album}
                   ListDuration_in_seconds={list.duration_in_seconds}
-                  listUrl = {list.track_file}
-                  
+                  listUrl={list.track_file}
                 />
               ))
             )}
@@ -61,11 +68,12 @@ const [currentTrack,setCurrentTrack] = useState(null)
         </S.mainCenterblock>
         {loading ? <SkeletonSideBarRender /> : <SideBarRender />}
       </S.Main>
-      {currentTrack ? <PlayerRender current = {currentTrack} loading={loading}> </PlayerRender>: null}
+      {currentTrack ? (
+        <PlayerRender current={currentTrack} loading={loading}></PlayerRender>
+      ) : null}
       <FooterRender />
     </S.Container>
-    
   );
 }
 
-  export default MainPageRender;
+export default MainPageRender;
