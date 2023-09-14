@@ -1,11 +1,12 @@
 import { createContext } from "react";
 
 export const Context = createContext(false);
-export const Loading = createContext({isLoading:true});
+export const Loading = createContext({ isLoading: true });
+export const setCurrentTrackContext = createContext({ isCurrent: false });
 
-export const checkAuthData = (login,pass) => {
+export const checkAuthData = (login, pass) => {
   localStorage.setItem("user", login);
-  localStorage.setItem("pass",pass);
+  localStorage.setItem("pass", pass);
   const user = localStorage.getItem("user");
 
   return user;

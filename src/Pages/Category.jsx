@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect ,useContext} from "react";
 import {useLocation } from "react-router";
 import NavMenuLeftRender from  "../components/NavLeft/NavLeft" // "../NavLeft/NavLeft";
 import SearchFormRender from "../components/SearchForm/SearchForm";
@@ -14,8 +14,10 @@ import {
 import { dataArray } from "../components/data";
 import * as S from "./SMain";
 import * as SS from "../components/SideBar/style";
+import { setCurrentTrackContext } from "../components/AuthForm/AuthForm";
 
 function CategoryPageRender() {
+  const [currentTrack, setCurrentTrack] = useContext(setCurrentTrackContext);
   const [loading, setLoading] = useState(true);
   const location = useLocation()
  
@@ -41,11 +43,13 @@ function CategoryPageRender() {
             ) : (
               dataArray.map((list) => (
                 <PlayListItemRender
-                  key={list.id}
-                  listName={list.name}
-                  listAuthor={list.author}
-                  listAlbum={list.album}
-                  ListDuration_in_seconds={list.duration_in_seconds}
+                setCurrentTrack={setCurrentTrack}
+                key={list.id}
+                listName={list.name}
+                listAuthor={list.author}
+                listAlbum={list.album}
+                ListDuration_in_seconds={list.duration_in_seconds}
+                listUrl={list.track_file}
                 />
               ))
             )}
@@ -59,7 +63,11 @@ function CategoryPageRender() {
           </SS.MainSidebar>
         )}
       </S.Main>
-      <PlayerRender> {loading}</PlayerRender>
+      {currentTrack ? (
+        <PlayerRender current={currentTrack} loading={loading}>
+          
+        </PlayerRender>
+      ) : null}
       <FooterRender />
     </S.Container>
   );

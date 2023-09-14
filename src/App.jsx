@@ -1,20 +1,25 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { StrictMode, useState } from "react";
 import AppRoutes from "./components/Routes/Routes";
-import Context from "./components/AuthForm/AuthForm";
+import {
+  Context,
+  setCurrentTrackContext,
+} from "./components/AuthForm/AuthForm";
 import * as S from "./StyledApp";
-import NavMenuLeftRender from "./components/NavLeft/NavLeft";
 
 export function App() {
   const user = localStorage.getItem("user");
   const [token, setToken] = useState(user);
+  const [currentTrack, setCurrentTrack] = useState(false);
   return (
     <StrictMode>
       <S.StyledWrapper>
         <Context.Provider value={[token, setToken]}>
-        <NavMenuLeftRender />
-          <AppRoutes />
-
+          <setCurrentTrackContext.Provider
+            value={[currentTrack, setCurrentTrack]}
+          >
+            <AppRoutes />
+          </setCurrentTrackContext.Provider>
         </Context.Provider>
       </S.StyledWrapper>
     </StrictMode>

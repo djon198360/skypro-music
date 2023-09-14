@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect ,useContext} from "react";
 import NavMenuLeftRender from "../components/NavLeft/NavLeft";
 import SearchFormRender from "../components/SearchForm/SearchForm";
 import TrackDescriptionCaptionRender from "../components/TrackDescriptionCaption/TrackDescriptionCaption";
@@ -12,8 +12,11 @@ import {
 import { dataArray } from "../components/data";
 import * as S from "./SMain";
 import * as SS from "../components/SideBar/style"
+import { setCurrentTrackContext } from "../components/AuthForm/AuthForm";
+
 
 function FavoritesPageRender() {
+  const [currentTrack, setCurrentTrack] = useContext(setCurrentTrackContext);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -38,11 +41,13 @@ function FavoritesPageRender() {
             ) : (
               dataArray.map((list) => (
                 <PlayListItemRender
-                  key={list.id}
-                  listName={list.name}
-                  listAuthor={list.author}
-                  listAlbum={list.album}
-                  ListDuration_in_seconds={list.duration_in_seconds}
+                setCurrentTrack={setCurrentTrack}
+                key={list.id}
+                listName={list.name}
+                listAuthor={list.author}
+                listAlbum={list.album}
+                ListDuration_in_seconds={list.duration_in_seconds}
+                listUrl={list.track_file}
                 />
               ))
             )}
@@ -50,7 +55,11 @@ function FavoritesPageRender() {
         </S.mainCenterblock>
          {loading ? <SkeletonSideBarRender /> : <SS.MainSidebar><PersonalSideBarRender userName="Разработчик SkyPro" /></SS.MainSidebar>}
       </S.Main>
-      <PlayerRender> {loading}</PlayerRender>
+      {currentTrack ? (
+        <PlayerRender current={currentTrack} loading={loading}>
+          
+        </PlayerRender>
+      ) : null}
       <FooterRender />
     </S.Container>
   );
