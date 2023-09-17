@@ -2,8 +2,11 @@
 import { useState, useEffect, StrictMode, useContext } from "react";
 import NavMenuLeftRender from "../components/NavLeft/NavLeft";
 import SearchFormRender from "../components/SearchForm/SearchForm";
+import {
+  ErrorDescriptionRender,
+  TrackDescriptionCaptionRender,
+} from "../components/TrackDescriptionCaption/TrackDescriptionCaption";
 import TrackFilterRender from "../components/TrackFilter/TrackFilter";
-import TrackDescriptionCaptionRender from "../components/TrackDescriptionCaption/TrackDescriptionCaption";
 import PlayListItemRender from "../components/PlayList/PlayList";
 import { SideBarRender } from "../components/SideBar/SideBar";
 import PlayerRender from "../components/Player/Player";
@@ -19,24 +22,32 @@ import { getAllTrack } from "../Api";
 function MainPageRender() {
   const [currentTrack, setCurrentTrack] = useContext(setCurrentTrackContext);
   const [allTrack, setAllTrack] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(null);
+  const [errorMessage, seterrorMessage] = useState(
+    `Не удалось загрузить плейлист, попробуйте позже!`
+  );
   useEffect(() => {
-    getAllTrack().then((arrayTrack) => {
-      try {
-        setAllTrack(arrayTrack);
-      } catch (error) {
-        setAllTrack(error);
-      } finally {
+    setLoading(true);
+    getAllTrack()
+      .then((arrayTrack) => {
+        if (arrayTrack.length > 1) {
+          setAllTrack(arrayTrack);
+        } else {
+          Promise.reject(arrayTrack);
+        }
+      })
+      .catch(() => {
+        seterrorMessage(`Не удалось загрузить плейлист, попробуйте позже!`);
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    });
+      });
 
     //  const timer = setTimeout(() => {
     //     setLoading(false);
     //    }, 1000);
     //   return () => clearTimeout(timer);
   }, []);
-
   return (
     <S.Container>
       <S.Main>
@@ -48,22 +59,28 @@ function MainPageRender() {
             <TrackFilterRender />
           </StrictMode>
           <S.centerblockContent>
-            <TrackDescriptionCaptionRender />
-            {loading ? (
-              <SkeletonTrackRender />
+            {errorMessage ? (
+              <ErrorDescriptionRender
+                errors={errorMessage}
+              ></ErrorDescriptionRender>
             ) : (
-              allTrack.map((list) => (
-                <PlayListItemRender
-                  setCurrentTrack={setCurrentTrack}
-                  key={list.id}
-                  listName={list.name}
-                  listAuthor={list.author}
-                  listAlbum={list.album}
-                  ListDuration_in_seconds={list.duration_in_seconds}
-                  listUrl={list.track_file}
-                />
-              ))
+              <TrackDescriptionCaptionRender />
             )}
+            {loading ? <SkeletonTrackRender /> : null}
+            {allTrack !== null
+              ? allTrack.map((list, index) => (
+                  <PlayListItemRender
+                    setCurrentTrack={setCurrentTrack}
+                    key={list.id}
+                    listKey={index}
+                    listName={list.name}
+                    listAuthor={list.author}
+                    listAlbum={list.album}
+                    ListDuration_in_seconds={list.duration_in_seconds}
+                    listUrl={list.track_file}
+                  />
+                ))
+              : null}
           </S.centerblockContent>
         </S.mainCenterblock>
         {loading ? <SkeletonSideBarRender /> : <SideBarRender />}
