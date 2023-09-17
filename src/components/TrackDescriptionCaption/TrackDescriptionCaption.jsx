@@ -1,6 +1,7 @@
 import * as S from "./style";
 
-function TrackDescriptionCaptionRender() {
+
+export function TrackDescriptionCaptionRender() {
   return (
     <S.ContentTitle>
       <S.col01>Трек</S.col01>
@@ -14,4 +15,15 @@ function TrackDescriptionCaptionRender() {
     </S.ContentTitle>
   );
 }
+// export default TrackDescriptionCaptionRender;
+
+export function ErrorDescriptionRender(errors) {
+  
+  return (
+    <S.ContentTitle>
+      {errors.errors}
+    </S.ContentTitle>
+  );
+}
+
 export default TrackDescriptionCaptionRender;
