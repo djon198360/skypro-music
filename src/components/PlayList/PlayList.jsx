@@ -26,7 +26,7 @@ const playlist = props.props;
                   playlist.setCurrentTrack({url:playlist.listUrl,author:playlist.listAuthor,name:playlist.listName})
                   
                 }} >
-              {playlist.listName}{playlist.listKey}
+              {playlist.listName}
               <S.TrackTitleSpan />
             </S.TrackTitleLink>
           </S.TrackTitleText>

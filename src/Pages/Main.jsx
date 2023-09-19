@@ -23,9 +23,7 @@ function MainPageRender() {
   const [currentTrack, setCurrentTrack] = useContext(setCurrentTrackContext);
   const [allTrack, setAllTrack] = useState(null);
   const [loading, setLoading] = useState(null);
-  const [errorMessage, seterrorMessage] = useState(
-    `Не удалось загрузить плейлист, попробуйте позже!`
-  );
+  const [errorMessage, seterrorMessage] = useState();
   useEffect(() => {
     setLoading(true);
     getAllTrack()
@@ -86,7 +84,7 @@ function MainPageRender() {
         {loading ? <SkeletonSideBarRender /> : <SideBarRender />}
       </S.Main>
       {currentTrack ? (
-        <PlayerRender current={currentTrack} loading={loading}></PlayerRender>
+        <PlayerRender current={currentTrack} toggle="false" loading={loading}></PlayerRender>
       ) : null}
       <FooterRender />
     </S.Container>
