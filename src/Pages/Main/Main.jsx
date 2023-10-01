@@ -80,7 +80,7 @@ function MainPageRender() {
         {loading ? <SkeletonSideBarRender /> : <SideBarRender />}
       </S.Main>
       {currentTrack ? (
-        <PlayerRender current={currentTrack} toggle="false" loading={loading}></PlayerRender>
+        <PlayerRender  toggle="false" loading={loading}></PlayerRender>
       ) : null}
       <FooterRender />
     </S.Container>

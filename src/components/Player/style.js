@@ -24,7 +24,7 @@ export const TimeSpan = styled.span`
 `
 export const Audio = styled.audio.attrs((props) => ({
   ref: props.ref,
-  autoplay: props.autoplay,
+/*   autoplay: props.autoplay, */
 }))`
    display:none
 `;
