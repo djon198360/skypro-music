@@ -8,9 +8,9 @@ import {
 import * as S from "./StyledApp";
 
 export function App() {
+  const userLocal = localStorage.getItem("user");
+  const [user, setUser] = useState(userLocal);
 
-   const userlocal = JSON.parse(localStorage.getItem("user")); 
- const [user, setUser] = useState( userlocal);
   const [currentTrack, setCurrentTrack] = useState(false);
   return (
     <StrictMode>
