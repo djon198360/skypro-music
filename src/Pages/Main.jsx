@@ -24,6 +24,7 @@ function MainPageRender() {
   const [allTrack, setAllTrack] = useState(null);
   const [loading, setLoading] = useState(null);
   const [errorMessage, seterrorMessage] = useState();
+ // const localUser =JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
     setLoading(true);
     getAllTrack()
@@ -40,11 +41,6 @@ function MainPageRender() {
       .finally(() => {
         setLoading(false);
       });
-
-    //  const timer = setTimeout(() => {
-    //     setLoading(false);
-    //    }, 1000);
-    //   return () => clearTimeout(timer);
   }, []);
   return (
     <S.Container>

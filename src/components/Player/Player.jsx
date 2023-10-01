@@ -33,8 +33,12 @@ function PlayerRender(props) {
   };
 
   const setStart = () => {
-    audioRef.current.play();
-    setIsPlaying(true);
+    audioRef.current.addEventListener("loadeddata", () => {
+      if (audioRef.current.readyState >= 2) {
+        audioRef.current.play();
+        setIsPlaying(true);
+      }
+    });
   };
 
   const setPause = () => {
@@ -71,6 +75,10 @@ function PlayerRender(props) {
     const volume = event.target.value;
     audioRef.current.volume = volume;
     setIsVolume(volume);
+    if (volume === "0") {
+      setIsMuted(true);
+      audioRef.current.muted = isMuted;
+    }
   };
 
   useEffect(() => {
@@ -91,29 +99,25 @@ function PlayerRender(props) {
     };
   }, [props.current.url]);
 
-const noFunct = () => {
-  alert("Ещё не реализовано")
-}
+  const noFunct = () => {
+    alert("Ещё не реализовано");
+  };
 
   return (
     <S.Bar>
       <S.Time>
-        <S.TimeSpan > {timeFormat(currentTime)}  </S.TimeSpan> <S.TimeSpan> &#x20; / &#x20;</S.TimeSpan>
+        <S.TimeSpan> {timeFormat(currentTime)} </S.TimeSpan>{" "}
+        <S.TimeSpan> &#x20; / &#x20;</S.TimeSpan>
         <S.TimeSpan> {duration ? timeFormat(duration) : "00:00"} </S.TimeSpan>
       </S.Time>
 
-      <S.Audio
-        autoPlay="autoplay"
-        src={urlmp3}
-        controls="controls"
-        ref={audioRef}
-      ></S.Audio>
+      <S.Audio src={urlmp3} controls="controls" ref={audioRef}></S.Audio>
       <S.BarContent>
         <S.ProgressBar
           type="range"
           min="0"
           value={currentTime}
-          max={duration}
+          max={duration || "0"}
           onChange={setSeek}
         />
         <S.BarPlayerBlock>
@@ -162,31 +166,19 @@ const noFunct = () => {
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-next" />
                 </S.PlayerBtnSvg>
               </S.PlayerControlsBtnNext>
-              {isLoop ? (
-                <S.PlayerControlsBtnRepeat onClick={toggleLoop}>
-                  <S.PlayerBtnSvg
-                    $width="18px"
-                    $height="12px"
-                    $fill="transparent"
-                    $stroke="#fff"
-                    alt="repeat"
-                  >
-                    <S.Use xlinkHref="../img/icon/sprite.svg#icon-repeat" />
-                  </S.PlayerBtnSvg>
-                </S.PlayerControlsBtnRepeat>
-              ) : (
-                <S.PlayerControlsBtnRepeat onClick={toggleLoop}>
-                  <S.PlayerBtnSvg
-                    $width="18px"
-                    $height="12px"
-                    $fill="transparent"
-                    $stroke="#696969"
-                    alt="repeat"
-                  >
-                    <S.Use xlinkHref="../img/icon/sprite.svg#icon-repeat" />
-                  </S.PlayerBtnSvg>
-                </S.PlayerControlsBtnRepeat>
-              )}
+
+              <S.PlayerControlsBtnRepeat onClick={toggleLoop}>
+                <S.PlayerBtnSvg
+                  $width="18px"
+                  $height="12px"
+                  $fill="transparent"
+                  $stroke={isLoop ? "#fff" : "#696969"}
+                  alt="repeat"
+                >
+                  <S.Use xlinkHref="../img/icon/sprite.svg#icon-repeat" />
+                </S.PlayerBtnSvg>
+              </S.PlayerControlsBtnRepeat>
+
               <S.PlayerControlsBtnShuffle onClick={noFunct}>
                 <S.PlayerBtnSvg
                   $width="19px"
@@ -219,20 +211,19 @@ const noFunct = () => {
                   $height="18px"
                   $fill="transparent"
                   alt="volume"
-                  //  stroke="#696969"
                   stroke={isMuted ? "#fff" : "#696969"}
                 >
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-volume" />
                 </S.PlayerBtnSvg>
               </S.VolumeImage>
-              <S.VolumeProgress>
+              <S.VolumeProgress title={isVolume}>
                 <S.VolumeProgressLine
                   type="range"
                   value={isVolume}
                   alt="volume"
                   min="0"
                   max="1"
-                  step="0.01"
+                  step="0.1"
                   onChange={setVolume}
                   ref={inputRef}
                 />

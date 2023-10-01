@@ -1,9 +1,14 @@
+/* eslint-disable no-unused-vars */
+import { useContext } from "react";
+import { Context, Logaut } from "../AuthForm/AuthForm";
+
 import * as S from "./style";
 
 export function SideBarRender() {
+  const [user, setUser] = useContext(Context);
   return (
     <S.MainSidebar>
-      <PersonalSideBarRender userName="Разработчик SkyPro" />
+      <PersonalSideBarRender userName={user} />
       <S.SidebarBlock>
         <S.SidebarList>
           <SideBarBlockRender
@@ -28,10 +33,18 @@ export function SideBarRender() {
 }
 
 export function PersonalSideBarRender({ userName }) {
+  const [user,setUser] = useContext(Context);
+  const logAuth = () => {
+    setUser(Logaut);
+  };
   return (
     <S.SidebarPersonal>
       <S.SidebarPersonal>{userName}</S.SidebarPersonal>
-      <S.SidebarIcon>
+      <S.SidebarIcon
+        onClick={() => {
+          logAuth();
+        }}
+      >
         <S.LogoutSvg>
           <S.Logout xlinkHref="./img/icon/sprite.svg#logout" />
         </S.LogoutSvg>
