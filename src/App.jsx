@@ -9,7 +9,8 @@ import {
 import * as S from "./StyledApp";
 
 export function App() {
-  const userLocal = JSON.parse(localStorage.getItem("user")).username || false
+  // JSON.parse(localStorage.getItem("user")).username ||
+  const userLocal =  false
   const [user, setUser] = useState(userLocal);
   const [currentTrack, setCurrentTrack] = useState(false);
 
