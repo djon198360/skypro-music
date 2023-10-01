@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
+
 import { StrictMode, useState } from "react";
 import AppRoutes from "./components/Routes/Routes";
 import {
@@ -8,10 +9,10 @@ import {
 import * as S from "./StyledApp";
 
 export function App() {
-  const userLocal = localStorage.getItem("user");
+  const userLocal = JSON.parse(localStorage.getItem("user")).username || false
   const [user, setUser] = useState(userLocal);
-
   const [currentTrack, setCurrentTrack] = useState(false);
+
   return (
     <StrictMode>
       <S.StyledWrapper>

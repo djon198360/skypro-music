@@ -11,7 +11,7 @@ import Context from "../AuthForm/AuthForm";
 // import AuthPage from "../../Pages/AuthPage/AuthPage"
 
 function AppRoutes() {
-  const [token] = useContext(Context);
+  const [user] = useContext(Context);
   return (
     <StrictMode>
       <Routes>
@@ -19,14 +19,14 @@ function AppRoutes() {
         <Route path="/register" element={<SignupRender />} />
         <Route path="*" element={<NotFoundRender />} />
 
-        <Route element={<ProtectedRoute isAllowed={Boolean(token)} />}>
+        <Route element={<ProtectedRoute isAllowed={Boolean(user)} />}>
           {/* Если токен есть */}
           <Route path="/" element={<MainPageRender />} />
         </Route>
-        <Route element={<ProtectedRoute isAllowed={Boolean(token)} />}>
+        <Route element={<ProtectedRoute isAllowed={Boolean(user)} />}>
           <Route path="/favorites" element={<FavoritesPageRender />} />
         </Route>
-        <Route element={<ProtectedRoute isAllowed={Boolean(token)} />}>
+        <Route element={<ProtectedRoute isAllowed={Boolean(user)} />}>
           <Route path="/category/:id" element={<CategoryPageRender />} />
         </Route>
       </Routes>

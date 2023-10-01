@@ -16,7 +16,9 @@ import { setCurrentTrackContext,Context } from "../../components/AuthForm/AuthFo
 
 
 function FavoritesPageRender() {
+ 
   const [currentTrack, setCurrentTrack] = useContext(setCurrentTrackContext);
+  
   const [user] = useContext(Context);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -57,7 +59,7 @@ function FavoritesPageRender() {
          {loading ? <SkeletonSideBarRender /> : <SS.MainSidebar><PersonalSideBarRender userName={user}/></SS.MainSidebar>}
       </S.Main>
       {currentTrack ? (
-        <PlayerRender current={currentTrack} loading={loading}>
+        <PlayerRender  toggle="false" loading={loading}>
           
         </PlayerRender>
       ) : null}

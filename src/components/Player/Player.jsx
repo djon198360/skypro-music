@@ -1,13 +1,17 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import TrackPlayRender from "../PlayerTrackPlay/PlayerTrackPlay";
 import { SkeletonTrackPlayRender } from "../Skeleton/Skeleton";
 import * as S from "./style";
+import { setCurrentTrackContext } from "../AuthForm/AuthForm";
 
 function PlayerRender(props) {
+  const [currentTrack] = useContext(setCurrentTrackContext);
+
   const audioRef = useRef(null);
   const inputRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState();
-  const [urlmp3, setUrlmp3] = useState(props.current.url);
+  // const [urlmp3, setUrlmp3] = useState(currentTrack.url || false);
+  console.log(audioRef);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isLoop, setIsLoop] = useState(false);
@@ -91,13 +95,13 @@ function PlayerRender(props) {
   }, []);
 
   useEffect(() => {
-    setUrlmp3(props.current.url);
+   // setUrlmp3(currentTrack.url);
     setIsPlaying(true);
     audioRef.current.addEventListener("timeupdate", setTimeUpdate);
     return () => {
       audioRef.current.removeEventListener("timeupdate", setTimeUpdate);
     };
-  }, [props.current.url]);
+  }, [currentTrack]);
 
   const noFunct = () => {
     alert("Ещё не реализовано");
@@ -111,7 +115,7 @@ function PlayerRender(props) {
         <S.TimeSpan> {duration ? timeFormat(duration) : "00:00"} </S.TimeSpan>
       </S.Time>
 
-      <S.Audio src={urlmp3} controls="controls" ref={audioRef}></S.Audio>
+      <S.Audio src={currentTrack.url} controls="controls" ref={audioRef}></S.Audio>
       <S.BarContent>
         <S.ProgressBar
           type="range"
