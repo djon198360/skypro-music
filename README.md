@@ -3,7 +3,7 @@
 
 Тема урока Context
 Предполагаемое время выполнения 4-6 часов
-
+Фактическое время 10 часов
 <!-- # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
