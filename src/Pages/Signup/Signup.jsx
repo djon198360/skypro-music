@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 import { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Context, checkRegisterData } from "../components/AuthForm/AuthForm";
+import { Context, checkRegisterData } from "../../components/AuthForm/AuthForm";
 import * as S from "./SSignup";
 
 function SignupRender() {

@@ -28,3 +28,5 @@ yarn-debug.log*
 yarn-error.log*
 instruction.txt
 22.prettierrc.json
+src/Pages/AuthPage/AuthPage.jsx
+src/Pages/AuthPage/AuthPage.styles.js

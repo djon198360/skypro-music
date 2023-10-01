@@ -4,7 +4,7 @@
 import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as S from "./AuthPage.styles";
-import {
+import { 
   checkAuthData,
   checkRegisterData,
   Context,
@@ -58,7 +58,7 @@ export default function AuthPage({ isLoginMode = false }) {
           })
           .catch((error) => {
             setErrorMessage(error.message + token);
-            console.log(errorMessage);
+          
           })
           .finally(() => {
             setDisabled(false);
@@ -93,7 +93,7 @@ export default function AuthPage({ isLoginMode = false }) {
           })
           .catch((error) => {
             setErrorMessage(error.message + token);
-            console.log(errorMessage);
+       
           })
           .finally(() => {})
       : setErrorMessage(errorText);
@@ -114,9 +114,7 @@ export default function AuthPage({ isLoginMode = false }) {
     setErrorMessage(null);
   }, [isLoginMode, email, password, repeatPassword]);
   const nameColor = email.emailValid === true ? "green" : "";
-  console.dir(email);
-  console.dir(errorMessage);
-  console.dir(password);
+
   return (
     <S.PageContainer>
       <S.ModalForm>

@@ -100,7 +100,7 @@ export const Buttons = styled.div`
   margin-top: 60px;
   width: 100%;
 `;
-
+ 
 export const Inputs = styled.div`
   display: flex;
   flex-direction: column;

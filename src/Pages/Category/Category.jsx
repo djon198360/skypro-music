@@ -1,26 +1,26 @@
 import { useState, useEffect ,useContext} from "react";
 import {useLocation } from "react-router";
-import NavMenuLeftRender from  "../components/NavLeft/NavLeft" // "../NavLeft/NavLeft";
-import SearchFormRender from "../components/SearchForm/SearchForm";
-import TrackDescriptionCaptionRender from "../components/TrackDescriptionCaption/TrackDescriptionCaption";
-import PlayListItemRender from "../components/PlayList/PlayList";
-import PlayerRender from "../components/Player/Player";
-import FooterRender from "../components/Footer/Footer";
-import { PersonalSideBarRender } from "../components/SideBar/SideBar";
+import NavMenuLeftRender from  "../../components/NavLeft/NavLeft" // "../NavLeft/NavLeft";
+import SearchFormRender from "../../components/SearchForm/SearchForm";
+import TrackDescriptionCaptionRender from "../../components/TrackDescriptionCaption/TrackDescriptionCaption";
+import PlayListItemRender from "../../components/PlayList/PlayList";
+import PlayerRender from "../../components/Player/Player";
+import FooterRender from "../../components/Footer/Footer";
+import { PersonalSideBarRender } from "../../components/SideBar/SideBar";
 import {
   SkeletonTrackRender,
   SkeletonSideBarRender,
-} from "../components/Skeleton/Skeleton";
-import { dataArray } from "../components/data";
-import * as S from "./SMain";
-import * as SS from "../components/SideBar/style";
-import { setCurrentTrackContext } from "../components/AuthForm/AuthForm";
+} from "../../components/Skeleton/Skeleton";
+import { dataArray } from "../../components/data";
+import * as S from "../Main/SMain";
+import * as SS from "../../components/SideBar/style";
+import { setCurrentTrackContext,Context } from "../../components/AuthForm/AuthForm";
 
 function CategoryPageRender() {
   const [currentTrack, setCurrentTrack] = useContext(setCurrentTrackContext);
   const [loading, setLoading] = useState(true);
   const location = useLocation()
- 
+  const [user] = useContext(Context);
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -59,7 +59,7 @@ function CategoryPageRender() {
           <SkeletonSideBarRender />
         ) : (
           <SS.MainSidebar>
-            <PersonalSideBarRender userName="Разработчик SkyPro" />
+            <PersonalSideBarRender userName={user} />
           </SS.MainSidebar>
         )}
       </S.Main>

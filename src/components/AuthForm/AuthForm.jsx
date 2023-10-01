@@ -8,6 +8,7 @@ export const setCurrentTrackContext = createContext({ isCurrent: false });
 const APIHOST = "https://skypro-music-api.skyeng.tech/user/";
 
 export const checkAuthData = async (email, password) => {
+ 
   const userData = {
     email,
     password,
@@ -26,7 +27,7 @@ export const checkAuthData = async (email, password) => {
   data ? localStorage.setItem("user", JSON.stringify(data)) : "";
   return data;
 };
-
+ 
 export async function checkRegisterData(email, password, username) {
   const userData = {
     email,
