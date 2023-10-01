@@ -1,5 +1,17 @@
 import { styled } from "styled-components";
 
+export const datalist = styled.datalist`
+
+`
+export const option = styled.option`
+
+`
+export const fieldset = styled.fieldset`
+
+`
+
+
+
 export const Time = styled.div`
 
     display: flex;
@@ -199,6 +211,7 @@ export const PlayerControlsBtnNext = styled(PlayerControlsBtn)`
 `;
 export const PlayerControlsBtnRepeat = styled(PlayerControlsBtn)`
   margin-right: 24px;
+  ${(props) => props.$stroke ?? "#fff"}
   &:active {
     fill: transparent;
     stroke: #ffffff;
@@ -291,6 +304,37 @@ export const VolumeProgressLine = styled.input.attrs((props) => ({
 --progress-height: 8px;
   --progress-color: #fff;
   --progress-color: ${(props) => props.$color ?? "#fff"};
+  --progress-bg-color: #797979;
+  margin: 0;
+  width: 100%;
+  height: var(--progress-height);
+  -webkit-appearance: none;
+  cursor: pointer;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+  &::-webkit-slider-runnable-track {
+    position: relative;
+    height: var(--progress-height);
+    background: var(--progress-bg-color);
+  }
+  &::-slider-thumb {
+    --thumb-height: 1px;
+    --thumb-width: 1px;
+    position: relative;
+    -webkit-appearance: none;
+    width: var(--thumb-width, var(--thumb-height));
+    box-shadow: calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0
+      100vmax var(--progress-color);
+  }
+
+  &::-webkit-slider-runnable-track {
+    background: var(--progress-bg-color);
+  }
+
+/* --progress-height: 8px;
+  --progress-color: #fff;
+  --progress-color: ${(props) => props.$color ?? "#fff"};
 
   --progress-bg-color: #797979;
 
@@ -322,7 +366,7 @@ export const VolumeProgressLine = styled.input.attrs((props) => ({
     background: var(--progress-bg-color);
   }
 
-  /* FF */
+  
   &::-moz-range-track {
     width: 100%;
     height: var(--progress-height);
@@ -340,7 +384,7 @@ export const VolumeProgressLine = styled.input.attrs((props) => ({
   &::-moz-range-progress {
     background-color: var(--progress-color);
     height: var(--progress-height);
-  }
+  } */
 
 
  /*  width: 109px;

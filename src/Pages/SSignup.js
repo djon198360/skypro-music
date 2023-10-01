@@ -19,7 +19,7 @@ export const ModalBlock = styled.div`
 
 export const ModalFormLogin = styled.form`
   width: 366px;
-  height: 439px;
+  min-height: 439px;
   background-color: #ffffff;
   border-radius: 12px;
   display: -webkit-box;
@@ -59,11 +59,12 @@ export const ModalInput = styled.input.attrs((props) => ({
   name: props.name,
   placeholder: props.placeholder,
 }))`
+  outline-color: transparent;
   width: 100%;
   border-top: none;
   border-left: none;
   border-right: none;
-  border-bottom: 1px solid #d0cece;
+  border-bottom: 1px solid ${(props) => (props.$activ ? "#d0cece" : "red")};
   padding: 8px 1px;
   margin-right: 3px;
   margin-bottom: 30px;
@@ -95,14 +96,16 @@ export const ModalInputLogin = styled(ModalInput)`
   margin-bottom: 30px;
 `;
 
+export const ModalInputEmail = styled(ModalInput)``;
 export const ModalInputPasswordFirst = styled(ModalInput)``;
 
 export const ModalInputPasswordDouble = styled(ModalInput)``;
 export const ModalBtnSignupEnt = styled.button.attrs((props) => ({
   type: props.type,
-  
+ disabled: props.disabled
 }))`
-height: 62px;
+
+  height: 62px;
   background-color: #580ea2;
   border-radius: 6px;
   margin-left: 4px;
@@ -118,7 +121,6 @@ height: 62px;
   -ms-flex-pack: center;
   justify-content: center;
   width: 100%;
- 
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -143,6 +145,9 @@ height: 62px;
   &:hover {
     background-color: #3f007d;
   }
+  &:disabled {
+    background-color: #d0cece;
+  }
 `;
 
 export const ModalBtnSignupLink = styled(NavLinkStandart)`
@@ -165,4 +170,13 @@ export const ModalBtnSignupLink = styled(NavLinkStandart)`
   justify-content: center;
 
   letter-spacing: -0.054px;
+`;
+export const Error = styled.div`
+  white-space: pre-wrap;
+  color: coral;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  margin-top: 20px;
+  text-align: left;
 `;

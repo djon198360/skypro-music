@@ -1,18 +1,59 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable prefer-const */
 import { createContext } from "react";
 
 export const Context = createContext(false);
 export const Loading = createContext({ isLoading: true });
 export const setCurrentTrackContext = createContext({ isCurrent: false });
+const APIHOST = "https://skypro-music-api.skyeng.tech/user/";
 
-export const checkAuthData = (login, pass) => {
-  localStorage.setItem("user", login);
-  localStorage.setItem("pass", pass);
-  const user = localStorage.getItem("user");
-
-  return user;
+export const checkAuthData = async (email, password) => {
+  const userData = {
+    email,
+    password,
+  };
+  const response = await fetch(`${APIHOST}login/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify(userData),
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    return data;
+  }
+  data ? localStorage.setItem("user", JSON.stringify(data)) : "";
+  return data;
 };
+
+export async function checkRegisterData(email, password, username) {
+  const userData = {
+    email,
+    password,
+    username,
+  };
+  const response = await fetch(`${APIHOST}signup/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify(userData),
+  });
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw data;
+  }
+
+  data ? localStorage.setItem("user", JSON.stringify(data)) : "";
+
+  return data;
+}
+
 export const Logaut = () => {
   localStorage.removeItem("user");
+  return false;
 };
 
 export default Context;
