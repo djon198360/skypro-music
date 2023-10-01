@@ -1,5 +1,5 @@
-import * as S from "./SSignup";
-import ContainerEnter from "./SSIgnin";
+import * as S from "../Signup/SSignup";
+import ContainerEnter from "../Signin/SSIgnin";
 import ModalErrorTitle from "./SNotFound";
 
 function NotFoundRender() {

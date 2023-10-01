@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-expressions */
 import { useContext, useState, useRef, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-import * as S from "./SSignup";
+import * as S from "../Signup/SSignup";
 import ContainerEnter from "./SSIgnin";
-import { Context, checkAuthData } from "../components/AuthForm/AuthForm";
+import { Context, checkAuthData } from "../../components/AuthForm/AuthForm";
 
 function SigninRender() {
   const [user, setUser] = useContext(Context);

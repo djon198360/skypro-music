@@ -1,23 +1,23 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect, StrictMode, useContext } from "react";
-import NavMenuLeftRender from "../components/NavLeft/NavLeft";
-import SearchFormRender from "../components/SearchForm/SearchForm";
+import NavMenuLeftRender from "../../components/NavLeft/NavLeft";
+import SearchFormRender from "../../components/SearchForm/SearchForm";
 import {
   ErrorDescriptionRender,
   TrackDescriptionCaptionRender,
-} from "../components/TrackDescriptionCaption/TrackDescriptionCaption";
-import TrackFilterRender from "../components/TrackFilter/TrackFilter";
-import PlayListItemRender from "../components/PlayList/PlayList";
-import { SideBarRender } from "../components/SideBar/SideBar";
-import PlayerRender from "../components/Player/Player";
-import FooterRender from "../components/Footer/Footer";
+} from "../../components/TrackDescriptionCaption/TrackDescriptionCaption";
+import TrackFilterRender from "../../components/TrackFilter/TrackFilter";
+import PlayListItemRender from "../../components/PlayList/PlayList";
+import { SideBarRender } from "../../components/SideBar/SideBar";
+import PlayerRender from "../../components/Player/Player";
+import FooterRender from "../../components/Footer/Footer";
 import {
   SkeletonTrackRender,
   SkeletonSideBarRender,
-} from "../components/Skeleton/Skeleton";
+} from "../../components/Skeleton/Skeleton";
 import * as S from "./SMain";
-import { setCurrentTrackContext } from "../components/AuthForm/AuthForm";
-import { getAllTrack } from "../Api";
+import { setCurrentTrackContext } from "../../components/AuthForm/AuthForm";
+import { getAllTrack } from "../../Api";
 
 function MainPageRender() {
   const [currentTrack, setCurrentTrack] = useContext(setCurrentTrackContext);

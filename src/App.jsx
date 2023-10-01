@@ -8,13 +8,14 @@ import {
 import * as S from "./StyledApp";
 
 export function App() {
-  const user = localStorage.getItem("user");
-  const [token, setToken] = useState(user);
+
+   const userlocal = JSON.parse(localStorage.getItem("user")); 
+ const [user, setUser] = useState( userlocal);
   const [currentTrack, setCurrentTrack] = useState(false);
   return (
     <StrictMode>
       <S.StyledWrapper>
-        <Context.Provider value={[token, setToken]}>
+        <Context.Provider value={[user, setUser]}>
           <setCurrentTrackContext.Provider
             value={[currentTrack, setCurrentTrack]}
           >

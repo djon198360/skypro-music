@@ -1,12 +1,12 @@
 import { StrictMode, useContext } from "react";
 import { Routes, Route } from "react-router-dom";
-import MainPageRender from "../../Pages/Main";
- import SignupRender from "../../Pages/Signup";
-import SigninRender from "../../Pages/Signin"; 
-import NotFoundRender from "../../Pages/NotFound";
+import MainPageRender from "../../Pages/Main/Main";
+ import SignupRender from "../../Pages/Signup/Signup";
+import SigninRender from "../../Pages/Signin/Signin"; 
+import NotFoundRender from "../../Pages/NotFound/NotFound";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-import CategoryPageRender from "../../Pages/Category";
-import FavoritesPageRender from "../../Pages/Favorites";
+import CategoryPageRender from "../../Pages/Category/Category";
+import FavoritesPageRender from "../../Pages/Favorites/Favorites";
 import Context from "../AuthForm/AuthForm";
 // import AuthPage from "../../Pages/AuthPage/AuthPage"
 
