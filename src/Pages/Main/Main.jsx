@@ -4,7 +4,6 @@ import { addTodo, addloading } from "../../Store/Actions/Creators/music";
 import {
   todosSelector,
   loadingSelector,
-  currentTrackSelector,
   shuffleSelector,
   shuffleAllTrackSelector,
 } from "../../Store/Selectors/music";
@@ -17,7 +16,7 @@ import {
 import TrackFilterRender from "../../components/TrackFilter/TrackFilter";
 import { PlayListItemRender } from "../../components/PlayList/PlayList";
 import { SideBarRender } from "../../components/SideBar/SideBar";
-import { PlayerRender } from "../../components/Player/Player";
+
 import FooterRender from "../../components/Footer/Footer";
 import {
   SkeletonTrackRender,
@@ -30,7 +29,6 @@ function MainPageRender() {
   const [errorMessage, seterrorMessage] = useState();
   const allTrackStore = useSelector(todosSelector);
   const loading = useSelector(loadingSelector);
-  const currentTrackStore = useSelector(currentTrackSelector);
   const dispatch = useDispatch();
   const isShuffle = useSelector(shuffleSelector);
   const shuffleAllTrack = useSelector(shuffleAllTrackSelector);
@@ -71,22 +69,16 @@ function MainPageRender() {
               <TrackDescriptionCaptionRender />
             )}
             {loading ? <SkeletonTrackRender /> : null}
-            {allTrackStore !== null && isShuffle ? 
+            {allTrackStore !== null && isShuffle ? (
               <PlayListItemRender trackStore={shuffleAllTrack} />
-            : <PlayListItemRender trackStore={allTrackStore} />}
+            ) : (
+              <PlayListItemRender trackStore={allTrackStore} />
+            )}
           </S.centerblockContent>
         </S.mainCenterblock>
         {loading ? <SkeletonSideBarRender /> : <SideBarRender />}
       </S.Main>
 
-      
-      {currentTrackStore ? (
-        <PlayerRender
-          current={currentTrackStore}
-          toggle="false"
-          loading={loading}
-        ></PlayerRender>
-      ) : null}
       <FooterRender />
     </S.Container>
   );

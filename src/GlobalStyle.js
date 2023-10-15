@@ -15,6 +15,13 @@ code {
     monospace;
 }
 
+div#root {
+    max-width: 1920px;
+    margin: 0 auto;
+    position: relative;
+    background-color: #181818;
+}
+
 * {
   margin: 0;
   padding: 0;

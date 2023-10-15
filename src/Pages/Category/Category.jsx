@@ -1,33 +1,27 @@
-import { useState, useEffect ,useContext} from "react";
-import {useLocation } from "react-router";
-import NavMenuLeftRender from  "../../components/NavLeft/NavLeft" // "../NavLeft/NavLeft";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useLocation } from "react-router";
+import NavMenuLeftRender from "../../components/NavLeft/NavLeft"; // "../NavLeft/NavLeft";
 import SearchFormRender from "../../components/SearchForm/SearchForm";
 import TrackDescriptionCaptionRender from "../../components/TrackDescriptionCaption/TrackDescriptionCaption";
-import {PlayListItemRender} from "../../components/PlayList/PlayList";
-import {PlayerRender} from "../../components/Player/Player";
+import { PlayListItemRender } from "../../components/PlayList/PlayList";
 import FooterRender from "../../components/Footer/Footer";
 import { PersonalSideBarRender } from "../../components/SideBar/SideBar";
 import {
   SkeletonTrackRender,
   SkeletonSideBarRender,
 } from "../../components/Skeleton/Skeleton";
-import { dataArray } from "../../components/data";
 import * as S from "../Main/SMain";
 import * as SS from "../../components/SideBar/style";
-import { setCurrentTrackContext,Context } from "../../components/AuthForm/AuthForm";
+// import { Context } from "../../components/AuthForm/AuthForm";
+import { todosSelector, loadingSelector } from "../../Store/Selectors/music";
 
 function CategoryPageRender() {
-  const [currentTrack, setCurrentTrack] = useContext(setCurrentTrackContext);
-  const [loading, setLoading] = useState(true);
-  const location = useLocation()
-  const [user] = useContext(Context);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
+  const loading = useSelector(loadingSelector);
+  const location = useLocation();
+  const allTrackStore = useSelector(todosSelector);
+ // const [user] = useContext(Context);
+  useEffect(() => {}, []);
 
   return (
     <S.Container>
@@ -41,17 +35,7 @@ function CategoryPageRender() {
             {loading ? (
               <SkeletonTrackRender />
             ) : (
-              dataArray.map((list) => (
-                <PlayListItemRender
-                setCurrentTrack={setCurrentTrack}
-                key={list.id}
-                listName={list.name}
-                listAuthor={list.author}
-                listAlbum={list.album}
-                ListDuration_in_seconds={list.duration_in_seconds}
-                listUrl={list.track_file}
-                />
-              ))
+              <PlayListItemRender trackStore={allTrackStore} />
             )}
           </S.centerblockContent>
         </S.mainCenterblock>
@@ -59,15 +43,10 @@ function CategoryPageRender() {
           <SkeletonSideBarRender />
         ) : (
           <SS.MainSidebar>
-            <PersonalSideBarRender userName={user} />
+            <PersonalSideBarRender />
           </SS.MainSidebar>
         )}
       </S.Main>
-      {currentTrack ? (
-        <PlayerRender current={currentTrack} loading={loading}>
-          
-        </PlayerRender>
-      ) : null}
       <FooterRender />
     </S.Container>
   );

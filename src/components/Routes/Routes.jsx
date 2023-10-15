@@ -6,9 +6,8 @@ import SigninRender from "../../Pages/Signin/Signin";
 import NotFoundRender from "../../Pages/NotFound/NotFound";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import CategoryPageRender from "../../Pages/Category/Category";
-import FavoritesPageRender from "../../Pages/Favorites/Favorites";
+import {FavoritesPageRender} from "../../Pages/Favorites/Favorites";
 import Context from "../AuthForm/AuthForm";
-// import AuthPage from "../../Pages/AuthPage/AuthPage"
 
 function AppRoutes() {
   const [user] = useContext(Context);

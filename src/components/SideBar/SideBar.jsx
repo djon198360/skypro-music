@@ -5,10 +5,10 @@ import { Context, Logaut } from "../AuthForm/AuthForm";
 import * as S from "./style";
 
 export function SideBarRender() {
-  const [user, setUser] = useContext(Context);
+ // const [user, setUser] = useContext(Context);
   return (
     <S.MainSidebar>
-      <PersonalSideBarRender userName={user} />
+      <PersonalSideBarRender/>
       <S.SidebarBlock>
         <S.SidebarList>
           <SideBarBlockRender
@@ -32,21 +32,21 @@ export function SideBarRender() {
   );
 }
 
-export function PersonalSideBarRender({ userName }) {
+export function PersonalSideBarRender() {
   const [user,setUser] = useContext(Context);
   const logAuth = () => {
     setUser(Logaut);
   };
   return (
     <S.SidebarPersonal>
-      <S.SidebarPersonal>{userName}</S.SidebarPersonal>
+      <S.SidebarPersonal>{user}</S.SidebarPersonal>
       <S.SidebarIcon
         onClick={() => {
           logAuth();
         }}
       >
         <S.LogoutSvg>
-          <S.Logout xlinkHref="./img/icon/sprite.svg#logout" />
+          <S.Logout xlinkHref="../../img/icon/sprite.svg#logout" />
         </S.LogoutSvg>
       </S.SidebarIcon>
     </S.SidebarPersonal>

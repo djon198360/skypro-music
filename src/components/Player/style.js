@@ -1,40 +1,30 @@
 import { styled } from "styled-components";
 
-export const datalist = styled.datalist`
-
-`
-export const option = styled.option`
-
-`
-export const fieldset = styled.fieldset`
-
-`
-
-
+export const datalist = styled.datalist``;
+export const option = styled.option``;
+export const fieldset = styled.fieldset``;
 
 export const Time = styled.div`
-
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    margin-right: 10px;
-`
-export const TimeSpan = styled.span`
-`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin-right: 10px;
+`;
+export const TimeSpan = styled.span``;
 export const Audio = styled.audio.attrs((props) => ({
   ref: props.ref,
-/*   autoplay: props.autoplay, */
+  /*   autoplay: props.autoplay, */
 }))`
-   display:none
+  display: none;
 `;
 
 export const Bar = styled.div`
-position: fixed;
-    bottom: 0;
-    /* left: 0; */
-    width: 100%;
-    max-width: 1920px;
+  position: fixed;
+  bottom: 0;
+  /* left: 0; */
+  width: 100%;
+  max-width: 1920px;
   background: rgba(28, 28, 28, 0.5);
 `;
 
@@ -46,6 +36,7 @@ export const BarContent = styled.div`
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
+  background:#181818;
 `;
 
 export const ProgressBar = styled.input`
@@ -117,8 +108,6 @@ export const ProgressBar = styled.input`
     flex-shrink: 0;
     background: #b672ff;
   } */
-
-  
 `;
 
 export const BarPlayerBlock = styled.div`
@@ -193,7 +182,7 @@ export const PlayerControlsBtnPlay = styled(PlayerControlsBtn)`
 export const PlayerControlsBtnPause = styled(PlayerControlsBtn)`
   margin-right: 23px;
 
-  fill:#D9D9D9;
+  fill: #d9d9d9;
   &:hover svg {
     fill: #696969;
     stroke: #696969;
@@ -288,7 +277,7 @@ export const VolumeImage = styled.div`
   height: 18px;
   margin-right: 17px;
   cursor: pointer;
-  stroke:${(props) => props.$muted ?? "#fff"}
+  stroke: ${(props) => props.$muted ?? "#fff"};
 `;
 
 export const VolumeProgress = styled.div`
@@ -296,12 +285,11 @@ export const VolumeProgress = styled.div`
 `;
 
 export const VolumeProgressLine = styled.input.attrs((props) => ({
-  $min:props.min,
-                  $max:props.max,
-                  $step:props.step 
+  $min: props.min,
+  $max: props.max,
+  $step: props.step,
 }))`
-
---progress-height: 8px;
+  --progress-height: 8px;
   --progress-color: #fff;
   --progress-color: ${(props) => props.$color ?? "#fff"};
   --progress-bg-color: #797979;
@@ -332,7 +320,7 @@ export const VolumeProgressLine = styled.input.attrs((props) => ({
     background: var(--progress-bg-color);
   }
 
-/* --progress-height: 8px;
+  /* --progress-height: 8px;
   --progress-color: #fff;
   --progress-color: ${(props) => props.$color ?? "#fff"};
 
@@ -386,8 +374,7 @@ export const VolumeProgressLine = styled.input.attrs((props) => ({
     height: var(--progress-height);
   } */
 
-
- /*  width: 109px;
+  /*  width: 109px;
   cursor: pointer;
   -webkit-appearance: none;
   -moz-appearance: none;
