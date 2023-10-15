@@ -6,16 +6,14 @@ export async function getAllTrack() {
   });
   const data = await response.json();
   if (!response.ok) {
-   // Promise.reject(response);
     throw new Error(`Не удалось загрузить плейлист, попробуйте позже!`); // ${response.status}
   }
-
   return data;
 }
 
 export function getTokken() {
-  // const responsed = fetch("./");
 }
+
 export function getFavoritesTrack() {
   const responsed = fetch(`${APIHOST}`);
   const datas = responsed.json;

@@ -1,14 +1,14 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable prefer-const */
 import { createContext } from "react";
 
 export const Context = createContext(false);
+export const isShuffle = createContext(false);
+export const refAudios = createContext({ currentTrack: false });
 export const Loading = createContext({ isLoading: true });
-export const setCurrentTrackContext = createContext({ isCurrent: false });
+export const setCurrentTrackContext = createContext();
+
 const APIHOST = "https://skypro-music-api.skyeng.tech/user/";
 
 export const checkAuthData = async (email, password) => {
- 
   const userData = {
     email,
     password,
@@ -24,10 +24,10 @@ export const checkAuthData = async (email, password) => {
   if (!response.ok) {
     return data;
   }
-  data ? localStorage.setItem("user", JSON.stringify(data)) : "";
+   localStorage.setItem("user", JSON.stringify(data)) ;
   return data;
 };
- 
+
 export async function checkRegisterData(email, password, username) {
   const userData = {
     email,
@@ -47,7 +47,7 @@ export async function checkRegisterData(email, password, username) {
     throw data;
   }
 
-  // data ? localStorage.setItem("user", JSON.stringify(data)) : "";
+  localStorage.setItem("user", JSON.stringify(data));
 
   return data;
 }

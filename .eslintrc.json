@@ -19,7 +19,16 @@
   },
   "plugins": ["react"],
   "rules": {
-      "import/prefer-default-export": "off",
+    "react/function-component-definition": [
+      2,
+      {
+        "namedcomponents": "function-declaration",
+        "unnamedcomponents": "function-declaration"
+      }
+    ],
+    "allowShortCircuit": false,
+    "allowTernary": true,
+    "import/prefer-default-export": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/prop-types": 0,
     "react/destructuring-assignment": 0,

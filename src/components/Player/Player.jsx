@@ -1,26 +1,121 @@
-import { useRef, useState, useEffect, useContext } from "react";
+/* eslint-disable react/function-component-definition */
+/* eslint-disable no-unused-expressions */
+import { useRef, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+  currentTrackSelector,
+  todosSelector,
+  isPlayingSelector,
+  shuffleSelector,
+  shuffleAllTrackSelector,
+} from "../../Store/Selectors/music";
+import {
+  addCurrentTrack,
+  addIsPlaying,
+  addShuffleAllTrack,
+  addShuffleTrack,
+} from "../../Store/Actions/Creators/music";
 import TrackPlayRender from "../PlayerTrackPlay/PlayerTrackPlay";
 import { SkeletonTrackPlayRender } from "../Skeleton/Skeleton";
 import * as S from "./style";
-import { setCurrentTrackContext } from "../AuthForm/AuthForm";
 
-function PlayerRender(props) {
-  const [currentTrack] = useContext(setCurrentTrackContext);
-
+export const PlayerRender = (props) => {
+  const currentTrackStore = useSelector(currentTrackSelector);
+  const allTrackStore = useSelector(todosSelector);
+  const isPlaying = useSelector(isPlayingSelector);
   const audioRef = useRef(null);
   const inputRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState();
-  // const [urlmp3, setUrlmp3] = useState(currentTrack.url || false);
-  console.log(audioRef);
+  const [urlmp3, setUrlmp3] = useState(
+    allTrackStore[currentTrackStore.key].track_file || false
+  );
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isLoop, setIsLoop] = useState(false);
   const [isVolume, setIsVolume] = useState(0.2);
   const [isMuted, setIsMuted] = useState(false);
+  const isShuffle = useSelector(shuffleSelector);
+  const shuffleAllTrack = useSelector(shuffleAllTrackSelector);
+  const dispatch = useDispatch();
+
+  const addTrackPlayer = (content) => {
+    dispatch(addCurrentTrack(content));
+  };
+  const shuffleTrack = () => {
+    dispatch(addShuffleTrack(true));
+
+    //  const randomTrack = allTrackStore.slice().sort(() => Math.random() - 0.5);
+
+    dispatch(
+      addShuffleAllTrack(allTrackStore.slice().sort(() => Math.random() - 0.5))
+    );
+    /*     const randomTrack = Math.floor(
+      Math.random() * Object.keys(allTrackStore).length
+    );
+    allTrackStore[randomTrack] ? addTrackPlayer({ key: randomTrack }) : null; */
+  };
+
+  const shuffleTrackStop = () => {
+    dispatch(addShuffleTrack(false));
+  };
+  const toggleShuffle = isShuffle ? shuffleTrackStop : shuffleTrack;
+
+  const prevTrackPlay = () => {
+/*     if (currentTime <= 5) {
+      audioRef.current.currentTime = 0;
+    } else { */
+      if (isShuffle) {
+        if (currentTime <= 5) {
+          audioRef.current.currentTime = 0;
+        } else {
+        shuffleAllTrack[currentTrackStore.key - 1]
+          ? addTrackPlayer({ key: currentTrackStore.key - 1 })
+          : shuffleAllTrack[currentTrackStore.key];
+        }
+      } if (!isShuffle) {
+        if (currentTime <= 5) {
+          audioRef.current.currentTime = 0;
+        } else {
+        allTrackStore[currentTrackStore.key - 1]
+          ? addTrackPlayer({ key: currentTrackStore.key - 1 })
+          : allTrackStore[currentTrackStore.key];
+          }
+      }
+    
+  };
+
+  const nextTrackPlay = () => {
+    if (isShuffle) {
+      shuffleAllTrack[currentTrackStore.key + 1]
+        ? addTrackPlayer({ key: currentTrackStore.key + 1 })
+        : shuffleAllTrack[currentTrackStore.key];
+    } else {
+      allTrackStore[currentTrackStore.key + 1]
+        ? addTrackPlayer({ key: currentTrackStore.key + 1 })
+        : allTrackStore[currentTrackStore.key];
+    }
+  };
 
   const setTimeUpdate = () => {
-    setCurrentTime(Math.round(audioRef.current.currentTime));
-    setDuration(Math.round(audioRef.current.duration));
+    audioRef.current
+      ? setCurrentTime(Math.round(audioRef.current.currentTime))
+      : setCurrentTime(0);
+    audioRef.current
+      ? setDuration(Math.round(audioRef.current.duration))
+      : setDuration(Math.round(0));
+    audioRef.current && audioRef.current.ended ? nextTrackPlay() : null;
+  };
+
+  const setStart = () => {
+    dispatch(addIsPlaying(true));
+    audioRef.current.play();
+
+    /*          audioRef.current.addEventListener("loadeddata", () => {
+      if (audioRef.current.readyState >= 2) {
+       setIsPlaying(true);
+        audioRef.current.play();
+      }
+    });  */
   };
 
   const timeFormat = (secondstime) => {
@@ -36,18 +131,9 @@ function PlayerRender(props) {
     setCurrentTime(Math.round(event.target.value));
   };
 
-  const setStart = () => {
-    audioRef.current.addEventListener("loadeddata", () => {
-      if (audioRef.current.readyState >= 2) {
-        audioRef.current.play();
-        setIsPlaying(true);
-      }
-    });
-  };
-
   const setPause = () => {
+    dispatch(addIsPlaying(false));
     audioRef.current.pause();
-    setIsPlaying(false);
   };
 
   const togglePlay = isPlaying ? setPause : setStart;
@@ -86,26 +172,36 @@ function PlayerRender(props) {
   };
 
   useEffect(() => {
-    setIsPlaying(true);
+    dispatch(addIsPlaying(true));
     setStart();
-    audioRef.current.addEventListener("timeupdate", setTimeUpdate);
+    if (audioRef.current) {
+      audioRef.current.addEventListener("timeupdate", setTimeUpdate);
+    }
     return () => {
-      audioRef.current.removeEventListener("timeupdate", setTimeUpdate);
+      audioRef.current
+        ? audioRef.current.removeEventListener("timeupdate", setTimeUpdate)
+        : null;
     };
   }, []);
 
   useEffect(() => {
-   // setUrlmp3(currentTrack.url);
-    setIsPlaying(true);
-    audioRef.current.addEventListener("timeupdate", setTimeUpdate);
-    return () => {
-      audioRef.current.removeEventListener("timeupdate", setTimeUpdate);
-    };
-  }, [currentTrack]);
+    dispatch(addIsPlaying(true));
+    setStart();
+  }, [urlmp3]);
 
-  const noFunct = () => {
-    alert("Ещё не реализовано");
-  };
+  useEffect(() => {
+    isShuffle
+      ? setUrlmp3(shuffleAllTrack[currentTrackStore.key].track_file || false)
+      : setUrlmp3(allTrackStore[currentTrackStore.key].track_file || false);
+    if (audioRef.current) {
+      audioRef.current.addEventListener("timeupdate", setTimeUpdate);
+    }
+    return () => {
+      audioRef.current
+        ? audioRef.current.removeEventListener("timeupdate", setTimeUpdate)
+        : null;
+    };
+  }, [currentTrackStore, isShuffle]);
 
   return (
     <S.Bar>
@@ -115,7 +211,7 @@ function PlayerRender(props) {
         <S.TimeSpan> {duration ? timeFormat(duration) : "00:00"} </S.TimeSpan>
       </S.Time>
 
-      <S.Audio src={currentTrack.url} controls="controls" ref={audioRef}></S.Audio>
+      <S.Audio src={urlmp3} controls="controls" ref={audioRef}></S.Audio>
       <S.BarContent>
         <S.ProgressBar
           type="range"
@@ -127,11 +223,12 @@ function PlayerRender(props) {
         <S.BarPlayerBlock>
           <S.BarPlayer>
             <S.PlayerControls>
-              <S.PlayerControlsBtnPrev onClick={noFunct}>
+              <S.PlayerControlsBtnPrev onClick={prevTrackPlay}>
                 <S.PlayerBtnSvg
                   $width="15px"
                   $height="14px"
-                  $fill="#d9d9d9"
+                  $fill="transparent"
+                  $stroke={allTrackStore[currentTrackStore.key - 1] ||shuffleAllTrack[currentTrackStore.key - 1] ? "#fff" : "#696969"}
                   alt="prev"
                 >
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-prev" />
@@ -160,11 +257,13 @@ function PlayerRender(props) {
                   </S.PlayerBtnSvg>
                 </S.PlayerControlsBtnPlay>
               )}
-              <S.PlayerControlsBtnNext onClick={noFunct}>
+              <S.PlayerControlsBtnNext onClick={nextTrackPlay}>
                 <S.PlayerBtnSvg
                   $width="15px"
-                  $height="14x"
-                  $fill="#d9d9d9"
+                  $height="14px"
+                  $fill="transparent"
+                  $stroke={allTrackStore[currentTrackStore.key + 1] ||shuffleAllTrack[currentTrackStore.key + 1] ? "#fff" : "#696969"}
+                 
                   alt="next"
                 >
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-next" />
@@ -183,12 +282,12 @@ function PlayerRender(props) {
                 </S.PlayerBtnSvg>
               </S.PlayerControlsBtnRepeat>
 
-              <S.PlayerControlsBtnShuffle onClick={noFunct}>
+              <S.PlayerControlsBtnShuffle onClick={toggleShuffle}>
                 <S.PlayerBtnSvg
                   $width="19px"
                   $height="12px"
                   $fill="transparent"
-                  $stroke="#696969"
+                  $stroke={isShuffle ? "#fff" : "#696969"}
                   alt="shuffle"
                 >
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-shuffle" />
@@ -200,9 +299,17 @@ function PlayerRender(props) {
             ) : (
               <TrackPlayRender
                 name_link="http://"
-                name_text={props.current ? props.current.name : null}
+                name_text={
+                  currentTrackStore && isShuffle
+                    ? shuffleAllTrack[currentTrackStore.key].name
+                    : allTrackStore[currentTrackStore.key].name
+                }
                 author_link="http://"
-                author_text={props.current ? props.current.author : null}
+                author_text={
+                  currentTrackStore && isShuffle
+                    ? shuffleAllTrack[currentTrackStore.key].author
+                    : allTrackStore[currentTrackStore.key].author
+                }
               />
             )}
           </S.BarPlayer>
@@ -238,5 +345,4 @@ function PlayerRender(props) {
       </S.BarContent>
     </S.Bar>
   );
-}
-export default PlayerRender;
+};

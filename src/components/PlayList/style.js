@@ -1,4 +1,5 @@
-import { styled } from "styled-components";
+/* eslint-disable no-undef */
+import { styled, keyframes } from "styled-components";
 
 export const ContentPlayList = styled.div`
   display: -webkit-box;
@@ -66,6 +67,7 @@ export const TrackTitleImage = styled.div`
 
 export const Svg = styled.svg.attrs((props) => ({
   alt: props.alt,
+  state: props.state,
 }))``;
 
 export const TrackTitleSvg = styled(Svg)`
@@ -78,9 +80,29 @@ export const TrackTitleSvg = styled(Svg)`
     width: 16px;
     height: 16px;
     flex-shrink: 0;
-    background-color: #B672FF
-}
+    background-color: #b672ff;
+  }
 `;
+
+const shadow = () => keyframes`
+ 50% {
+    box-shadow: 0 0 0 0 rgba(55, 141, 250, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 0 16px rgba(55, 141, 250, 0);
+  }
+`;
+export const imgActive = styled(TrackTitleSvg)`
+  border-radius: 16px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  background: #b672ff;
+`;
+export const imgActiveAnime = styled(imgActive)`
+  animation: ${shadow} 1s ease-in-out infinite;
+`;
+
 export const Use = styled.use.attrs((props) => ({
   xlinkHref: props.xlinkHref,
 }))``;

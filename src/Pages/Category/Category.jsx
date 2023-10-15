@@ -3,8 +3,8 @@ import {useLocation } from "react-router";
 import NavMenuLeftRender from  "../../components/NavLeft/NavLeft" // "../NavLeft/NavLeft";
 import SearchFormRender from "../../components/SearchForm/SearchForm";
 import TrackDescriptionCaptionRender from "../../components/TrackDescriptionCaption/TrackDescriptionCaption";
-import PlayListItemRender from "../../components/PlayList/PlayList";
-import PlayerRender from "../../components/Player/Player";
+import {PlayListItemRender} from "../../components/PlayList/PlayList";
+import {PlayerRender} from "../../components/Player/Player";
 import FooterRender from "../../components/Footer/Footer";
 import { PersonalSideBarRender } from "../../components/SideBar/SideBar";
 import {

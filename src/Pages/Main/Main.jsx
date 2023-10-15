@@ -1,5 +1,13 @@
-/* eslint-disable no-unused-vars */
-import { useState, useEffect, StrictMode, useContext } from "react";
+import { useState, useEffect, StrictMode } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addTodo, addloading } from "../../Store/Actions/Creators/music";
+import {
+  todosSelector,
+  loadingSelector,
+  currentTrackSelector,
+  shuffleSelector,
+  shuffleAllTrackSelector,
+} from "../../Store/Selectors/music";
 import NavMenuLeftRender from "../../components/NavLeft/NavLeft";
 import SearchFormRender from "../../components/SearchForm/SearchForm";
 import {
@@ -7,30 +15,31 @@ import {
   TrackDescriptionCaptionRender,
 } from "../../components/TrackDescriptionCaption/TrackDescriptionCaption";
 import TrackFilterRender from "../../components/TrackFilter/TrackFilter";
-import PlayListItemRender from "../../components/PlayList/PlayList";
+import { PlayListItemRender } from "../../components/PlayList/PlayList";
 import { SideBarRender } from "../../components/SideBar/SideBar";
-import PlayerRender from "../../components/Player/Player";
+import { PlayerRender } from "../../components/Player/Player";
 import FooterRender from "../../components/Footer/Footer";
 import {
   SkeletonTrackRender,
   SkeletonSideBarRender,
 } from "../../components/Skeleton/Skeleton";
 import * as S from "./SMain";
-import { setCurrentTrackContext } from "../../components/AuthForm/AuthForm";
-import { getAllTrack } from "../../Api";
+import { getAllTrack } from "../../API/Api";
 
 function MainPageRender() {
-  const [currentTrack, setCurrentTrack] = useContext(setCurrentTrackContext);
-  const [allTrack, setAllTrack] = useState(null);
-  const [loading, setLoading] = useState(null);
   const [errorMessage, seterrorMessage] = useState();
- // const localUser =JSON.parse(localStorage.getItem("user"));
+  const allTrackStore = useSelector(todosSelector);
+  const loading = useSelector(loadingSelector);
+  const currentTrackStore = useSelector(currentTrackSelector);
+  const dispatch = useDispatch();
+  const isShuffle = useSelector(shuffleSelector);
+  const shuffleAllTrack = useSelector(shuffleAllTrackSelector);
+
   useEffect(() => {
-    setLoading(true);
     getAllTrack()
       .then((arrayTrack) => {
         if (arrayTrack.length > 1) {
-          setAllTrack(arrayTrack);
+          dispatch(addTodo(arrayTrack));
         } else {
           Promise.reject(arrayTrack);
         }
@@ -39,9 +48,10 @@ function MainPageRender() {
         seterrorMessage(`Не удалось загрузить плейлист, попробуйте позже!`);
       })
       .finally(() => {
-        setLoading(false);
+        dispatch(addloading(false));
       });
   }, []);
+
   return (
     <S.Container>
       <S.Main>
@@ -61,26 +71,19 @@ function MainPageRender() {
               <TrackDescriptionCaptionRender />
             )}
             {loading ? <SkeletonTrackRender /> : null}
-            {allTrack !== null
-              ? allTrack.map((list, index) => (
-                  <PlayListItemRender
-                    setCurrentTrack={setCurrentTrack}
-                    key={list.id}
-                    listKey={index}
-                    listName={list.name}
-                    listAuthor={list.author}
-                    listAlbum={list.album}
-                    ListDuration_in_seconds={list.duration_in_seconds}
-                    listUrl={list.track_file}
-                  />
-                ))
-              : null}
+            {allTrackStore !== null && isShuffle ? 
+              <PlayListItemRender trackStore={shuffleAllTrack} />
+            : <PlayListItemRender trackStore={allTrackStore} />}
           </S.centerblockContent>
         </S.mainCenterblock>
         {loading ? <SkeletonSideBarRender /> : <SideBarRender />}
       </S.Main>
-      {currentTrack ? (
-        <PlayerRender  toggle="false" loading={loading}></PlayerRender>
+      {currentTrackStore ? (
+        <PlayerRender
+          current={currentTrackStore}
+          toggle="false"
+          loading={loading}
+        ></PlayerRender>
       ) : null}
       <FooterRender />
     </S.Container>
