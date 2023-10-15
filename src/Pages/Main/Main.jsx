@@ -78,6 +78,8 @@ function MainPageRender() {
         </S.mainCenterblock>
         {loading ? <SkeletonSideBarRender /> : <SideBarRender />}
       </S.Main>
+
+      
       {currentTrackStore ? (
         <PlayerRender
           current={currentTrackStore}

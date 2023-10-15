@@ -16,15 +16,13 @@ export const PlayListItemRender = (trackStore) => {
 
   return trackStore.trackStore.map((playlist, index) => (
     <S.ContentPlayList key={playlist.id}>
-      <S.PlaylistItem
-        onClick={() => {
+      <S.PlaylistItem>
+        <S.PlayListTrack>
+          <S.TrackTitle  onClick={() => {
           addTrackPlayer({
             key: index,
           });
-        }}
-      >
-        <S.PlayListTrack>
-          <S.TrackTitle>
+        }} >
             <S.TrackTitleImage>
               {currentTrackStore &&
               currentTrackStore.key === index &&
