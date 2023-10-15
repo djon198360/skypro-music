@@ -228,7 +228,7 @@ export const PlayerRender = (props) => {
                   $width="15px"
                   $height="14px"
                   $fill="transparent"
-                  $stroke={allTrackStore[currentTrackStore.key - 1] ||shuffleAllTrack[currentTrackStore.key - 1] ? "#fff" : "#696969"}
+                  $stroke={allTrackStore[currentTrackStore.key - 1] ||shuffleAllTrack[currentTrackStore.key - 1] ? "#fff" : "red"}
                   alt="prev"
                 >
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-prev" />
@@ -262,7 +262,7 @@ export const PlayerRender = (props) => {
                   $width="15px"
                   $height="14px"
                   $fill="transparent"
-                  $stroke={allTrackStore[currentTrackStore.key + 1] ||shuffleAllTrack[currentTrackStore.key + 1] ? "#fff" : "#696969"}
+                  $stroke={allTrackStore[currentTrackStore.key + 1] ||shuffleAllTrack[currentTrackStore.key + 1] ? "#fff" : "red"}
                  
                   alt="next"
                 >
