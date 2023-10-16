@@ -4,6 +4,7 @@ import {
   currentTrackSelector,
   isPlayingSelector,
 } from "../../Store/Selectors/music";
+import { creatorCurrentTrack } from "../../function";
 import * as S from "./style";
 
 export const PlayListItemRender = (trackStore) => {
@@ -18,11 +19,11 @@ export const PlayListItemRender = (trackStore) => {
     <S.ContentPlayList key={playlist.id}>
       <S.PlaylistItem>
         <S.PlayListTrack>
-          <S.TrackTitle  onClick={() => {
-          addTrackPlayer({
-            key: index,
-          });
-        }} >
+          <S.TrackTitle
+            onClick={() => {
+              addTrackPlayer(creatorCurrentTrack(playlist, index));
+            }}
+          >
             <S.TrackTitleImage>
               {currentTrackStore &&
               currentTrackStore.key === index &&

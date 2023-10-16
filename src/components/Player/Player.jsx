@@ -8,16 +8,19 @@ import {
   todosSelector,
   isPlayingSelector,
   shuffleSelector,
-  shuffleAllTrackSelector,
+  prevTrackSelector,
+  nextTrackSelector,
 } from "../../Store/Selectors/music";
 import {
   addCurrentTrack,
   addIsPlaying,
-  addShuffleAllTrack,
   addShuffleTrack,
+  addPrevTrack,
+  addNextTrack,
 } from "../../Store/Actions/Creators/music";
 import TrackPlayRender from "../PlayerTrackPlay/PlayerTrackPlay";
 import { SkeletonTrackPlayRender } from "../Skeleton/Skeleton";
+import { creatorCurrentTrack } from "../../function";
 import * as S from "./style";
 
 export const PlayerRender = (props) => {
@@ -35,24 +38,22 @@ export const PlayerRender = (props) => {
   const [isVolume, setIsVolume] = useState(0.2);
   const [isMuted, setIsMuted] = useState(false);
   const isShuffle = useSelector(shuffleSelector);
-  const shuffleAllTrack = useSelector(shuffleAllTrackSelector);
+  const prevTrackShuffle = useSelector(prevTrackSelector);
+  const nextTrackShuffle = useSelector(nextTrackSelector);
   const dispatch = useDispatch();
 
   const addTrackPlayer = (content) => {
     dispatch(addCurrentTrack(content));
   };
+
   const shuffleTrack = () => {
     dispatch(addShuffleTrack(true));
-
-    //  const randomTrack = allTrackStore.slice().sort(() => Math.random() - 0.5);
-
-    dispatch(
-      addShuffleAllTrack(allTrackStore.slice().sort(() => Math.random() - 0.5))
-    );
-    /*     const randomTrack = Math.floor(
+    const randomTrack = Math.floor(
       Math.random() * Object.keys(allTrackStore).length
     );
-    allTrackStore[randomTrack] ? addTrackPlayer({ key: randomTrack }) : null; */
+    addTrackPlayer(
+      creatorCurrentTrack(allTrackStore[randomTrack], randomTrack)
+    );
   };
 
   const shuffleTrackStop = () => {
@@ -61,39 +62,52 @@ export const PlayerRender = (props) => {
   const toggleShuffle = isShuffle ? shuffleTrackStop : shuffleTrack;
 
   const prevTrackPlay = () => {
-/*     if (currentTime <= 5) {
+    if (currentTime <= 5) {
       audioRef.current.currentTime = 0;
-    } else { */
-      if (isShuffle) {
-        if (currentTime <= 5) {
-          audioRef.current.currentTime = 0;
-        } else {
-        shuffleAllTrack[currentTrackStore.key - 1]
-          ? addTrackPlayer({ key: currentTrackStore.key - 1 })
-          : shuffleAllTrack[currentTrackStore.key];
-        }
-      } if (!isShuffle) {
-        if (currentTime <= 5) {
-          audioRef.current.currentTime = 0;
-        } else {
-        allTrackStore[currentTrackStore.key - 1]
-          ? addTrackPlayer({ key: currentTrackStore.key - 1 })
-          : allTrackStore[currentTrackStore.key];
-          }
-      }
-    
+    }
+    dispatch(
+      addNextTrack(
+        creatorCurrentTrack(currentTrackStore, currentTrackStore.key)
+      )
+    );
+    if (isShuffle) {
+      prevTrackShuffle ? addTrackPlayer(prevTrackShuffle) : shuffleTrack();
+      
+    } else {
+      allTrackStore[currentTrackStore.key - 1]
+        ? addTrackPlayer(
+            creatorCurrentTrack(
+              allTrackStore[currentTrackStore.key - 1],
+              currentTrackStore.key - 1
+            )
+          )
+        : currentTrackStore;
+    }
+    dispatch(addPrevTrack(null));
   };
 
   const nextTrackPlay = () => {
-    if (isShuffle) {
-      shuffleAllTrack[currentTrackStore.key + 1]
-        ? addTrackPlayer({ key: currentTrackStore.key + 1 })
-        : shuffleAllTrack[currentTrackStore.key];
+    dispatch(
+      addPrevTrack(
+        creatorCurrentTrack(currentTrackStore, currentTrackStore.key)
+      )
+    );
+
+    if (isShuffle && allTrackStore) {
+      nextTrackShuffle ? addTrackPlayer(nextTrackShuffle) : shuffleTrack();
+      
+     
     } else {
       allTrackStore[currentTrackStore.key + 1]
-        ? addTrackPlayer({ key: currentTrackStore.key + 1 })
-        : allTrackStore[currentTrackStore.key];
+        ? addTrackPlayer(
+            creatorCurrentTrack(
+              allTrackStore[currentTrackStore.key + 1],
+              currentTrackStore.key + 1
+            )
+          )
+        : currentTrackStore;
     }
+    dispatch(addNextTrack(null));
   };
 
   const setTimeUpdate = () => {
@@ -190,9 +204,7 @@ export const PlayerRender = (props) => {
   }, [urlmp3]);
 
   useEffect(() => {
-    isShuffle
-      ? setUrlmp3(shuffleAllTrack[currentTrackStore.key].track_file || false)
-      : setUrlmp3(allTrackStore[currentTrackStore.key].track_file || false);
+    currentTrackStore ? setUrlmp3(currentTrackStore.track_file || false) : null;
     if (audioRef.current) {
       audioRef.current.addEventListener("timeupdate", setTimeUpdate);
     }
@@ -228,7 +240,9 @@ export const PlayerRender = (props) => {
                   $width="15px"
                   $height="14px"
                   $fill="transparent"
-                  $stroke={allTrackStore[currentTrackStore.key - 1] ||shuffleAllTrack[currentTrackStore.key - 1] ? "#fff" : "red"}
+                  $stroke={
+                    allTrackStore[currentTrackStore.key - 1] ? "#fff" : "red"
+                  }
                   alt="prev"
                 >
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-prev" />
@@ -262,8 +276,9 @@ export const PlayerRender = (props) => {
                   $width="15px"
                   $height="14px"
                   $fill="transparent"
-                  $stroke={allTrackStore[currentTrackStore.key + 1] ||shuffleAllTrack[currentTrackStore.key + 1] ? "#fff" : "red"}
-                 
+                  $stroke={
+                    allTrackStore[currentTrackStore.key + 1] ? "#fff" : "red"
+                  }
                   alt="next"
                 >
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-next" />
@@ -300,15 +315,15 @@ export const PlayerRender = (props) => {
               <TrackPlayRender
                 name_link="http://"
                 name_text={
-                  currentTrackStore && isShuffle
-                    ? shuffleAllTrack[currentTrackStore.key].name
-                    : allTrackStore[currentTrackStore.key].name
+                  currentTrackStore
+                    ? allTrackStore[currentTrackStore.key].name
+                    : null
                 }
                 author_link="http://"
                 author_text={
-                  currentTrackStore && isShuffle
-                    ? shuffleAllTrack[currentTrackStore.key].author
-                    : allTrackStore[currentTrackStore.key].author
+                  currentTrackStore
+                    ? allTrackStore[currentTrackStore.key].author
+                    : null
                 }
               />
             )}

@@ -1,11 +1,10 @@
+/* eslint-disable react/function-component-definition */
 import { useState, useEffect, StrictMode } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addTodo, addloading } from "../../Store/Actions/Creators/music";
 import {
   todosSelector,
   loadingSelector,
-  shuffleSelector,
-  shuffleAllTrackSelector,
 } from "../../Store/Selectors/music";
 import NavMenuLeftRender from "../../components/NavLeft/NavLeft";
 import SearchFormRender from "../../components/SearchForm/SearchForm";
@@ -17,7 +16,7 @@ import TrackFilterRender from "../../components/TrackFilter/TrackFilter";
 import { PlayListItemRender } from "../../components/PlayList/PlayList";
 import { SideBarRender } from "../../components/SideBar/SideBar";
 
-import FooterRender from "../../components/Footer/Footer";
+
 import {
   SkeletonTrackRender,
   SkeletonSideBarRender,
@@ -25,13 +24,11 @@ import {
 import * as S from "./SMain";
 import { getAllTrack } from "../../API/Api";
 
-function MainPageRender() {
+export const MainPageRender = () => {
   const [errorMessage, seterrorMessage] = useState();
   const allTrackStore = useSelector(todosSelector);
   const loading = useSelector(loadingSelector);
   const dispatch = useDispatch();
-  const isShuffle = useSelector(shuffleSelector);
-  const shuffleAllTrack = useSelector(shuffleAllTrackSelector);
 
   useEffect(() => {
     getAllTrack()
@@ -69,19 +66,13 @@ function MainPageRender() {
               <TrackDescriptionCaptionRender />
             )}
             {loading ? <SkeletonTrackRender /> : null}
-            {allTrackStore !== null && isShuffle ? (
-              <PlayListItemRender trackStore={shuffleAllTrack} />
-            ) : (
+            {allTrackStore !== null ? (
               <PlayListItemRender trackStore={allTrackStore} />
-            )}
+            ) : null}
           </S.centerblockContent>
         </S.mainCenterblock>
         {loading ? <SkeletonSideBarRender /> : <SideBarRender />}
       </S.Main>
-
-      <FooterRender />
     </S.Container>
   );
 }
-
-export default MainPageRender;

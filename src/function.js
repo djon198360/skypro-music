@@ -1,9 +1,13 @@
-import { useDispatch } from "react-redux";
-import { addCurrentTrack } from "./Store/Actions/Creators/music";
 
-const dispatch = useDispatch();
 
-export const addTrackPlayer = (content) => {
-  
-  dispatch(addCurrentTrack(content));
+export const creatorCurrentTrack = (content, index) => {
+  const trackObject = {
+    id: content.id,
+    name: content.name,
+    author: content.author,
+    track_file: content.track_file,
+    key: index,
+  };
+  return trackObject;
 };
+

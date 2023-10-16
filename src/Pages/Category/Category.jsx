@@ -5,7 +5,6 @@ import NavMenuLeftRender from "../../components/NavLeft/NavLeft"; // "../NavLeft
 import SearchFormRender from "../../components/SearchForm/SearchForm";
 import TrackDescriptionCaptionRender from "../../components/TrackDescriptionCaption/TrackDescriptionCaption";
 import { PlayListItemRender } from "../../components/PlayList/PlayList";
-import FooterRender from "../../components/Footer/Footer";
 import { PersonalSideBarRender } from "../../components/SideBar/SideBar";
 import {
   SkeletonTrackRender,
@@ -47,7 +46,6 @@ function CategoryPageRender() {
           </SS.MainSidebar>
         )}
       </S.Main>
-      <FooterRender />
     </S.Container>
   );
 }

@@ -1,6 +1,6 @@
 import { StrictMode, useContext } from "react";
 import { Routes, Route } from "react-router-dom";
-import MainPageRender from "../../Pages/Main/Main";
+import {MainPageRender} from "../../Pages/Main/Main";
  import SignupRender from "../../Pages/Signup/Signup";
 import SigninRender from "../../Pages/Signin/Signin"; 
 import NotFoundRender from "../../Pages/NotFound/NotFound";

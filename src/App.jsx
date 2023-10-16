@@ -2,7 +2,7 @@
 import { StrictMode, useState } from "react";
 import { useSelector } from "react-redux";
 import AppRoutes from "./components/Routes/Routes";
-
+import FooterRender from "./components/Footer/Footer";
 import { loadingSelector, currentTrackSelector } from "./Store/Selectors/music";
 // "../Store/Selectors/music";
 
@@ -31,8 +31,8 @@ export function App() {
             value={[currentTrack, setCurrentTrack]}
           >
             <AppRoutes />
-          </setCurrentTrackContext.Provider>
-        </Context.Provider>
+          
+        
         {currentTrackStore ? (
           <PlayerRender
             current={currentTrackStore}
@@ -40,6 +40,9 @@ export function App() {
             loading={loading}
           ></PlayerRender>
         ) : null}
+        <FooterRender />
+        </setCurrentTrackContext.Provider>
+        </Context.Provider>
       </S.StyledWrapper>
     </StrictMode>
   );

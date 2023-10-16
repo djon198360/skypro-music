@@ -5,8 +5,9 @@ import {
   LOADING,
   CURRENT_TRACK,
   ISPLAYING_TRACK,
-  ADD_SHUFFLE_ALL_TRACK,
   SHUFFLE_TRACK,
+  PREV_TRACK,
+  NEXT_TRACK,
 } from "../Types/music";
 
 // let nextTodoId = 0;
@@ -16,11 +17,6 @@ export const addTodo = (content) => ({
   payload: {
     content,
   },
-});
-
-export const addShuffleAllTrack = (content) => ({
-  type: ADD_SHUFFLE_ALL_TRACK,
-  payload: { content },
 });
 
 export const addShuffleTrack = (content) => ({
@@ -49,6 +45,20 @@ export const addCurrentTrack = (content) => ({
 
 export const addIsPlaying = (content) => ({
   type: ISPLAYING_TRACK,
+  payload: {
+    content,
+  },
+});
+
+export const addPrevTrack = (content) => ({
+  type: PREV_TRACK,
+  payload: {
+    content,
+  },
+});
+
+export const addNextTrack = (content) => ({
+  type: NEXT_TRACK,
   payload: {
     content,
   },
