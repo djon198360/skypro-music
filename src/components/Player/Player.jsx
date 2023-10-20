@@ -1,37 +1,15 @@
-/* eslint-disable react/function-component-definition */
-/* eslint-disable no-unused-expressions */
 import { useRef, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
-import {
-  currentTrackSelector,
-  todosSelector,
-  isPlayingSelector,
-  shuffleSelector,
-  prevTrackSelector,
-  nextTrackSelector,
-} from "../../Store/Selectors/music";
-import {
-  addCurrentTrack,
-  addIsPlaying,
-  addShuffleTrack,
-  addPrevTrack,
-  addNextTrack,
-} from "../../Store/Actions/Creators/music";
 import TrackPlayRender from "../PlayerTrackPlay/PlayerTrackPlay";
 import { SkeletonTrackPlayRender } from "../Skeleton/Skeleton";
 import { creatorCurrentTrack } from "../../function";
 import * as S from "./style";
+import { setCurrentTrackContext } from "../AuthForm/AuthForm";
 
-export const PlayerRender = (props) => {
-  const currentTrackStore = useSelector(currentTrackSelector);
-  const allTrackStore = useSelector(todosSelector);
-  const isPlaying = useSelector(isPlayingSelector);
+function PlayerRender(props) {
   const audioRef = useRef(null);
   const inputRef = useRef(null);
-  const [urlmp3, setUrlmp3] = useState(
-    allTrackStore[currentTrackStore.key].track_file || false
-  );
+  const [isPlaying, setIsPlaying] = useState();
+  const [urlmp3, setUrlmp3] = useState(props.current.url);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isLoop, setIsLoop] = useState(false);
@@ -145,6 +123,11 @@ export const PlayerRender = (props) => {
     setCurrentTime(Math.round(event.target.value));
   };
 
+  const setStart = () => {
+    audioRef.current.play();
+    setIsPlaying(true);
+  };
+
   const setPause = () => {
     dispatch(addIsPlaying(false));
     audioRef.current.pause();
@@ -199,21 +182,19 @@ export const PlayerRender = (props) => {
   }, []);
 
   useEffect(() => {
-    dispatch(addIsPlaying(true));
-    setStart();
-  }, [urlmp3]);
-
-  useEffect(() => {
-    currentTrackStore ? setUrlmp3(currentTrackStore.track_file || false) : null;
-    if (audioRef.current) {
-      audioRef.current.addEventListener("timeupdate", setTimeUpdate);
-    }
+    setUrlmp3(props.current.url);
+    setIsPlaying(true);
+    audioRef.current.addEventListener("timeupdate", setTimeUpdate);
     return () => {
       audioRef.current
         ? audioRef.current.removeEventListener("timeupdate", setTimeUpdate)
         : null;
     };
-  }, [currentTrackStore, isShuffle]);
+  }, [props.current.url]);
+
+const noFunct = () => {
+  alert("Ещё не реализовано")
+}
 
   return (
     <S.Bar>
@@ -223,7 +204,12 @@ export const PlayerRender = (props) => {
         <S.TimeSpan> {duration ? timeFormat(duration) : "00:00"} </S.TimeSpan>
       </S.Time>
 
-      <S.Audio src={urlmp3} controls="controls" ref={audioRef}></S.Audio>
+      <S.Audio
+        autoPlay="autoplay"
+        src={urlmp3}
+        controls="controls"
+        ref={audioRef}
+      ></S.Audio>
       <S.BarContent>
         <S.ProgressBar
           type="range"
@@ -284,20 +270,32 @@ export const PlayerRender = (props) => {
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-next" />
                 </S.PlayerBtnSvg>
               </S.PlayerControlsBtnNext>
-
-              <S.PlayerControlsBtnRepeat onClick={toggleLoop}>
-                <S.PlayerBtnSvg
-                  $width="18px"
-                  $height="12px"
-                  $fill="transparent"
-                  $stroke={isLoop ? "#fff" : "#696969"}
-                  alt="repeat"
-                >
-                  <S.Use xlinkHref="../img/icon/sprite.svg#icon-repeat" />
-                </S.PlayerBtnSvg>
-              </S.PlayerControlsBtnRepeat>
-
-              <S.PlayerControlsBtnShuffle onClick={toggleShuffle}>
+              {isLoop ? (
+                <S.PlayerControlsBtnRepeat onClick={toggleLoop}>
+                  <S.PlayerBtnSvg
+                    $width="18px"
+                    $height="12px"
+                    $fill="transparent"
+                    $stroke="#fff"
+                    alt="repeat"
+                  >
+                    <S.Use xlinkHref="../img/icon/sprite.svg#icon-repeat" />
+                  </S.PlayerBtnSvg>
+                </S.PlayerControlsBtnRepeat>
+              ) : (
+                <S.PlayerControlsBtnRepeat onClick={toggleLoop}>
+                  <S.PlayerBtnSvg
+                    $width="18px"
+                    $height="12px"
+                    $fill="transparent"
+                    $stroke="#696969"
+                    alt="repeat"
+                  >
+                    <S.Use xlinkHref="../img/icon/sprite.svg#icon-repeat" />
+                  </S.PlayerBtnSvg>
+                </S.PlayerControlsBtnRepeat>
+              )}
+              <S.PlayerControlsBtnShuffle onClick={noFunct}>
                 <S.PlayerBtnSvg
                   $width="19px"
                   $height="12px"

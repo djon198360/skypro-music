@@ -1,9 +1,5 @@
 import { styled } from "styled-components";
 
-export const datalist = styled.datalist``;
-export const option = styled.option``;
-export const fieldset = styled.fieldset``;
-
 export const Time = styled.div`
   display: flex;
   flex-direction: row;
@@ -289,7 +285,8 @@ export const VolumeProgressLine = styled.input.attrs((props) => ({
   $max: props.max,
   $step: props.step,
 }))`
-  --progress-height: 8px;
+
+--progress-height: 8px;
   --progress-color: #fff;
   --progress-color: ${(props) => props.$color ?? "#fff"};
   --progress-bg-color: #797979;
@@ -372,7 +369,8 @@ export const VolumeProgressLine = styled.input.attrs((props) => ({
   &::-moz-range-progress {
     background-color: var(--progress-color);
     height: var(--progress-height);
-  } */
+  }
+
 
   /*  width: 109px;
   cursor: pointer;
