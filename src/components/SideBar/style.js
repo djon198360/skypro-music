@@ -66,9 +66,12 @@ export const SidebarIcon = styled.div`
 `;
 
 export const Logout = styled.use.attrs((props) => ({
-    xlinkHref: props.xlinkHref}))``
+  xlinkHref: props.xlinkHref,
+}))``;
 
-export const LogoutSvg = styled.svg``
+export const LogoutSvg = styled.svg`
+  width: 40px;
+`;
 
 export const SidebarItem = styled.div`
   width: 250px;
@@ -83,9 +86,9 @@ export const SidebarLink = styled(NavLinkStandart)`
   height: 100%;
 `;
 export const SidebarImg = styled.img.attrs((props) => ({
-    "href": props.href,
-    "src": props.src,
-    "alt": `${props.alt}`
+  href: props.href,
+  src: props.src,
+  alt: `${props.alt}`,
 }))`
   width: 100%;
   height: auto;

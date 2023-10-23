@@ -1,4 +1,4 @@
-const todoSelector = (store) => store.todo;
+const todoSelector = (store) => store.allStateStore;
 
 export const todoIdsSelector = (store) => todoSelector(store)?.allTrack || [];
 export const currentTrackSelector = (store) =>

@@ -2,83 +2,76 @@
 /* eslint-disable no-unused-expressions */
 import { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import {
-  currentTrackSelector,
-  todosSelector,
-  isPlayingSelector,
-  shuffleSelector,
-  prevTrackSelector,
-  nextTrackSelector,
-} from "../../Store/Selectors/music";
-import {
-  addCurrentTrack,
-  addIsPlaying,
-  addShuffleTrack,
-  addPrevTrack,
-  addNextTrack,
-} from "../../Store/Actions/Creators/music";
-import TrackPlayRender from "../PlayerTrackPlay/PlayerTrackPlay";
+import { TrackPlayRender } from "../PlayerTrackPlay/PlayerTrackPlay";
 import { SkeletonTrackPlayRender } from "../Skeleton/Skeleton";
 import { creatorCurrentTrack } from "../../function";
+import { useGetAllTodosQuery } from "../../Services/todo";
+import {
+  setIsPlaying,
+  setCurrentTrack,
+  addShuffleTrack,
+  addNextTrack,
+  addPrevTrack,
+  setIsLoop,
+  setIsMuted,
+} from "../../Store/Slice/Slice";
 import * as S from "./style";
 
-export const PlayerRender = (props) => {
-  const currentTrackStore = useSelector(currentTrackSelector);
-  const allTrackStore = useSelector(todosSelector);
-  const isPlaying = useSelector(isPlayingSelector);
+export const PlayerRender = () => {
+  const { data,  isLoading } = useGetAllTodosQuery({
+    refetchOnReconnect: true,
+  });
+  const allTrackStore = data;
   const audioRef = useRef(null);
-  const inputRef = useRef(null);
-  const [urlmp3, setUrlmp3] = useState(
-    allTrackStore[currentTrackStore.key].track_file || false
-  );
+
+  const stateHandleTrackState = useSelector((state) => state.handleTrackState);
+  const currentTrackStore = stateHandleTrackState.current_track;
+  const isPlaying = stateHandleTrackState.isPlaying_track;
+  const isShuffle = stateHandleTrackState.shuffle;
+  const prevTrackShuffle = stateHandleTrackState.prevTrack;
+  const nextTrackShuffle = stateHandleTrackState.nextTrack;
+  const isLoop = stateHandleTrackState.isLoopTrack;
+  const isMuted = stateHandleTrackState.isMutedPlayer;
+  const [isVolume, setIsVolume] = useState(0.2);
+  const [urlmp3, setUrlmp3] = useState(currentTrackStore.track_file || false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [isLoop, setIsLoop] = useState(false);
-  const [isVolume, setIsVolume] = useState(0.2);
-  const [isMuted, setIsMuted] = useState(false);
-  const isShuffle = useSelector(shuffleSelector);
-  const prevTrackShuffle = useSelector(prevTrackSelector);
-  const nextTrackShuffle = useSelector(nextTrackSelector);
   const dispatch = useDispatch();
 
-  const addTrackPlayer = (content) => {
-    dispatch(addCurrentTrack(content));
-  };
 
   const shuffleTrack = () => {
     dispatch(addShuffleTrack(true));
     const randomTrack = Math.floor(
       Math.random() * Object.keys(allTrackStore).length
     );
-    addTrackPlayer(
-      creatorCurrentTrack(allTrackStore[randomTrack], randomTrack)
+    dispatch(
+      setCurrentTrack(creatorCurrentTrack(data[randomTrack], randomTrack))
     );
   };
 
   const shuffleTrackStop = () => {
     dispatch(addShuffleTrack(false));
   };
+
   const toggleShuffle = isShuffle ? shuffleTrackStop : shuffleTrack;
 
   const prevTrackPlay = () => {
     if (currentTime <= 5) {
       audioRef.current.currentTime = 0;
     }
-    dispatch(
-      addNextTrack(
-        creatorCurrentTrack(currentTrackStore, currentTrackStore.key)
-      )
-    );
-    if (isShuffle) {
-      prevTrackShuffle ? addTrackPlayer(prevTrackShuffle) : shuffleTrack();
-      
+
+    if (isShuffle && allTrackStore) {
+      prevTrackShuffle
+        ? dispatch(setCurrentTrack(prevTrackShuffle))
+        : shuffleTrack();
     } else {
       allTrackStore[currentTrackStore.key - 1]
-        ? addTrackPlayer(
-            creatorCurrentTrack(
-              allTrackStore[currentTrackStore.key - 1],
-              currentTrackStore.key - 1
+        ? dispatch(
+            setCurrentTrack(
+              creatorCurrentTrack(
+                allTrackStore[currentTrackStore.key - 1],
+                currentTrackStore.key - 1
+              )
             )
           )
         : currentTrackStore;
@@ -94,15 +87,17 @@ export const PlayerRender = (props) => {
     );
 
     if (isShuffle && allTrackStore) {
-      nextTrackShuffle ? addTrackPlayer(nextTrackShuffle) : shuffleTrack();
-      
-     
+      nextTrackShuffle
+        ? dispatch(setCurrentTrack(creatorCurrentTrack(nextTrackShuffle)))
+        : shuffleTrack();
     } else {
       allTrackStore[currentTrackStore.key + 1]
-        ? addTrackPlayer(
-            creatorCurrentTrack(
-              allTrackStore[currentTrackStore.key + 1],
-              currentTrackStore.key + 1
+        ? dispatch(
+            setCurrentTrack(
+              creatorCurrentTrack(
+                allTrackStore[currentTrackStore.key + 1],
+                currentTrackStore.key + 1
+              )
             )
           )
         : currentTrackStore;
@@ -121,7 +116,7 @@ export const PlayerRender = (props) => {
   };
 
   const setStart = () => {
-    dispatch(addIsPlaying(true));
+    dispatch(setIsPlaying(true));
     audioRef.current.play();
 
     /*          audioRef.current.addEventListener("loadeddata", () => {
@@ -146,7 +141,7 @@ export const PlayerRender = (props) => {
   };
 
   const setPause = () => {
-    dispatch(addIsPlaying(false));
+    dispatch(setIsPlaying(false));
     audioRef.current.pause();
   };
 
@@ -154,12 +149,12 @@ export const PlayerRender = (props) => {
 
   const setLoop = () => {
     audioRef.current.loop = true;
-    setIsLoop(true);
+    dispatch(setIsLoop(true));
   };
 
   const setLoopStop = () => {
     audioRef.current.loop = false;
-    setIsLoop(false);
+    dispatch(setIsLoop(false));
   };
 
   const toggleLoop = isLoop ? setLoopStop : setLoop;
@@ -186,7 +181,7 @@ export const PlayerRender = (props) => {
   };
 
   useEffect(() => {
-    dispatch(addIsPlaying(true));
+    dispatch(setIsPlaying(true));
     setStart();
     if (audioRef.current) {
       audioRef.current.addEventListener("timeupdate", setTimeUpdate);
@@ -199,7 +194,7 @@ export const PlayerRender = (props) => {
   }, []);
 
   useEffect(() => {
-    dispatch(addIsPlaying(true));
+    dispatch(setIsPlaying(true));
     setStart();
   }, [urlmp3]);
 
@@ -309,21 +304,15 @@ export const PlayerRender = (props) => {
                 </S.PlayerBtnSvg>
               </S.PlayerControlsBtnShuffle>
             </S.PlayerControls>
-            {props.loading ? (
+            {isLoading ? (
               <SkeletonTrackPlayRender />
             ) : (
               <TrackPlayRender
                 name_link="http://"
-                name_text={
-                  currentTrackStore
-                    ? allTrackStore[currentTrackStore.key].name
-                    : null
-                }
+                name_text={currentTrackStore ? currentTrackStore.name : null}
                 author_link="http://"
                 author_text={
-                  currentTrackStore
-                    ? allTrackStore[currentTrackStore.key].author
-                    : null
+                  currentTrackStore ? currentTrackStore.author : null
                 }
               />
             )}
@@ -351,7 +340,6 @@ export const PlayerRender = (props) => {
                   max="1"
                   step="0.1"
                   onChange={setVolume}
-                  ref={inputRef}
                 />
               </S.VolumeProgress>
             </S.VolumeContent>

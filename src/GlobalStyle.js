@@ -1,6 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 
-const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle`
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -17,6 +17,7 @@ code {
 
 div#root {
     max-width: 1920px;
+    min-height: 100vh;
     margin: 0 auto;
     position: relative;
     background-color: #181818;
@@ -68,5 +69,3 @@ body {
   color: #ffffff;
 }
 `;
-
-export default GlobalStyle;

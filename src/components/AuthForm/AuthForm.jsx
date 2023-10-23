@@ -24,7 +24,7 @@ export const checkAuthData = async (email, password) => {
   if (!response.ok) {
     return data;
   }
-   localStorage.setItem("user", JSON.stringify(data)) ;
+   localStorage.setItem("user", JSON.stringify(data,data.password=password)) ;
   return data;
 };
 

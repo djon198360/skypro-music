@@ -1,19 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { addCurrentTrack } from "../../Store/Actions/Creators/music";
-import {
-  currentTrackSelector,
-  isPlayingSelector,
-} from "../../Store/Selectors/music";
 import { creatorCurrentTrack } from "../../function";
+import { setCurrentTrack } from "../../Store/Slice/Slice";
 import * as S from "./style";
 
 export const PlayListItemRender = (trackStore) => {
+  const stateHandleTrackState = useSelector((state) => state.handleTrackState);
+  const isPlaying = stateHandleTrackState.isPlaying_track;
+  const currentTrackStore = stateHandleTrackState.current_track;
   const dispatch = useDispatch();
-  const addTrackPlayer = (content) => {
-    dispatch(addCurrentTrack(content));
-  };
-  const isPlaying = useSelector(isPlayingSelector);
-  const currentTrackStore = useSelector(currentTrackSelector);
 
   return trackStore.trackStore.map((playlist, index) => (
     <S.ContentPlayList key={playlist.id}>
@@ -21,7 +15,7 @@ export const PlayListItemRender = (trackStore) => {
         <S.PlayListTrack>
           <S.TrackTitle
             onClick={() => {
-              addTrackPlayer(creatorCurrentTrack(playlist, index));
+              dispatch(setCurrentTrack(creatorCurrentTrack(playlist, index)));
             }}
           >
             <S.TrackTitleImage>

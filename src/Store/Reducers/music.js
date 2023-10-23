@@ -10,7 +10,6 @@ import {
 } from "../Actions/Types/music";
 
 const initialState = {
-  allTrack: [],
   loading: true,
   current_track: null,
   isPlaying_track: false,

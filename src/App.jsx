@@ -3,45 +3,37 @@ import { StrictMode, useState } from "react";
 import { useSelector } from "react-redux";
 import AppRoutes from "./components/Routes/Routes";
 import FooterRender from "./components/Footer/Footer";
-import { loadingSelector, currentTrackSelector } from "./Store/Selectors/music";
-// "../Store/Selectors/music";
-
-import {
-  Context,
-  setCurrentTrackContext,
-} from "./components/AuthForm/AuthForm";
-
+import { loadingSelector } from "./Store/Selectors/music";
+import { Context } from "./components/AuthForm/AuthForm";
 import { PlayerRender } from "./components/Player/Player";
-
 import * as S from "./StyledApp";
 
 export function App() {
   const userLocal = localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user")).username
     : false;
+
   const [user, setUser] = useState(userLocal);
-  const [currentTrack, setCurrentTrack] = useState(false);
   const loading = useSelector(loadingSelector);
-  const currentTrackStore = useSelector(currentTrackSelector);
+  const currentTrackStore = useSelector(
+    (state) => state.handleTrackState.current_track
+  );
   return (
     <StrictMode>
       <S.StyledWrapper>
         <Context.Provider value={[user, setUser]}>
-          <setCurrentTrackContext.Provider
-            value={[currentTrack, setCurrentTrack]}
-          >
-            <AppRoutes />
-          
-        
-        {currentTrackStore ? (
-          <PlayerRender
-            current={currentTrackStore}
-            toggle="false"
-            loading={loading}
-          ></PlayerRender>
-        ) : null}
-        <FooterRender />
-        </setCurrentTrackContext.Provider>
+          {/*     <setCurrentTrackContext.Provider value={currentTrackStore}> */}
+          <AppRoutes />
+
+          {currentTrackStore ? (
+            <PlayerRender
+              current={currentTrackStore}
+              toggle="false"
+              loading={loading}
+            ></PlayerRender>
+          ) : null}
+          <FooterRender />
+          {/*           </setCurrentTrackContext.Provider> */}
         </Context.Provider>
       </S.StyledWrapper>
     </StrictMode>

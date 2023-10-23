@@ -1,6 +1,8 @@
+/* eslint-disable react/function-component-definition */
+/* eslint-disable arrow-body-style */
 import * as S from "./style";
 
-function TrackPlayRender(props) {
+export const TrackPlayRender = (props) => {
   return (
     <S.PlayerTrackPlay>
       <S.TrackPlayContain>
@@ -33,9 +35,9 @@ function TrackPlayRender(props) {
       </S.TrackPlayLikeDis>
     </S.PlayerTrackPlay>
   );
-}
+};
 
-function Dislike() {
+export const Dislike = () => {
   return (
     <S.TrackPlayDis $marginleft="28.5px">
       <S.TrackPlaySvg
@@ -49,9 +51,9 @@ function Dislike() {
       </S.TrackPlaySvg>
     </S.TrackPlayDis>
   );
-}
+};
 
-function Like() {
+export const Like = () => {
   return (
     <S.TrackPlayLike>
       <S.TrackPlaySvg
@@ -65,6 +67,4 @@ function Like() {
       </S.TrackPlaySvg>
     </S.TrackPlayLike>
   );
-}
-
-export default TrackPlayRender;
+};

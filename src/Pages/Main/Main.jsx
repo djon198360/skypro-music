@@ -1,11 +1,6 @@
 /* eslint-disable react/function-component-definition */
-import { useState, useEffect, StrictMode } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addTodo, addloading } from "../../Store/Actions/Creators/music";
-import {
-  todosSelector,
-  loadingSelector,
-} from "../../Store/Selectors/music";
+import { useState, StrictMode, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import NavMenuLeftRender from "../../components/NavLeft/NavLeft";
 import SearchFormRender from "../../components/SearchForm/SearchForm";
 import {
@@ -16,36 +11,38 @@ import TrackFilterRender from "../../components/TrackFilter/TrackFilter";
 import { PlayListItemRender } from "../../components/PlayList/PlayList";
 import { SideBarRender } from "../../components/SideBar/SideBar";
 
-
 import {
   SkeletonTrackRender,
   SkeletonSideBarRender,
 } from "../../components/Skeleton/Skeleton";
+import { setUserData } from "../../Store/Slice/UserSlice";
+import { useGetAllTodosQuery } from "../../Services/todo";
 import * as S from "./SMain";
-import { getAllTrack } from "../../API/Api";
 
-export const MainPageRender = () => {
-  const [errorMessage, seterrorMessage] = useState();
-  const allTrackStore = useSelector(todosSelector);
-  const loading = useSelector(loadingSelector);
+export const MainPageRender = (props) => {
+  console.log(props)
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getAllTrack()
-      .then((arrayTrack) => {
-        if (arrayTrack.length > 1) {
-          dispatch(addTodo(arrayTrack));
-        } else {
-          Promise.reject(arrayTrack);
-        }
-      })
-      .catch(() => {
-        seterrorMessage(`Не удалось загрузить плейлист, попробуйте позже!`);
-      })
-      .finally(() => {
-        dispatch(addloading(false));
-      });
+    dispatch(setUserData(JSON.parse(localStorage.getItem("user"))));
   }, []);
+  const [errorMessage, seterrorMessage] = useState();
+  const { data, error, isLoading } = useGetAllTodosQuery({
+    refetchOnReconnect: true,
+  });
+
+  const isEmptyList = !isLoading && !data?.length;
+  if (isLoading) {
+    return isLoading;
+  }
+
+  if (error) {
+    seterrorMessage(error.message);
+  }
+
+  if (isEmptyList) {
+    <p>No todos, yay!</p>;
+  }
 
   return (
     <S.Container>
@@ -65,14 +62,12 @@ export const MainPageRender = () => {
             ) : (
               <TrackDescriptionCaptionRender />
             )}
-            {loading ? <SkeletonTrackRender /> : null}
-            {allTrackStore !== null ? (
-              <PlayListItemRender trackStore={allTrackStore} />
-            ) : null}
+            {isLoading ? <SkeletonTrackRender /> : null}
+            {data !== null ? <PlayListItemRender trackStore={data} /> : null}
           </S.centerblockContent>
         </S.mainCenterblock>
-        {loading ? <SkeletonSideBarRender /> : <SideBarRender />}
+        {isLoading ? <SkeletonSideBarRender /> : <SideBarRender />}
       </S.Main>
     </S.Container>
   );
-}
+};

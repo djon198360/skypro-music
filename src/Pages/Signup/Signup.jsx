@@ -1,17 +1,24 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-expressions */
-import { useState, useEffect, useContext, useRef } from "react";
+
+import { useState, useEffect, useRef, useContext } from "react";
+// import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Context, checkRegisterData } from "../../components/AuthForm/AuthForm";
+import { Context } from "../../components/AuthForm/AuthForm";
 import * as S from "./SSignup";
+import { useCheckRegisterDataMutation } from "../../API/User";
+// import { setUserData } from "../../Store/Slice/UserSlice";
 
 function SignupRender() {
+  const [addRegistrationData, { data, error, isLoading }] =
+    useCheckRegisterDataMutation({
+      refetchOnReconnect: true,
+    });
+ // const dispatch = useDispatch();
   const [user, setUser] = useContext(Context);
   const userRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const repeatPasswordRef = useRef(null);
-  const buttonRef = useRef(null);
   const [userName, setUserName] = useState(false);
   const [email, setEmail] = useState(false);
   const [password, setPassword] = useState(false);
@@ -24,11 +31,14 @@ function SignupRender() {
 
   const userNameValidate = () => {
     const minLength = 2;
-    userRef.current.addEventListener("input" || "blur" || "focus", () => {
-      userRef.current.value.length >= minLength
-        ? setUserName({ validate: true, color: true })
-        : setUserName({ validate: false, color: false });
-    });
+    userRef.current.addEventListener(
+      "input" || "blur" || "focus" || "paste",
+      () => {
+        userRef.current.value.length >= minLength
+          ? setUserName({ validate: true, color: true })
+          : setUserName({ validate: false, color: false });
+      }
+    );
     userName.validate
       ? setErrorMessage({ ...errorMessage, userError: false })
       : setErrorMessage({
@@ -39,11 +49,14 @@ function SignupRender() {
   };
 
   const userEmailValidate = () => {
-    emailRef.current.addEventListener("input" || "blur" || "focus", () => {
-      EMAIL_REGEXP.test(emailRef.current.value)
-        ? setEmail({ validate: true, color: true })
-        : setEmail({ validate: false, color: false });
-    });
+    emailRef.current.addEventListener(
+      "input" || "blur" || "focus" || "paste",
+      () => {
+        EMAIL_REGEXP.test(emailRef.current.value)
+          ? setEmail({ validate: true, color: true })
+          : setEmail({ validate: false, color: false });
+      }
+    );
     email.validate
       ? setErrorMessage({ ...errorMessage, emailError: false })
       : setErrorMessage({
@@ -56,11 +69,14 @@ function SignupRender() {
 
   const userPasswordValidate = () => {
     const minLength = 8;
-    passwordRef.current.addEventListener("input" || "blur" || "focus", () => {
-      passwordRef.current.value.length >= minLength
-        ? setPassword({ validate: true, color: true })
-        : setPassword({ validate: false, color: false });
-    });
+    passwordRef.current.addEventListener(
+      "input" || "blur" || "focus" || "paste",
+      () => {
+        passwordRef.current.value.length >= minLength
+          ? setPassword({ validate: true, color: true })
+          : setPassword({ validate: false, color: false });
+      }
+    );
     password.validate
       ? setErrorMessage({ ...errorMessage, passwordError: false })
       : setErrorMessage({
@@ -88,52 +104,33 @@ function SignupRender() {
         });
     return repeatPasswordRef.current.value === passwordRef.current.value;
   };
+  const handleRegistration = () => {
+    addRegistrationData({
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+      username: userRef.current.value,
+      completed: false,
+    });
+  };
 
   const handleRegister = () => {
     setIsActive(false);
+
     email.validate && password.validate && userName.validate
-      ? checkRegisterData(
-          emailRef.current.value,
-          passwordRef.current.value,
-          userRef.current.value
-        )
-          .then((data) => {
-            setUser(data.username);
-            navigate("/", { replace: true });
-          })
-          .catch((data) => {
-            Object.keys(data).map((id) =>
-              data[id].map((error) => setErrorMessage(`${error}`))
-            );
-          })
-          .finally(() => {
-            setIsActive(true);
-          })
+      ? handleRegistration()
       : errorMessage;
   };
 
- /*  const formOnClick = () => {
-    const userInput = userNameValidate();
-    const emailInput = userEmailValidate();
-    const passwordInput = userPasswordValidate();
-    const repeatInput = userRepeatPasswordValidate();
-    userInput
-      ? setUserName({ validate: true, color: true })
-      : setUserName({ validate: false, color: false });
-    emailInput
-      ? setEmail({ validate: true, color: true })
-      : setEmail({ validate: false, color: false });
-    passwordInput
-      ? setPassword({ validate: true, color: true })
-      : setPassword({ validate: false, color: false });
-    repeatInput
-      ? setRepeatPassword({ validate: true, color: true })
-      : setRepeatPassword({ validate: false, color: false });
-
-    userInput && emailInput && passwordInput && repeatInput
-      ? setIsActive(true)
-      : setIsActive(false);
-  }; */
+  if (data) {
+     /*  dispatch(setUserData(data, (data.password = passwordRef.current.value))); */
+    setUser(JSON.parse(localStorage.getItem("user")));
+    localStorage.setItem(
+      "user",
+      JSON.stringify(data, (data.password = passwordRef.current.value))
+    );
+   
+    navigate("/", { replace: true });
+  }
 
   useEffect(() => {
     setErrorMessage(null);
@@ -148,15 +145,11 @@ function SignupRender() {
       ? setIsActive(true)
       : setIsActive(false);
   }, [userName, password, email, repeatPassword]);
-
+const n = "\n"
   return (
     <S.ContainerSignup>
       <S.ModalBlock>
-        <S.ModalFormLogin
-         /*  onClick={() => {
-            formOnClick();
-          }} */
-        >
+        <S.ModalFormLogin>
           <S.ModalFormLink to="/">
             <S.ModalLogo>
               <S.ModalLogoImg src="../img/logo_modal.png" alt="logo" />
@@ -210,13 +203,17 @@ function SignupRender() {
           />
           {errorMessage ? (
             <S.Error>
-              {Object.values(errorMessage).map((error) => error)}
+              {Object.values(errorMessage).map((errors) => errors)}
+            </S.Error>
+          ) : null}
+          {error ? (
+            <S.Error>
+              {Object.values(error.data).map((errors) => errors + n)}
             </S.Error>
           ) : null}
           <S.ModalBtnSignupEnt
-            ref={buttonRef}
             type="button"
-            disabled={!isActive}
+            disabled={!isActive || isLoading}
             onClick={() => {
               handleRegister();
             }}
