@@ -1,20 +1,16 @@
 /* eslint-disable no-unused-expressions */
-
-import { useState, useEffect, useRef, useContext } from "react";
-// import { useDispatch } from "react-redux";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Context } from "../../components/AuthForm/AuthForm";
+import { createRegistation } from "../../API/User";
+import {
+  validEmail,
+  validPassword,
+  handleValidName,
+  handleRepeatPasswordValidate,
+} from "../../assets/function";
 import * as S from "./SSignup";
-import { useCheckRegisterDataMutation } from "../../API/User";
-// import { setUserData } from "../../Store/Slice/UserSlice";
 
-function SignupRender() {
-  const [addRegistrationData, { data, error, isLoading }] =
-    useCheckRegisterDataMutation({
-      refetchOnReconnect: true,
-    });
- // const dispatch = useDispatch();
-  const [user, setUser] = useContext(Context);
+export function SignupRender() {
   const userRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -26,118 +22,96 @@ function SignupRender() {
   const [isActive, setIsActive] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
-  const EMAIL_REGEXP =
-    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
-
-  const userNameValidate = () => {
-    const minLength = 2;
-    userRef.current.addEventListener(
-      "input" || "blur" || "focus" || "paste",
-      () => {
-        userRef.current.value.length >= minLength
-          ? setUserName({ validate: true, color: true })
-          : setUserName({ validate: false, color: false });
-      }
-    );
-    userName.validate
-      ? setErrorMessage({ ...errorMessage, userError: false })
-      : setErrorMessage({
-          ...errorMessage,
-          userError: "Логин не может быть менее 2 букв \n",
-        });
-    return userRef.current.value.length >= minLength;
-  };
 
   const userEmailValidate = () => {
-    emailRef.current.addEventListener(
-      "input" || "blur" || "focus" || "paste",
-      () => {
-        EMAIL_REGEXP.test(emailRef.current.value)
-          ? setEmail({ validate: true, color: true })
-          : setEmail({ validate: false, color: false });
-      }
-    );
-    email.validate
-      ? setErrorMessage({ ...errorMessage, emailError: false })
-      : setErrorMessage({
-          ...errorMessage,
-          emailError: "Неверный формат email \n",
-        });
-
-    return EMAIL_REGEXP.test(emailRef.current.value);
+    setEmail(validEmail(emailRef.current.value));
+    return validEmail(emailRef.current.value);
   };
 
   const userPasswordValidate = () => {
-    const minLength = 8;
-    passwordRef.current.addEventListener(
-      "input" || "blur" || "focus" || "paste",
-      () => {
-        passwordRef.current.value.length >= minLength
-          ? setPassword({ validate: true, color: true })
-          : setPassword({ validate: false, color: false });
-      }
-    );
-    password.validate
-      ? setErrorMessage({ ...errorMessage, passwordError: false })
-      : setErrorMessage({
-          ...errorMessage,
-          passwordError: "Пароль не может быть менее 8 символов \n",
-        });
+    setPassword(validPassword(passwordRef.current.value));
+    return validPassword(passwordRef.current.value);
+  };
 
-    return passwordRef.current.value.length >= minLength;
+  const userNameValidate = () => {
+    setUserName(handleValidName(userRef.current.value));
+    return handleValidName(userRef.current.value);
   };
 
   const userRepeatPasswordValidate = () => {
-    repeatPasswordRef.current.addEventListener(
-      "input" || "blur" || "focus",
-      () => {
-        repeatPasswordRef.current.value === passwordRef.current.value
-          ? setRepeatPassword({ validate: true, color: true })
-          : setRepeatPassword({ validate: false, color: false });
-      }
+    setRepeatPassword(
+      handleRepeatPasswordValidate(
+        passwordRef.current.value,
+        repeatPasswordRef.current.value
+      )
     );
-    repeatPassword.validate
-      ? setErrorMessage({ ...errorMessage, repeatPasswordError: false })
-      : setErrorMessage({
-          ...errorMessage,
-          repeatPasswordError: "Пароли не совпадают \n",
-        });
-    return repeatPasswordRef.current.value === passwordRef.current.value;
-  };
-  const handleRegistration = () => {
-    addRegistrationData({
-      email: emailRef.current.value,
-      password: passwordRef.current.value,
-      username: userRef.current.value,
-      completed: false,
-    });
+    setRepeatPassword(
+      handleRepeatPasswordValidate(
+        passwordRef.current.value,
+        repeatPasswordRef.current.value
+      )
+    );
   };
 
   const handleRegister = () => {
     setIsActive(false);
-
+    setErrorMessage(null);
     email.validate && password.validate && userName.validate
-      ? handleRegistration()
+      ? createRegistation(
+          emailRef.current.value,
+          passwordRef.current.value,
+          userRef.current.value
+        )
+          .then((data) => {
+            localStorage.setItem("user", JSON.stringify(data));
+            navigate("/", { replace: true });
+          })
+          .catch((data) => {
+            data ? setErrorMessage(data) : null;
+          })
+          .finally(() => {
+            setIsActive(true);
+          })
       : errorMessage;
   };
 
-  if (data) {
-     /*  dispatch(setUserData(data, (data.password = passwordRef.current.value))); */
-    setUser(JSON.parse(localStorage.getItem("user")));
-    localStorage.setItem(
-      "user",
-      JSON.stringify(data, (data.password = passwordRef.current.value))
-    );
-   
-    navigate("/", { replace: true });
-  }
+  useEffect(() => {
+    userName.validate
+      ? setErrorMessage({ ...errorMessage, userError: false })
+      : setErrorMessage({
+          ...errorMessage,
+          userError: "Логин не может быть менее 2 букв",
+        });
+  }, [userName]);
 
   useEffect(() => {
-    setErrorMessage(null);
-  }, [user]);
+    email.validate
+      ? setErrorMessage({ ...errorMessage, emailError: false })
+      : setErrorMessage({
+          ...errorMessage,
+          emailError: "Неверный формат email",
+        });
+  }, [email]);
 
   useEffect(() => {
-    setErrorMessage(null);
+    password.validate
+      ? setErrorMessage({ ...errorMessage, passwordError: false })
+      : setErrorMessage({
+          ...errorMessage,
+          passwordError: "Пароль не может быть менее 8 символов ",
+        });
+  }, [password]);
+
+  useEffect(() => {
+    repeatPassword.validate
+      ? setErrorMessage({ ...errorMessage, repeatPasswordError: false })
+      : setErrorMessage({
+          ...errorMessage,
+          repeatPasswordError: "Пароли не совпадают ",
+        });
+  }, [repeatPassword]);
+
+  useEffect(() => {
     userName.validate &&
     password.validate &&
     email.validate &&
@@ -145,7 +119,11 @@ function SignupRender() {
       ? setIsActive(true)
       : setIsActive(false);
   }, [userName, password, email, repeatPassword]);
-const n = "\n"
+
+  useEffect(() => {
+    setErrorMessage(errorMessage);
+  }, [errorMessage]);
+
   return (
     <S.ContainerSignup>
       <S.ModalBlock>
@@ -203,17 +181,19 @@ const n = "\n"
           />
           {errorMessage ? (
             <S.Error>
-              {Object.values(errorMessage).map((errors) => errors)}
+              {Object.values(errorMessage).map((errors) =>
+                errors ? (
+                  <S.ErrorSpan>
+                    {errors} {"\n"}
+                  </S.ErrorSpan>
+                ) : null
+              )}
             </S.Error>
           ) : null}
-          {error ? (
-            <S.Error>
-              {Object.values(error.data).map((errors) => errors + n)}
-            </S.Error>
-          ) : null}
+
           <S.ModalBtnSignupEnt
             type="button"
-            disabled={!isActive || isLoading}
+            disabled={!isActive}
             onClick={() => {
               handleRegister();
             }}
@@ -225,5 +205,3 @@ const n = "\n"
     </S.ContainerSignup>
   );
 }
-
-export default SignupRender;

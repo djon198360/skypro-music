@@ -1,19 +1,21 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable react/jsx-no-constructed-context-values */
-import { StrictMode, useState } from "react";
+import { StrictMode , useState } from "react";
 import { useSelector } from "react-redux";
 import AppRoutes from "./components/Routes/Routes";
 import FooterRender from "./components/Footer/Footer";
 import { loadingSelector } from "./Store/Selectors/music";
 import { Context } from "./components/AuthForm/AuthForm";
 import { PlayerRender } from "./components/Player/Player";
+
 import * as S from "./StyledApp";
 
 export function App() {
-  const userLocal = localStorage.getItem("user")
-    ? JSON.parse(localStorage.getItem("user")).username
-    : false;
+    const userLocal = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).username
+    : false; 
+  //  const [user,setUser] = useContext(userLocal);
+  const [user,setUser] = useState(userLocal);
 
-  const [user, setUser] = useState(userLocal);
   const loading = useSelector(loadingSelector);
   const currentTrackStore = useSelector(
     (state) => state.handleTrackState.current_track
@@ -21,10 +23,8 @@ export function App() {
   return (
     <StrictMode>
       <S.StyledWrapper>
-        <Context.Provider value={[user, setUser]}>
-          {/*     <setCurrentTrackContext.Provider value={currentTrackStore}> */}
-          <AppRoutes />
-
+      <Context.Provider value={[user,setUser]}>   
+          <AppRoutes/>
           {currentTrackStore ? (
             <PlayerRender
               current={currentTrackStore}
@@ -33,9 +33,9 @@ export function App() {
             ></PlayerRender>
           ) : null}
           <FooterRender />
-          {/*           </setCurrentTrackContext.Provider> */}
-        </Context.Provider>
-      </S.StyledWrapper>
+      
+          </Context.Provider>   
+             </S.StyledWrapper>
     </StrictMode>
   );
 }

@@ -180,3 +180,11 @@ export const Error = styled.div`
   margin-top: 20px;
   text-align: left;
 `;
+
+export const ErrorSpan = styled.span`
+  white-space: pre-wrap;
+  color: coral;
+  font-weight: 400;
+  font-size: 18px;
+  text-align: left;
+`;

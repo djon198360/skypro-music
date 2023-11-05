@@ -1,10 +1,12 @@
-import { useState, useContext } from "react";
+import { useState} from "react";
 import CreateMenuItemLi from "../MenuItem/MenuItem";
 import * as S from "./style";
-import { Context, Logaut } from "../AuthForm/AuthForm";
+import {  Logaut } from "../../API/User";
 
-function NavMenuLeftRender() {
-  const [token, setToken] = useContext(Context);
+export function NavMenuLeftRender(user) {
+
+  
+ 
   const [visible, setVisible] = useState(true);
   const toggleVisibility = () => setVisible(!visible);
 
@@ -24,10 +26,9 @@ function NavMenuLeftRender() {
             <CreateMenuItemLi to="/" text="Главная" />
             <CreateMenuItemLi to="/favorites" text="Мой плейлист" />
 
-            {token ? (
+            {user ? (
               <CreateMenuItemLi
                 onClick={() => {
-                  setToken(false);
                   Logaut();
                 }}
                 text="Выйти"
@@ -41,5 +42,3 @@ function NavMenuLeftRender() {
     </S.MainNav>
   );
 }
-
-export default NavMenuLeftRender;

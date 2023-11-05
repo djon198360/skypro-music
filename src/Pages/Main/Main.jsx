@@ -1,7 +1,5 @@
-/* eslint-disable react/function-component-definition */
-import { useState, StrictMode, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import NavMenuLeftRender from "../../components/NavLeft/NavLeft";
+import { useState, StrictMode } from "react";
+import { NavMenuLeftRender } from "../../components/NavLeft/NavLeft";
 import SearchFormRender from "../../components/SearchForm/SearchForm";
 import {
   ErrorDescriptionRender,
@@ -15,33 +13,24 @@ import {
   SkeletonTrackRender,
   SkeletonSideBarRender,
 } from "../../components/Skeleton/Skeleton";
-import { setUserData } from "../../Store/Slice/UserSlice";
-import { useGetAllTodosQuery } from "../../Services/todo";
+import { useGetAllTrackQuery } from "../../Services/ApiTrack";
 import * as S from "./SMain";
 
-export const MainPageRender = (props) => {
-  console.log(props)
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(setUserData(JSON.parse(localStorage.getItem("user"))));
-  }, []);
-  const [errorMessage, seterrorMessage] = useState();
-  const { data, error, isLoading } = useGetAllTodosQuery({
+export function MainPageRender() {
+  const { data, error, isLoading } = useGetAllTrackQuery({
+/*     pollingInterval: 3000,
+    keepUnusedDataFor: 120, */
     refetchOnReconnect: true,
   });
-
+  const [errorMessage, seterrorMessage] = useState();
   const isEmptyList = !isLoading && !data?.length;
-  if (isLoading) {
-    return isLoading;
-  }
 
   if (error) {
     seterrorMessage(error.message);
   }
 
   if (isEmptyList) {
-    <p>No todos, yay!</p>;
+    seterrorMessage("Список треков пуст");
   }
 
   return (
@@ -62,12 +51,12 @@ export const MainPageRender = (props) => {
             ) : (
               <TrackDescriptionCaptionRender />
             )}
-            {isLoading ? <SkeletonTrackRender /> : null}
-            {data !== null ? <PlayListItemRender trackStore={data} /> : null}
+            {isLoading ? <SkeletonTrackRender /> : <PlayListItemRender trackStore={data} />}
+            {/* {data !== null ? <PlayListItemRender trackStore={data} /> : null} */}
           </S.centerblockContent>
         </S.mainCenterblock>
         {isLoading ? <SkeletonSideBarRender /> : <SideBarRender />}
       </S.Main>
     </S.Container>
   );
-};
+}

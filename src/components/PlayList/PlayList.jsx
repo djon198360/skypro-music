@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { creatorCurrentTrack } from "../../function";
+import { creatorCurrentTrack } from "../../assets/function";
 import { setCurrentTrack } from "../../Store/Slice/Slice";
 import * as S from "./style";
 

@@ -12,6 +12,8 @@ const initialState = {
   nextTrack: null,
   isLoopTrack: false,
   isMutedPlayer: false,
+  accessToken:null,
+  refreshToken:null,
 };
 // const count = useSelector((state) => state)
 export const postsSlice = createSlice({
@@ -40,6 +42,14 @@ export const postsSlice = createSlice({
     setIsMuted(state, action) {
       state.isMutedPlayer = action.payload;
     },
+
+    setAccessToken(state, action) {
+      state.accessToken = action.payload;
+    },
+    setRefreshToken(state, action) {
+      state.refreshToken = action.payload;
+    },
+
   },
 });
 
@@ -51,5 +61,7 @@ export const {
   addPrevTrack,
   setIsLoop,
   setIsMuted,
+  setAccessToken,
+  setRefreshToken,
 } = postsSlice.actions;
 export default postsSlice.reducer;

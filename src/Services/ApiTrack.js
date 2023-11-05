@@ -9,30 +9,17 @@ export const allTrackStore = createApi({
     baseUrl: APIHOST,
   }),
   endpoints: (builder) => ({
-    getAllTodos: builder.query({
+    getAllTrack: builder.query({
       query: () => "catalog/track/all/",
     }),
- 
- 
-/*   getAllFavorite: builder.mutation({
-    query: (body) => ({
-      url: "catalog/track/favorite/all/",
-      method: "GET",
-      body,
-    }),
 
-  }),
- */
-
-    getAllFavorite:  builder.query({
+    getAllFavorite: builder.query({
       query: (body) => ({
         url: "catalog/track/favorite/all/",
         body,
       }),
-    }), 
-  
-  // https://skypro-music-api.skyeng.tech/catalog/track/favorite/all/
-}),
+    }),
+  }),
 });
 
-export const { useGetAllTodosQuery, useGetAllFavoriteQuery } = allTrackStore;
+export const { useGetAllTrackQuery, useGetAllFavoriteQuery } = allTrackStore;

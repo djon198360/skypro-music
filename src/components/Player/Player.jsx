@@ -1,11 +1,10 @@
-/* eslint-disable react/function-component-definition */
 /* eslint-disable no-unused-expressions */
 import { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TrackPlayRender } from "../PlayerTrackPlay/PlayerTrackPlay";
 import { SkeletonTrackPlayRender } from "../Skeleton/Skeleton";
-import { creatorCurrentTrack } from "../../function";
-import { useGetAllTodosQuery } from "../../Services/todo";
+import { creatorCurrentTrack } from "../../assets/function";
+import { useGetAllTrackQuery } from "../../Services/ApiTrack";
 import {
   setIsPlaying,
   setCurrentTrack,
@@ -17,8 +16,8 @@ import {
 } from "../../Store/Slice/Slice";
 import * as S from "./style";
 
-export const PlayerRender = () => {
-  const { data,  isLoading } = useGetAllTodosQuery({
+export function PlayerRender() {
+  const { data, isLoading } = useGetAllTrackQuery({
     refetchOnReconnect: true,
   });
   const allTrackStore = data;
@@ -33,11 +32,9 @@ export const PlayerRender = () => {
   const isLoop = stateHandleTrackState.isLoopTrack;
   const isMuted = stateHandleTrackState.isMutedPlayer;
   const [isVolume, setIsVolume] = useState(0.2);
-  const [urlmp3, setUrlmp3] = useState(currentTrackStore.track_file || false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const dispatch = useDispatch();
-
 
   const shuffleTrack = () => {
     dispatch(addShuffleTrack(true));
@@ -62,7 +59,8 @@ export const PlayerRender = () => {
 
     if (isShuffle && allTrackStore) {
       prevTrackShuffle
-        ? dispatch(setCurrentTrack(prevTrackShuffle))
+        ? dispatch(setCurrentTrack(prevTrackShuffle)) &&
+          dispatch(addNextTrack(creatorCurrentTrack(currentTrackStore)))
         : shuffleTrack();
     } else {
       allTrackStore[currentTrackStore.key - 1]
@@ -196,10 +194,10 @@ export const PlayerRender = () => {
   useEffect(() => {
     dispatch(setIsPlaying(true));
     setStart();
-  }, [urlmp3]);
+  }, [currentTrackStore.track_file]);
 
   useEffect(() => {
-    currentTrackStore ? setUrlmp3(currentTrackStore.track_file || false) : null;
+    //  currentTrackStore ? setUrlmp3(currentTrackStore.track_file || false) : null;
     if (audioRef.current) {
       audioRef.current.addEventListener("timeupdate", setTimeUpdate);
     }
@@ -218,7 +216,11 @@ export const PlayerRender = () => {
         <S.TimeSpan> {duration ? timeFormat(duration) : "00:00"} </S.TimeSpan>
       </S.Time>
 
-      <S.Audio src={urlmp3} controls="controls" ref={audioRef}></S.Audio>
+      <S.Audio
+        src={currentTrackStore.track_file || false}
+        controls="controls"
+        ref={audioRef}
+      ></S.Audio>
       <S.BarContent>
         <S.ProgressBar
           type="range"
@@ -348,4 +350,4 @@ export const PlayerRender = () => {
       </S.BarContent>
     </S.Bar>
   );
-};
+}

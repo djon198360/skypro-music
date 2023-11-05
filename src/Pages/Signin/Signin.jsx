@@ -1,97 +1,93 @@
+/* eslint-disable react/function-component-definition */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-expressions */
-import { useContext, useState, useRef, useEffect} from "react";
+import { useContext, useState, useRef, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { setAuth, Context } from "../../API/User";
+import { validEmail, validPassword } from "../../assets/function";
 import * as S from "../Signup/SSignup";
 import ContainerEnter from "./SSIgnin";
-import { Context, checkAuthData } from "../../components/AuthForm/AuthForm";
 
-function SigninRender() {
+import { setUserData } from "../../Store/Slice/UserSlice";
+
+export const SigninRender = () => {
   const [user, setUser] = useContext(Context);
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
   const [email, setEmail] = useState(false);
   const [password, setPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [isActive, setIsActive] = useState(false);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
   const navigate = useNavigate();
-  const EMAIL_REGEXP =
-    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+  const dispatch = useDispatch();
 
   const userEmailValidate = () => {
-    emailRef.current.addEventListener("input" || "blur" || "focus", () => {
-      EMAIL_REGEXP.test(emailRef.current.value)
-        ? setEmail({ validate: true, color: true })
-        : setEmail({ validate: false, color: false });
-    });
+    setEmail(validEmail(emailRef.current.value));
+    return validEmail(emailRef.current.value);
+  };
+
+  const userPasswordValidate = () => {
+    setPassword(validPassword(passwordRef.current.value));
+    return validPassword(passwordRef.current.value);
+  };
+
+ 
+
+  const formOnClick = () => {
+    userEmailValidate();
+    userPasswordValidate();
+    email.validate && password.validate
+      ? setIsActive(true)
+      : setIsActive(false);
+  };
+
+  useEffect(() => {
     email.validate
       ? setErrorMessage({ ...errorMessage, emailError: false })
       : setErrorMessage({
           ...errorMessage,
-          emailError: "Неверный формат email \n",
+          emailError: "Неверный формат email",
         });
+  }, [email]);
 
-    return EMAIL_REGEXP.test(emailRef.current.value);
-  };
-
-  const userPasswordValidate = () => {
-    const minLength = 8;
-    passwordRef.current.addEventListener("input" || "blur" || "focus", () => {
-      passwordRef.current.value.length >= minLength
-        ? setPassword({ validate: true, color: true })
-        : setPassword({ validate: false, color: false });
-    });
+  useEffect(() => {
     password.validate
       ? setErrorMessage({ ...errorMessage, passwordError: false })
       : setErrorMessage({
           ...errorMessage,
-          passwordError: "Пароль не может быть менее 8 символов \n",
+          passwordError: "Пароль не может быть менее 8 символов ",
         });
+    password.validate && email.validate
+      ? setIsActive(true)
+      : setIsActive(false);
+  }, [password]);
 
-    return passwordRef.current.value.length >= minLength;
-  };
-
-  const loginAuthData = () => {
-    setIsActive(false);
-    email.validate && password.validate
-      ? checkAuthData(emailRef.current.value, passwordRef.current.value)
-          .then((data) => {
-            setUser(data.username);
-            navigate("/", { replace: true });
-          })
-          .catch((data) => {
-            Object.keys(data).map((id) =>
-            data[id].map((error) => setErrorMessage(`${error}`))
-            );
-          })
-          .finally(() => {
-            setIsActive(true);
-          })
-      : errorMessage;
-   
-  };
-
-  const formOnClick = () => {
-    const emailInput = userEmailValidate();
-    const passwordInput = userPasswordValidate();
-    emailInput
-      ? setEmail({ validate: true, color: true })
-      : setEmail({ validate: false, color: false });
-    passwordInput
-      ? setPassword({ validate: true, color: true })
-      : setPassword({ validate: false, color: false });
-    emailInput && passwordInput ? setIsActive(true) : setIsActive(false);
-  };
+  useEffect(() => {
+    setErrorMessage(errorMessage);
+  }, [errorMessage]);
 
   useEffect(() => {
     setErrorMessage(null);
   }, [user]);
 
-  useEffect(() => {
-    setErrorMessage(null);
-    password.validate && email.validate
-      ? setIsActive(true)
-      : setIsActive(false);
-  }, [password, email]);
+  const handleLogin = () => {
+    setIsActive(false);
+    email.validate && password.validate
+      ? setAuth(emailRef.current.value, passwordRef.current.value)
+          .then((data) => {
+            dispatch(setUserData(data));
+            navigate("/", { replace: true });
+          })
+          .catch((data) => {
+            data ? setErrorMessage(data) : null;
+          })
+          .finally(() => {
+            setIsActive(true);
+          })
+      : errorMessage;
+  };
+
   return (
     <ContainerEnter>
       <S.ModalBlock>
@@ -105,7 +101,6 @@ function SigninRender() {
               <S.ModalLogoImg src="../img/logo_modal.png" alt="logo" />
             </S.ModalLogo>
           </S.ModalFormLink>
-
           <S.ModalInputEmail
             type="text"
             name="Email"
@@ -117,7 +112,6 @@ function SigninRender() {
               userEmailValidate();
             }}
           />
-
           <S.ModalInputPasswordFirst
             type="password"
             name="password"
@@ -129,12 +123,23 @@ function SigninRender() {
               userPasswordValidate();
             }}
           />
+          {errorMessage ? (
+            <S.Error>
+              {Object.values(errorMessage).map((errors) =>
+                errors ? (
+                  <S.ErrorSpan>
+                    {errors} {"\n"}
+                  </S.ErrorSpan>
+                ) : null
+              )}
+            </S.Error>
+          ) : null}
 
           <S.ModalBtnSignupEnt
             type="button"
             disabled={!isActive}
             onClick={() => {
-              loginAuthData();
+              handleLogin();
             }}
           >
             Войти
@@ -148,6 +153,4 @@ function SigninRender() {
       </S.ModalBlock>
     </ContainerEnter>
   );
-}
-
-export default SigninRender;
+};

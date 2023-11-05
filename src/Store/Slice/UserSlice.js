@@ -2,13 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  //  user_Data:null,
-/*   email: null,
-  first_name: null,
-  id: null,
-  last_name: null,
-  username: null,
-  password: null, */
+//  user_Data:{username:false}
 };
 
 export const UserDataSlice = createSlice({

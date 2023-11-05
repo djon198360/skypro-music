@@ -1,6 +1,7 @@
 /* eslint-disable react/function-component-definition */
-import { useContext, useEffect, useState } from "react";
-import NavMenuLeftRender from "../../components/NavLeft/NavLeft";
+import { useContext, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { NavMenuLeftRender } from "../../components/NavLeft/NavLeft";
 import SearchFormRender from "../../components/SearchForm/SearchForm";
 import {
   ErrorDescriptionRender,
@@ -16,34 +17,32 @@ import * as S from "../Main/SMain";
 import * as SS from "../../components/SideBar/style";
 import { Context } from "../../components/AuthForm/AuthForm";
 import { useGetTokenMutation } from "../../Services/Auth";
+import { setAccessToken, setRefreshToken } from "../../Store/Slice/Slice";
 // import { useGetAllFavoriteQuery } from "../../Services/todo";
 
 export const FavoritesPageRender = () => {
+  const dispatch = useDispatch();
   const [user] = useContext(Context);
-  const [token, setToken] = useState(null);
-  const [addTodo, { data, error, isLoading }] = useGetTokenMutation({
+  const [addDataGetToken, { data, error, isLoading }] = useGetTokenMutation({
     refetchOnReconnect: true,
   });
-  const handleToken = () => {
-    addTodo({
+
+  const getToken = () => {
+    addDataGetToken({
       email: JSON.parse(localStorage.getItem("user")).email,
       password: JSON.parse(localStorage.getItem("user")).password,
       completed: false,
+      refetchOnReconnect: true,
     });
   };
-
-  const allTrackStore = null;
-
-  // const { data, error, isLoading } = useAddTodoQuery();
+  console.log(data);
+  const allTrackStore = data;
+  dispatch(setAccessToken(data.access));
+  dispatch(setRefreshToken(data.refresh));
+  // const { data, error, isLoading } = useaddDataGetTokenQuery();
   useEffect(() => {
-    handleToken();
+    getToken();
   }, []);
-  useEffect(() => {
-    console.log(data);
-    setToken(data.access);
-
-    console.log(token);
-  }, [token]);
 
   return (
     <S.Container disabled={isLoading}>

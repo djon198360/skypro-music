@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
-import NavMenuLeftRender from "../../components/NavLeft/NavLeft"; // "../NavLeft/NavLeft";
+import { NavMenuLeftRender } from "../../components/NavLeft/NavLeft"; // "../NavLeft/NavLeft";
 import SearchFormRender from "../../components/SearchForm/SearchForm";
 import TrackDescriptionCaptionRender from "../../components/TrackDescriptionCaption/TrackDescriptionCaption";
 import { PlayListItemRender } from "../../components/PlayList/PlayList";
@@ -19,7 +19,7 @@ function CategoryPageRender() {
   const loading = useSelector(loadingSelector);
   const location = useLocation();
   const allTrackStore = useSelector(todosSelector);
- // const [user] = useContext(Context);
+  // const [user] = useContext(Context);
   useEffect(() => {}, []);
 
   return (
