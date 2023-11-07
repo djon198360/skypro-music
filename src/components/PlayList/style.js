@@ -106,6 +106,11 @@ export const imgActiveAnime = styled(imgActive)`
 export const Use = styled.use.attrs((props) => ({
   xlinkHref: props.xlinkHref,
 }))``;
+export const UseLoading = styled.use.attrs((props) => ({
+  xlinkHref: props.xlinkHref,
+}))` animation: ${shadow} 1s ease-in-out infinite;`;
+
+
 
 export const TrackTitleText = styled.div``;
 

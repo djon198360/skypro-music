@@ -1,6 +1,6 @@
 /* eslint-disable react/function-component-definition */
-import { useContext, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NavMenuLeftRender } from "../../components/NavLeft/NavLeft";
 import SearchFormRender from "../../components/SearchForm/SearchForm";
 import {
@@ -15,37 +15,44 @@ import {
 } from "../../components/Skeleton/Skeleton";
 import * as S from "../Main/SMain";
 import * as SS from "../../components/SideBar/style";
-import { Context } from "../../components/AuthForm/AuthForm";
-import { useGetTokenMutation } from "../../Services/Auth";
-import { setAccessToken, setRefreshToken } from "../../Store/Slice/Slice";
-// import { useGetAllFavoriteQuery } from "../../Services/todo";
+import Context from "../../assets/context";
+import { getFavoritesTrack } from "../../API/Api";
+import { setFavoriteTrack } from "../../Store/Slice/Slice";
 
 export const FavoritesPageRender = () => {
-  const dispatch = useDispatch();
   const [user] = useContext(Context);
-  const [addDataGetToken, { data, error, isLoading }] = useGetTokenMutation({
-    refetchOnReconnect: true,
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const dispatch = useDispatch();
 
-  const getToken = () => {
-    addDataGetToken({
-      email: JSON.parse(localStorage.getItem("user")).email,
-      password: JSON.parse(localStorage.getItem("user")).password,
-      completed: false,
-      refetchOnReconnect: true,
-    });
+  const getFavorite = () => {
+    setIsLoading(true);
+    getFavoritesTrack().then((data) => {
+       dispatch(setFavoriteTrack(data));
+      })
+      .catch((data) => {
+        setError(data);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+      
   };
-  console.log(data);
-  const allTrackStore = data;
-  dispatch(setAccessToken(data.access));
-  dispatch(setRefreshToken(data.refresh));
-  // const { data, error, isLoading } = useaddDataGetTokenQuery();
+
+  const favoriteTrack = useSelector(
+    (state) => state.handleTrackState.favoriteTrack
+  );
+  
   useEffect(() => {
-    getToken();
+    getFavorite();
   }, []);
 
+  useEffect(() => {
+    setIsLoading(true)
+    setIsLoading(false);
+  }, [favoriteTrack]);
   return (
-    <S.Container disabled={isLoading}>
+    <S.Container>
       <S.Main>
         <NavMenuLeftRender />
         <S.mainCenterblock>
@@ -53,16 +60,14 @@ export const FavoritesPageRender = () => {
           <S.H2>Мои треки</S.H2>
           <S.centerblockContent>
             {error ? (
-              <ErrorDescriptionRender
-                errors={error.message}
-              ></ErrorDescriptionRender>
+              <ErrorDescriptionRender errors={error}></ErrorDescriptionRender>
             ) : (
               <TrackDescriptionCaptionRender />
             )}
 
             {isLoading ? <SkeletonTrackRender /> : null}
-            {allTrackStore ? (
-              <PlayListItemRender trackStore={allTrackStore} />
+            {favoriteTrack && favoriteTrack.length > 0 ? (
+              <PlayListItemRender trackStore={favoriteTrack} />
             ) : (
               <ErrorDescriptionRender errors="Список треков пуст"></ErrorDescriptionRender>
             )}

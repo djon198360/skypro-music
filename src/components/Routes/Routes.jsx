@@ -7,10 +7,11 @@ import NotFoundRender from "../../Pages/NotFound/NotFound";
 import { ProtectedRoute } from "../ProtectedRoute/ProtectedRoute";
 import CategoryPageRender from "../../Pages/Category/Category";
 import { FavoritesPageRender } from "../../Pages/Favorites/Favorites";
-import Context from "../AuthForm/AuthForm";
+/* import Context from "../AuthForm/AuthForm"; */
+import  Context from "../../assets/context";
 
 function AppRoutes() {
-console.log(useContext(Context))
+
   const [user] = useContext(Context);
 
   return (
@@ -29,7 +30,7 @@ console.log(useContext(Context))
         <Route element={<ProtectedRoute isAllowed={Boolean(user)} />}>
           <Route path="/category/:id" element={<CategoryPageRender />} />
         </Route>
-      </Routes>{" "}
+      </Routes>
     </StrictMode>
   );
 }

@@ -4,10 +4,11 @@
 import { useContext, useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setAuth, Context } from "../../API/User";
 import { validEmail, validPassword } from "../../assets/function";
 import * as S from "../Signup/SSignup";
 import ContainerEnter from "./SSIgnin";
+import { setAuth } from "../../API/User";
+import Context from "../../assets/context";
 
 import { setUserData } from "../../Store/Slice/UserSlice";
 
@@ -77,6 +78,7 @@ export const SigninRender = () => {
       ? setAuth(emailRef.current.value, passwordRef.current.value)
           .then((data) => {
             dispatch(setUserData(data));
+            setUser(data.username);
             navigate("/", { replace: true });
           })
           .catch((data) => {

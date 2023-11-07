@@ -16,13 +16,14 @@ import {
 } from "../../Store/Slice/Slice";
 import * as S from "./style";
 
-export function PlayerRender() {
+export function PlayerRender(toggle) {
+console.log(toggle)
   const { data, isLoading } = useGetAllTrackQuery({
     refetchOnReconnect: true,
   });
   const allTrackStore = data;
   const audioRef = useRef(null);
-
+console.dir(allTrackStore)
   const stateHandleTrackState = useSelector((state) => state.handleTrackState);
   const currentTrackStore = stateHandleTrackState.current_track;
   const isPlaying = stateHandleTrackState.isPlaying_track;
@@ -63,7 +64,7 @@ export function PlayerRender() {
           dispatch(addNextTrack(creatorCurrentTrack(currentTrackStore)))
         : shuffleTrack();
     } else {
-      allTrackStore[currentTrackStore.key - 1]
+      allTrackStore[(currentTrackStore.key - 1)]
         ? dispatch(
             setCurrentTrack(
               creatorCurrentTrack(
@@ -237,9 +238,7 @@ export function PlayerRender() {
                   $width="15px"
                   $height="14px"
                   $fill="transparent"
-                  $stroke={
-                    allTrackStore[currentTrackStore.key - 1] ? "#fff" : "red"
-                  }
+                 // $stroke={allTrackStore[(currentTrackStore.key - 1)] ? "#fff" : "red" }
                   alt="prev"
                 >
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-prev" />
@@ -273,9 +272,9 @@ export function PlayerRender() {
                   $width="15px"
                   $height="14px"
                   $fill="transparent"
-                  $stroke={
+/*                   $stroke={
                     allTrackStore[currentTrackStore.key + 1] ? "#fff" : "red"
-                  }
+                  } */
                   alt="next"
                 >
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-next" />

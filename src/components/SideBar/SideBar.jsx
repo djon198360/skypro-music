@@ -1,13 +1,12 @@
-/* eslint-disable no-unused-vars */
-import { useSelector } from "react-redux";
-import { Context, Logaut } from "../AuthForm/AuthForm";
-
+import { useContext } from "react";
+import { Logaut } from "../../API/User";
+import Context from "../../assets/context";
 import * as S from "./style";
 
 export function SideBarRender() {
   return (
     <S.MainSidebar>
-      <PersonalSideBarRender/>
+      <PersonalSideBarRender />
       <S.SidebarBlock>
         <S.SidebarList>
           <SideBarBlockRender
@@ -31,10 +30,11 @@ export function SideBarRender() {
   );
 }
 
-export function PersonalSideBarRender(user) {
- // const user = useSelector((state) => state.userDataState.user_Data.username);
+export function PersonalSideBarRender() {
+  const [user, setUser] = useContext(Context);
   const logAuth = () => {
-   Logaut();
+    Logaut();
+    setUser(false);
   };
   return (
     <S.SidebarPersonal>

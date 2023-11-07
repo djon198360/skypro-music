@@ -1,15 +1,16 @@
-import { createContext } from "react";
+import { getToken } from "./Api";
 
-const APIHOST = "https://skypro-music-api.skyeng.tech/user/";
-export const Context = createContext(false);
+const APIHOST = "https://skypro-music-api.skyeng.tech/";
 
-export async function createRegistation(email, password, username) {
+
+
+export const createRegistation = async (email, password, username) => {
   const userData = {
     email,
     password,
     username,
   };
-  const response = await fetch(`${APIHOST}signup/`, {
+  const response = await fetch(`${APIHOST}user/signup/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
@@ -20,17 +21,20 @@ export async function createRegistation(email, password, username) {
   if (!response.ok) {
     throw data;
   }
-  localStorage.setItem("user",JSON.stringify(data, (data.password = password)));
+  getToken(userData);
+  localStorage.setItem(
+    "user",
+    JSON.stringify(data, (data.password = password))
+  );
   return data;
 }
 
 export const setAuth = async (email, password) => {
-  //  const navigate = useNavigate();
   const userData = {
     email,
     password,
   };
-  const response = await fetch(`${APIHOST}login/`, {
+  const response = await fetch(`${APIHOST}user/login/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
@@ -41,15 +45,15 @@ export const setAuth = async (email, password) => {
   if (!response.ok) {
     return data;
   }
-  // localStorage.setItem("user", JSON.stringify(data,data.password=password)) ;
-  // localStorage.setItem("user",JSON.stringify(data, (data.password = password)));
-
-  // navigate("/", { replace: true });
-
+  getToken(userData);
+  localStorage.setItem(
+    "user",
+    JSON.stringify(data) // ,(data.password = password))
+  );
   return data;
 };
 
-export const Logaut = () => {
+export const Logaut = async () => {
   localStorage.removeItem("user");
   return false;
 };

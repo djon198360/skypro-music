@@ -14,6 +14,7 @@ const initialState = {
   isMutedPlayer: false,
   accessToken:null,
   refreshToken:null,
+  favoriteTrack:[]
 };
 // const count = useSelector((state) => state)
 export const postsSlice = createSlice({
@@ -49,7 +50,9 @@ export const postsSlice = createSlice({
     setRefreshToken(state, action) {
       state.refreshToken = action.payload;
     },
-
+    setFavoriteTrack(state, action) {
+      state.favoriteTrack = action.payload;
+    },
   },
 });
 
@@ -63,5 +66,6 @@ export const {
   setIsMuted,
   setAccessToken,
   setRefreshToken,
+  setFavoriteTrack,
 } = postsSlice.actions;
 export default postsSlice.reducer;

@@ -1,4 +1,37 @@
+/* eslint-disable no-unused-vars */
 const APIHOST = "https://skypro-music-api.skyeng.tech/";
+
+export const getToken = async (userData) => {
+  const token = await fetch(`${APIHOST}user/token/`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
+  const data = await token.json();
+  if (!token.ok) {
+    throw data;
+  }
+  localStorage.setItem("token_access", data.access);
+  localStorage.setItem("token_refresh", data.refresh);
+};
+
+export const refreshToken = async (functionCallback) => {
+  const token = await fetch(`${APIHOST}user/token/refresh/`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({ refresh: localStorage.getItem("token_refresh") }),
+  });
+  const data = await token.json();
+  if (!token.ok) {
+    throw data;
+  }
+  localStorage.setItem("token_access", data.access);
+  functionCallback();
+};
 
 export async function getAllTrack() {
   const response = await fetch(`${APIHOST}catalog/track/all/`, {
@@ -6,18 +39,55 @@ export async function getAllTrack() {
   });
   const data = await response.json();
   if (!response.ok) {
+  
     throw new Error(`Не удалось загрузить плейлист, попробуйте позже!`); // ${response.status}
   }
   return data;
 }
 
-export function getTokken() {
+export const getFavoritesTrack = async () => {
+  const accessToken = localStorage.getItem("token_access");
+  const token = await fetch(`${APIHOST}catalog/track/favorite/all/`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const data = await token.json();
+  if (!token.ok) {
+    refreshToken(() => getFavoritesTrack());
+    throw data;
+  }
+  return data;
+};
 
-  
-}
+export const setFavoritesTrack = async (id) => {
+  const accessToken = localStorage.getItem("token_access");
+  const token = await fetch(`${APIHOST}catalog/track/${id}/favorite/`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const data = await token.json();
+  if (token.status === 401) {
+    refreshToken(() => setFavoritesTrack(id));
+    return false;
+  }
+  return true;
+};
 
-export function getFavoritesTrack() {
-  const responsed = fetch(`${APIHOST}`);
-  const datas = responsed.json;
-  return datas;
-}
+export const delFavoritesTrack = async (id) => {
+  const accessToken = localStorage.getItem("token_access");
+  const token = await fetch(`${APIHOST}catalog/track/${id}/favorite/`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const data = await token.json();
+  if (token.status === 401) {
+    refreshToken(() => delFavoritesTrack(id));
+  }
+  return data;
+};
