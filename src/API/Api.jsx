@@ -39,7 +39,6 @@ export async function getAllTrack() {
   });
   const data = await response.json();
   if (!response.ok) {
-  
     throw new Error(`Не удалось загрузить плейлист, попробуйте позже!`); // ${response.status}
   }
   return data;
@@ -54,7 +53,7 @@ export const getFavoritesTrack = async () => {
     },
   });
   const data = await token.json();
-  if (!token.ok) {
+  if (token.status === 401) {
     refreshToken(() => getFavoritesTrack());
     throw data;
   }
@@ -89,5 +88,6 @@ export const delFavoritesTrack = async (id) => {
   if (token.status === 401) {
     refreshToken(() => delFavoritesTrack(id));
   }
+  getFavoritesTrack()
   return data;
 };

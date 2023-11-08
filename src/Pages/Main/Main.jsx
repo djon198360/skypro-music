@@ -1,4 +1,5 @@
-import { useState, StrictMode } from "react";
+import { useState, StrictMode, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NavMenuLeftRender } from "../../components/NavLeft/NavLeft";
 import SearchFormRender from "../../components/SearchForm/SearchForm";
 import {
@@ -8,6 +9,7 @@ import {
 import TrackFilterRender from "../../components/TrackFilter/TrackFilter";
 import { PlayListItemRender } from "../../components/PlayList/PlayList";
 import { SideBarRender } from "../../components/SideBar/SideBar";
+import { setAllTrack,setPage } from "../../Store/Slice/Slice";
 
 import {
   SkeletonTrackRender,
@@ -17,11 +19,13 @@ import { useGetAllTrackQuery } from "../../Services/ApiTrack";
 import * as S from "./SMain";
 
 export function MainPageRender() {
+  const dispatch = useDispatch();
   const { data, error, isLoading } = useGetAllTrackQuery({
 /*     pollingInterval: 3000,
     keepUnusedDataFor: 120, */
     refetchOnReconnect: true,
   });
+  
   const [errorMessage, seterrorMessage] = useState();
   const isEmptyList = !isLoading && !data?.length;
 
@@ -32,6 +36,16 @@ export function MainPageRender() {
   if (isEmptyList) {
     seterrorMessage("Список треков пуст");
   }
+  useEffect(() => {
+    dispatch(setPage("allTrack"));
+    if(data){
+      dispatch(setAllTrack(data));
+    }
+
+  }, [data]);
+  const allTrack = useSelector(
+    (state) => state.handleTrackState.allTrack
+  );
 
   return (
     <S.Container>
@@ -46,12 +60,12 @@ export function MainPageRender() {
           <S.centerblockContent>
             {errorMessage ? (
               <ErrorDescriptionRender
-                errors={errorMessage}
+                errors={Object.values(errorMessage).map((errors) =>errors)}
               ></ErrorDescriptionRender>
             ) : (
               <TrackDescriptionCaptionRender />
             )}
-            {isLoading ? <SkeletonTrackRender /> : <PlayListItemRender trackStore={data} />}
+            {isLoading ? <SkeletonTrackRender /> : <PlayListItemRender trackStore={allTrack} />}
             {/* {data !== null ? <PlayListItemRender trackStore={data} /> : null} */}
           </S.centerblockContent>
         </S.mainCenterblock>

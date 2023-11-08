@@ -2,6 +2,7 @@
 /* eslint-disable no-param-reassign */
 // import {  useSelector } from "react-redux";
 import { createSlice } from "@reduxjs/toolkit";
+import { useGetAllTrackQuery } from "../../Services/ApiTrack";
 
 const initialState = {
   loading: true,
@@ -14,7 +15,9 @@ const initialState = {
   isMutedPlayer: false,
   accessToken:null,
   refreshToken:null,
-  favoriteTrack:[]
+  favoriteTrack:[],
+  allTrack:[],
+  page:"allTrack"
 };
 // const count = useSelector((state) => state)
 export const postsSlice = createSlice({
@@ -50,8 +53,14 @@ export const postsSlice = createSlice({
     setRefreshToken(state, action) {
       state.refreshToken = action.payload;
     },
-    setFavoriteTrack(state, action) {
+    setFavoriteAllTrack(state, action) {
       state.favoriteTrack = action.payload;
+    },
+    setAllTrack(state, action) {
+      state.allTrack = action.payload;
+    },
+    setPage(state, action) {
+      state.page = action.payload;
     },
   },
 });
@@ -66,6 +75,8 @@ export const {
   setIsMuted,
   setAccessToken,
   setRefreshToken,
-  setFavoriteTrack,
+  setFavoriteAllTrack,
+  setAllTrack,
+  setPage,
 } = postsSlice.actions;
 export default postsSlice.reducer;
