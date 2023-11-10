@@ -134,12 +134,12 @@ export const RenderItem = (track) => {
               >
                 {loadings ? (
                   <S.UseLoading
-                    xlinkHref="./img/icon/sprite.svg#icon-dislike"
+                    xlinkHref="./img/icon/sprite.svg#icon-like"
                     fill="#d0ff61"
                   />
                 ) : (
                   <S.Use
-                    xlinkHref="./img/icon/sprite.svg#icon-dislike"
+                    xlinkHref="./img/icon/sprite.svg#icon-like"
                     fill="#ad61ff"
                   />
                 )}
@@ -153,11 +153,11 @@ export const RenderItem = (track) => {
               >
                 {loadings ? (
                   <S.UseLoading
-                    xlinkHref="./img/icon/sprite.svg#icon-like"
+                    xlinkHref="./img/icon/sprite.svg#icon-dislike"
                     fill="#d0ff61"
                   />
                 ) : (
-                  <S.Use xlinkHref="./img/icon/sprite.svg#icon-like" />
+                  <S.Use xlinkHref="./img/icon/sprite.svg#icon-dislike" />
                 )}
               </S.TrackTimeSvg>
             )}
