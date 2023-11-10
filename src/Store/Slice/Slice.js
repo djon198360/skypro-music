@@ -16,6 +16,7 @@ const initialState = {
   accessToken:null,
   refreshToken:null,
   favoriteTrack:[],
+  category:[],
   allTrack:[],
   page:"allTrack"
 };
@@ -59,6 +60,9 @@ export const postsSlice = createSlice({
     setAllTrack(state, action) {
       state.allTrack = action.payload;
     },
+    setTrackCategory(state, action) {
+      state.category = action.payload;
+    },
     setPage(state, action) {
       state.page = action.payload;
     },
@@ -77,6 +81,7 @@ export const {
   setRefreshToken,
   setFavoriteAllTrack,
   setAllTrack,
+  setTrackCategory,
   setPage,
 } = postsSlice.actions;
 export default postsSlice.reducer;

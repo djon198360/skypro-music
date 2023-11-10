@@ -1,10 +1,12 @@
-/* eslint-disable no-undef */
+
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const APIHOST = "https://skypro-music-api.skyeng.tech/";
+const accessToken = localStorage.getItem("token_access");
 
 export const allTrackStore = createApi({
   reducerPath: "allTrackStore",
+
   baseQuery: fetchBaseQuery({
     baseUrl: APIHOST,
   }),
@@ -14,12 +16,32 @@ export const allTrackStore = createApi({
     }),
 
     getAllFavorite: builder.query({
-      query: (body) => ({
+      query: () => ({
         url: "catalog/track/favorite/all/",
-        body,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       }),
+    }),
+
+    refreshToken: builder.mutation({
+      query: () => ({
+        url: "user/token/refresh/",
+        body: JSON.stringify({
+          refresh: localStorage.getItem("token_refresh"),
+        }),
+      }),
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
     }),
   }),
 });
 
-export const { useGetAllTrackQuery, useGetAllFavoriteQuery } = allTrackStore;
+export const {
+  useGetAllTrackQuery,
+  useGetAllFavoriteQuery,
+  useRefreshTokenMutation,
+} = allTrackStore;

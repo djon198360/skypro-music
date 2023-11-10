@@ -7,7 +7,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { creatorCurrentTrack } from "../../assets/function";
-import { setFavoritesTrack, delFavoritesTrack,getFavoritesTrack } from "../../API/Api";
+import {
+  setFavoritesTrack,
+  delFavoritesTrack,
+  getFavoritesTrack,
+} from "../../API/Api";
 import { setFavoriteAllTrack, setCurrentTrack } from "../../Store/Slice/Slice";
 import * as S from "./style";
 
@@ -20,22 +24,35 @@ export const RenderItem = (track) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [isLiked, setIsLiked] = useState(false);
   const [loadings, setLoadings] = useState(false);
-  const [dis,setDis] = useState(null)
+  const [dis, setDis] = useState(null);
+  const {page} = stateHandleTrackState;
 
   useEffect(() => {
-    stateHandleTrackState.page === "Favorite" ? setIsLiked(true) : null;
-  playlist.stared_user 
-      ? setIsLiked(playlist.stared_user.find(({ id }) => id === user.id)) || setIsLiked(Boolean(stateHandleTrackState.favoriteTrack.find(( {id} ) => id ===playlist.id)))
-      : null;
+    if (page === "Favorite") {
+      setIsLiked(true);
+    } else {
+      setIsLiked(
+        Boolean(playlist.stared_user.find(({ id }) => id === user.id))
+      )  ||
+        setIsLiked(
+          Boolean(
+            stateHandleTrackState.favoriteTrack.find(
+              ({ id }) => id === playlist.id
+            )
+          )
+        ); 
+        console.log(isLiked)
+        console.log(playlist.stared_user.find(({ id }) => id === user.id))
+    }
   }, []);
 
   useEffect(() => {
-    stateHandleTrackState.page === "Favorite" ?
-      getFavoritesTrack()
-        .then((data) => {
+    stateHandleTrackState.page === "Favorite"
+      ? getFavoritesTrack().then((data) => {
           dispatch(setFavoriteAllTrack(data));
-          setDis(false)
-        }):null
+          setDis(false);
+        })
+      : null;
   }, [dis]);
 
   const toogleLikeDislike = (id, isLike) =>
@@ -65,7 +82,7 @@ export const RenderItem = (track) => {
       .then((result) => {
         if (result) {
           setLoadings(false);
-          
+
           stateHandleTrackState.page === "Favorite" ? setDis(true) : null;
         }
       })
@@ -75,7 +92,6 @@ export const RenderItem = (track) => {
       .finally(() => {
         setLoadings(false);
       });
-    
   };
 
   return (
@@ -134,12 +150,12 @@ export const RenderItem = (track) => {
               >
                 {loadings ? (
                   <S.UseLoading
-                    xlinkHref="./img/icon/sprite.svg#icon-dislike"
+                    xlinkHref="../img/icon/sprite.svg#icon-like"
                     fill="#d0ff61"
                   />
                 ) : (
                   <S.Use
-                    xlinkHref="./img/icon/sprite.svg#icon-dislike"
+                    xlinkHref="../img/icon/sprite.svg#icon-like"
                     fill="#ad61ff"
                   />
                 )}
@@ -153,11 +169,11 @@ export const RenderItem = (track) => {
               >
                 {loadings ? (
                   <S.UseLoading
-                    xlinkHref="./img/icon/sprite.svg#icon-like"
+                    xlinkHref="../img/icon/sprite.svg#icon-dislike"
                     fill="#d0ff61"
                   />
                 ) : (
-                  <S.Use xlinkHref="./img/icon/sprite.svg#icon-like" />
+                  <S.Use xlinkHref="../img/icon/sprite.svg#icon-dislike" />
                 )}
               </S.TrackTimeSvg>
             )}

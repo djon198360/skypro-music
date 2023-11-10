@@ -9,7 +9,7 @@ export function TrackDescriptionCaptionRender() {
       <S.col03>АЛЬБОМ</S.col03>
       <S.col04>
         <S.Svg alt="time">
-          <S.Use xlinkHref="./img/icon/sprite.svg#icon-watch" />
+          <S.Use xlinkHref="../img/icon/sprite.svg#icon-watch" />
         </S.Svg>
       </S.col04>
     </S.ContentTitle>

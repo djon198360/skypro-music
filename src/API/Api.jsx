@@ -44,6 +44,17 @@ export async function getAllTrack() {
   return data;
 }
 
+export async function getTrackCategory(id) {
+  const response = await fetch(`${APIHOST}catalog/selection/${id}`, {
+    headers: { Authorization: ``, "Content-Type": "application/json" },
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(`Не удалось загрузить плейлист, попробуйте позже!`); // ${response.status}
+  }
+  return data;
+}
+
 export const getFavoritesTrack = async () => {
   const accessToken = localStorage.getItem("token_access");
   const token = await fetch(`${APIHOST}catalog/track/favorite/all/`, {
@@ -53,7 +64,7 @@ export const getFavoritesTrack = async () => {
     },
   });
   const data = await token.json();
-  if (token.status === 401) {
+  if (!token.ok) {
     refreshToken(() => getFavoritesTrack());
     throw data;
   }
@@ -69,7 +80,7 @@ export const setFavoritesTrack = async (id) => {
     },
   });
   const data = await token.json();
-  if (token.status === 401) {
+  if (!token.ok) {
     refreshToken(() => setFavoritesTrack(id));
     return false;
   }
@@ -85,9 +96,9 @@ export const delFavoritesTrack = async (id) => {
     },
   });
   const data = await token.json();
-  if (token.status === 401) {
+  if (!token.ok) {
     refreshToken(() => delFavoritesTrack(id));
   }
-  getFavoritesTrack()
+ /* // getFavoritesTrack() */
   return data;
 };

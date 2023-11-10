@@ -17,13 +17,12 @@ import {
 import * as S from "./style";
 
 export function PlayerRender(toggle) {
-console.log(toggle)
+//  console.log(toggle);
   const { data, isLoading } = useGetAllTrackQuery({
     refetchOnReconnect: true,
   });
-  const allTrackStore = data;
+  const allTrackStore = toggle;
   const audioRef = useRef(null);
-console.dir(allTrackStore)
   const stateHandleTrackState = useSelector((state) => state.handleTrackState);
   const currentTrackStore = stateHandleTrackState.current_track;
   const isPlaying = stateHandleTrackState.isPlaying_track;
@@ -64,7 +63,7 @@ console.dir(allTrackStore)
           dispatch(addNextTrack(creatorCurrentTrack(currentTrackStore)))
         : shuffleTrack();
     } else {
-      allTrackStore[(currentTrackStore.key - 1)]
+      allTrackStore[currentTrackStore.key - 1]
         ? dispatch(
             setCurrentTrack(
               creatorCurrentTrack(
@@ -238,7 +237,7 @@ console.dir(allTrackStore)
                   $width="15px"
                   $height="14px"
                   $fill="transparent"
-                 // $stroke={allTrackStore[(currentTrackStore.key - 1)] ? "#fff" : "red" }
+                  // $stroke={allTrackStore[(currentTrackStore.key - 1)] ? "#fff" : "red" }
                   alt="prev"
                 >
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-prev" />
@@ -272,7 +271,7 @@ console.dir(allTrackStore)
                   $width="15px"
                   $height="14px"
                   $fill="transparent"
-/*                   $stroke={
+                  /*                   $stroke={
                     allTrackStore[currentTrackStore.key + 1] ? "#fff" : "red"
                   } */
                   alt="next"
@@ -309,12 +308,8 @@ console.dir(allTrackStore)
               <SkeletonTrackPlayRender />
             ) : (
               <TrackPlayRender
-                name_link="http://"
-                name_text={currentTrackStore ? currentTrackStore.name : null}
-                author_link="http://"
-                author_text={
-                  currentTrackStore ? currentTrackStore.author : null
-                }
+              trackStore={currentTrackStore}
+
               />
             )}
           </S.BarPlayer>

@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavMenuLeftRender } from "../../components/NavLeft/NavLeft";
 import SearchFormRender from "../../components/SearchForm/SearchForm";
 import {
-  ErrorDescriptionRender,
   TrackDescriptionCaptionRender,
+  ErrorDescriptionRender,
 } from "../../components/TrackDescriptionCaption/TrackDescriptionCaption";
 import { PlayListItemRender } from "../../components/PlayList/PlayList";
 import { PersonalSideBarRender } from "../../components/SideBar/SideBar";
@@ -43,18 +43,14 @@ export const FavoritesPageRender = () => {
      
   };
 
-  const favoriteTrack = useSelector(
-    (state) => state.handleTrackState.favoriteTrack
-  );
-
   useEffect(() => {
     dispatch(setPage("Favorite"));
     getFavorite();
   }, []);
-/*   useEffect(() => {
-  
-    
-  }, [favoriteTrack]); */
+
+  const favoriteTrack = useSelector(
+    (state) => state.handleTrackState.favoriteTrack
+  );
 
   return (
     <S.Container>

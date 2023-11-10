@@ -1,26 +1,54 @@
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
+import { getTrackCategory } from "../../API/Api";
 import { NavMenuLeftRender } from "../../components/NavLeft/NavLeft"; // "../NavLeft/NavLeft";
 import SearchFormRender from "../../components/SearchForm/SearchForm";
-import TrackDescriptionCaptionRender from "../../components/TrackDescriptionCaption/TrackDescriptionCaption";
+import {
+  TrackDescriptionCaptionRender,
+  ErrorDescriptionRender,
+} from "../../components/TrackDescriptionCaption/TrackDescriptionCaption";
 import { PlayListItemRender } from "../../components/PlayList/PlayList";
 import { PersonalSideBarRender } from "../../components/SideBar/SideBar";
 import {
   SkeletonTrackRender,
   SkeletonSideBarRender,
 } from "../../components/Skeleton/Skeleton";
+import { Context } from "../../assets/context";
+import { setTrackCategory, setPage } from "../../Store/Slice/Slice";
 import * as S from "../Main/SMain";
 import * as SS from "../../components/SideBar/style";
-// import { Context } from "../../components/AuthForm/AuthForm";
-import { todosSelector, loadingSelector } from "../../Store/Selectors/music";
 
 function CategoryPageRender() {
-  const loading = useSelector(loadingSelector);
+  const [user] = useContext(Context);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const dispatch = useDispatch();
   const location = useLocation();
-  const allTrackStore = useSelector(todosSelector);
-  // const [user] = useContext(Context);
-  useEffect(() => {}, []);
+
+  const getCategory = (id) => {
+    setIsLoading(true);
+    getTrackCategory(id)
+      .then((data) => {
+        dispatch(setTrackCategory(data));
+      })
+      .catch(() => {
+        setError("Произошла ошибка");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const categoryTrack = useSelector(
+    (state) => state.handleTrackState.category.items
+  );
+
+  useEffect(() => {
+    dispatch(setPage("Category"));
+    const id = location.pathname.split("/").pop();
+    getCategory(id);
+  }, []);
 
   return (
     <S.Container>
@@ -30,19 +58,38 @@ function CategoryPageRender() {
           <SearchFormRender />
           <S.H2>{location.state}</S.H2>
           <S.centerblockContent>
-            <TrackDescriptionCaptionRender />
-            {loading ? (
-              <SkeletonTrackRender />
+            {error ? (
+              <ErrorDescriptionRender>
+                {Object.values(error).map((errors) =>
+                  errors ? (
+                    <ErrorDescriptionRender>
+                      {errors} {"\n"}
+                    </ErrorDescriptionRender>
+                  ) : null
+                )}
+              </ErrorDescriptionRender>
             ) : (
-              <PlayListItemRender trackStore={allTrackStore} />
+              <TrackDescriptionCaptionRender />
+            )}
+            {isLoading ? <SkeletonTrackRender /> : null}
+
+            {categoryTrack &&
+            categoryTrack.length > 0 &&
+            !isLoading &&
+            !error ? (
+              <PlayListItemRender trackStore={categoryTrack} />
+            ) : (
+              <ErrorDescriptionRender errors="No track">
+                No Track
+              </ErrorDescriptionRender> // <ErrorDescriptionRender errors={Object.values(error).map((errors) =>errors)}></ErrorDescriptionRender>
             )}
           </S.centerblockContent>
         </S.mainCenterblock>
-        {loading ? (
+        {isLoading ? (
           <SkeletonSideBarRender />
         ) : (
           <SS.MainSidebar>
-            <PersonalSideBarRender />
+            <PersonalSideBarRender userName={user} />
           </SS.MainSidebar>
         )}
       </S.Main>

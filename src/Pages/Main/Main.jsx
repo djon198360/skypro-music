@@ -9,7 +9,7 @@ import {
 import TrackFilterRender from "../../components/TrackFilter/TrackFilter";
 import { PlayListItemRender } from "../../components/PlayList/PlayList";
 import { SideBarRender } from "../../components/SideBar/SideBar";
-import { setAllTrack,setPage } from "../../Store/Slice/Slice";
+import { setAllTrack, setPage } from "../../Store/Slice/Slice";
 
 import {
   SkeletonTrackRender,
@@ -21,11 +21,13 @@ import * as S from "./SMain";
 export function MainPageRender() {
   const dispatch = useDispatch();
   const { data, error, isLoading } = useGetAllTrackQuery({
-/*     pollingInterval: 3000,
+    /*     pollingInterval: 3000,
     keepUnusedDataFor: 120, */
     refetchOnReconnect: true,
   });
-  
+  useEffect(() => {
+    dispatch(setPage("allTrack"));
+  }, []);
   const [errorMessage, seterrorMessage] = useState();
   const isEmptyList = !isLoading && !data?.length;
 
@@ -38,14 +40,11 @@ export function MainPageRender() {
   }
   useEffect(() => {
     dispatch(setPage("allTrack"));
-    if(data){
+    if (data) {
       dispatch(setAllTrack(data));
     }
-
   }, [data]);
-  const allTrack = useSelector(
-    (state) => state.handleTrackState.allTrack
-  );
+  const allTrack = useSelector((state) => state.handleTrackState.allTrack);
 
   return (
     <S.Container>
@@ -60,12 +59,16 @@ export function MainPageRender() {
           <S.centerblockContent>
             {errorMessage ? (
               <ErrorDescriptionRender
-                errors={Object.values(errorMessage).map((errors) =>errors)}
+                errors={Object.values(errorMessage).map((errors) => errors)}
               ></ErrorDescriptionRender>
             ) : (
               <TrackDescriptionCaptionRender />
             )}
-            {isLoading ? <SkeletonTrackRender /> : <PlayListItemRender trackStore={allTrack} />}
+            {isLoading ? (
+              <SkeletonTrackRender />
+            ) : (
+              <PlayListItemRender trackStore={allTrack} />
+            )}
             {/* {data !== null ? <PlayListItemRender trackStore={data} /> : null} */}
           </S.centerblockContent>
         </S.mainCenterblock>

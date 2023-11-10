@@ -8,6 +8,7 @@ export const creatorCurrentTrack = (content, index) => {
     author: content.author,
     track_file: content.track_file,
     key: index,
+    stared_user:content.stared_user
   };
   return trackObject;
 };
