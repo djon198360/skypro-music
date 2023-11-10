@@ -15,6 +15,7 @@ import {
   setIsMuted,
 } from "../../Store/Slice/Slice";
 import * as S from "./style";
+import { setCurrentTrackContext } from "../AuthForm/AuthForm";
 
 export function PlayerRender(toggle) {
 console.log(toggle)
@@ -207,7 +208,11 @@ console.dir(allTrackStore)
         ? audioRef.current.removeEventListener("timeupdate", setTimeUpdate)
         : null;
     };
-  }, [currentTrackStore, isShuffle]);
+  }, [props.current.url]);
+
+const noFunct = () => {
+  alert("Ещё не реализовано")
+}
 
   return (
     <S.Bar>
@@ -280,20 +285,32 @@ console.dir(allTrackStore)
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-next" />
                 </S.PlayerBtnSvg>
               </S.PlayerControlsBtnNext>
-
-              <S.PlayerControlsBtnRepeat onClick={toggleLoop}>
-                <S.PlayerBtnSvg
-                  $width="18px"
-                  $height="12px"
-                  $fill="transparent"
-                  $stroke={isLoop ? "#fff" : "#696969"}
-                  alt="repeat"
-                >
-                  <S.Use xlinkHref="../img/icon/sprite.svg#icon-repeat" />
-                </S.PlayerBtnSvg>
-              </S.PlayerControlsBtnRepeat>
-
-              <S.PlayerControlsBtnShuffle onClick={toggleShuffle}>
+              {isLoop ? (
+                <S.PlayerControlsBtnRepeat onClick={toggleLoop}>
+                  <S.PlayerBtnSvg
+                    $width="18px"
+                    $height="12px"
+                    $fill="transparent"
+                    $stroke="#fff"
+                    alt="repeat"
+                  >
+                    <S.Use xlinkHref="../img/icon/sprite.svg#icon-repeat" />
+                  </S.PlayerBtnSvg>
+                </S.PlayerControlsBtnRepeat>
+              ) : (
+                <S.PlayerControlsBtnRepeat onClick={toggleLoop}>
+                  <S.PlayerBtnSvg
+                    $width="18px"
+                    $height="12px"
+                    $fill="transparent"
+                    $stroke="#696969"
+                    alt="repeat"
+                  >
+                    <S.Use xlinkHref="../img/icon/sprite.svg#icon-repeat" />
+                  </S.PlayerBtnSvg>
+                </S.PlayerControlsBtnRepeat>
+              )}
+              <S.PlayerControlsBtnShuffle onClick={noFunct}>
                 <S.PlayerBtnSvg
                   $width="19px"
                   $height="12px"

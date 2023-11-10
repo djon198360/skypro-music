@@ -1,10 +1,12 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable prefer-const */
 import { createContext } from "react";
 
 export const Context = createContext(false);
 export const isShuffle = createContext(false);
 export const refAudios = createContext({ currentTrack: false });
 export const Loading = createContext({ isLoading: true });
-export const setCurrentTrackContext = createContext();
+export const setCurrentTrackContext = createContext({ isCurrent: false });
 
 const APIHOST = "https://skypro-music-api.skyeng.tech/user/";
 
