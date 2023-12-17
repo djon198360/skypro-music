@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-use-before-define */
-/* eslint-disable react/function-component-definition */
-/* eslint-disable arrow-body-style */
 import { useState, useEffect } from "react";
 import {
   useLikeTrackMutation,
@@ -9,27 +5,30 @@ import {
 } from "../../Services/ApiTrack";
 import * as S from "./style";
 
-export const TrackPlayRender = (props) => {
-  const [isLiked, setIsLiked] = useState(null);
+export function TrackPlayRender(props) {
+  const [isLiked, setIsLiked] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
   const [likeTrack] = useLikeTrackMutation();
   const [disLikeTrack] = useDislikeTrackMutation();
-const idTrack = props.trackStore.id;
-
-  const toogleLikeDislike = (id, isLike) => {
-    isLike ? handleDislike(id) : handleLike(id);
-  }; 
+  const idTrack = props.trackStore.id;
 
   const handleLike = async (id) => {
-    console.log('1')
-    setIsLiked(likeTrack({ id }));
+    likeTrack({ id })
+   setIsLiked(true);
   };
 
   const handleDislike = async (id) => {
-    console.log('0')
-    setIsLiked(disLikeTrack({ id }));
-    
-  }; 
+    disLikeTrack({ id })
+    setIsLiked(false)
+  };
+
+  const toogleLikeDislike = (id,isLike) => {
+    if (isLike) {
+      handleDislike(id);
+    } else {
+      handleLike(id);
+    }
+  };
 
   useEffect(() => {
     if (props.trackStore.stared_user) {
@@ -37,7 +36,7 @@ const idTrack = props.trackStore.id;
         Boolean(props.trackStore.stared_user.find(({ id }) => id === user.id))
       );
     }
-  }, [props]);
+  }, [props.trackStore.stared_user]);
   return (
     <S.PlayerTrackPlay>
       <S.TrackPlayContain>
@@ -64,50 +63,31 @@ const idTrack = props.trackStore.id;
         </S.TrackPlayAuthor>
       </S.TrackPlayContain>
 
-      <S.TrackPlayLikeDis>
+      <S.TrackPlayLikeDis>{isLiked}
         {isLiked ? (
-          <Dislike
-          onClick= { () => toogleLikeDislike(idTrack,false)}
-          />
+          <S.TrackPlayDis onClick={() => toogleLikeDislike(idTrack, true)}>
+            <S.TrackPlaySvg
+              $width="14px"
+              $height="12px"
+              $stroke="#ad61ff"
+              $fill="#ad61ff"
+            >
+              <S.Use xlinkHref="../img/icon/sprite.svg#icon-dislike" />
+            </S.TrackPlaySvg>
+          </S.TrackPlayDis>
         ) : (
-          <Like
-            onClick={() => toogleLikeDislike(idTrack,true)}
-            
-          />
+          <S.TrackPlayLike onClick={() => toogleLikeDislike(idTrack, false)}>
+            <S.TrackPlaySvg
+              $width="14.34px"
+              $height="13px"
+              $stroke="#696969"
+              $fill="#696969"
+            >
+              <S.Use xlinkHref="../img/icon/sprite.svg#icon-like" />
+            </S.TrackPlaySvg>
+          </S.TrackPlayLike>
         )}
       </S.TrackPlayLikeDis>
     </S.PlayerTrackPlay>
   );
-};
-
-export const Like = () => {
-  return (
-    <S.TrackPlayDis>
-      <S.TrackPlaySvg
-        $width="14.34px"
-        $height="13px"
-        $stroke="#696969"
-        $fill="#696969"
-        alt="dislike"
-      >
-        <S.Use xlinkHref="../img/icon/sprite.svg#icon-dislike" />
-      </S.TrackPlaySvg>
-    </S.TrackPlayDis>
-  );
-};
-
-export const Dislike = () => {
-  return (
-    <S.TrackPlayLike>
-      <S.TrackPlaySvg
-        $width="14px"
-        $height="12px"
-        $stroke="#ad61ff"
-        $fill="#ad61ff"
-        alt="like"
-      >
-        <S.Use xlinkHref="../img/icon/sprite.svg#icon-like" />
-      </S.TrackPlaySvg>
-    </S.TrackPlayLike>
-  );
-};
+}

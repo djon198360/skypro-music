@@ -64,10 +64,8 @@ export const allTrackStore = createApi({
           url: `catalog/track/${id}`,
         };
       },
-      providesTags: (result = []) => [
-        ...result.map((id) => ({ type: "Favorite", id })),
-        DATA_TAG,
-      ],
+      providesTags: { type: "Favorite" }
+      
       /*  query: (id) => `catalog/track/${id}`,
       providesTags: (result = []) => [
         ...result.map((id) => ({ type: "Favorite",id })),

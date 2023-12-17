@@ -16,18 +16,22 @@ const initialState = {
   accessToken:null,
   refreshToken:null,
   favoriteTrack:[],
-  category:[],
+  categoryTrack:[],
   allTrack:[],
+  currentPlaylist:[],
   page:"allTrack",
   filterAuthor:[],
   filterGenre:[],
   filterYear:[],
 };
-// const count = useSelector((state) => state)
+
 export const postsSlice = createSlice({
   name: "handleTrackState",
   initialState,
   reducers: {
+    setCurrentPlaylist(state, action) {
+      state.currentPlaylist = action.payload;
+    },
     setCurrentTrack(state, action) {
       state.current_track = action.payload;
     },
@@ -70,29 +74,28 @@ export const postsSlice = createSlice({
       state.page = action.payload;
     },
     setFilterAuthors(state, action) {
-
       return {
-        // Again, one less level of nesting to copy
         ...state,
         filterAuthor: action.payload
       }
-    
-
-/*       !state.filterAuthor.includes(action.payload) ?
-...state.filterAuthor = action.payload : ...state.filterAuthor.filter((item) => item !== action.payload)
-   //   state.filterAuthor = action.payload */
-  
     },
     setFilterGenres(state, action) {
-      state.filterGenre = action.payload;
+      return {
+      ...state,
+      filterGenre:action.payload
+      }
     },
     setFilterYears(state, action) {
-      state.filterYear = action.payload;
+      return {
+        ...state,
+     filterYear : action.payload
+      }
     },
   },
 });
 
 export const {
+  setCurrentPlaylist,
   setCurrentTrack,
   setIsPlaying,
   addShuffleTrack,

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { TrackPlayRender } from "../PlayerTrackPlay/PlayerTrackPlay";
 import { SkeletonTrackPlayRender } from "../Skeleton/Skeleton";
 import { creatorCurrentTrack } from "../../assets/function";
-import { useGetAllTrackQuery } from "../../Services/ApiTrack";
+// import { useGetAllTrackQuery } from "../../Services/ApiTrack";
 import {
   setIsPlaying,
   setCurrentTrack,
@@ -17,12 +17,14 @@ import {
 import * as S from "./style";
 
 export function PlayerRender(toggle) {
-  const { data, isLoading } = useGetAllTrackQuery({
+  const dispatch = useDispatch();
+/*   const { data, isLoading } = useGetAllTrackQuery({
     refetchOnReconnect: true,
-  });
-  const allTrackStore = data;
+  }); */
+
   const audioRef = useRef(null);
   const stateHandleTrackState = useSelector((state) => state.handleTrackState);
+  const allTrackStore = stateHandleTrackState.currentPlaylist;
   const currentTrackStore = stateHandleTrackState.current_track;
   const isPlaying = stateHandleTrackState.isPlaying_track;
   const isShuffle = stateHandleTrackState.shuffle;
@@ -33,7 +35,7 @@ export function PlayerRender(toggle) {
   const [isVolume, setIsVolume] = useState(0.2);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const dispatch = useDispatch();
+ 
 
   const shuffleTrack = () => {
     dispatch(addShuffleTrack(true));
@@ -41,7 +43,7 @@ export function PlayerRender(toggle) {
       Math.random() * Object.keys(allTrackStore).length
     );
     dispatch(
-      setCurrentTrack(creatorCurrentTrack(data[randomTrack], randomTrack))
+      setCurrentTrack(creatorCurrentTrack(allTrackStore[randomTrack], randomTrack))
     );
   };
 
@@ -303,7 +305,7 @@ export function PlayerRender(toggle) {
                 </S.PlayerBtnSvg>
               </S.PlayerControlsBtnShuffle>
             </S.PlayerControls>
-            {isLoading ? (
+            {!currentTrackStore ? (
               <SkeletonTrackPlayRender />
             ) : (
               <TrackPlayRender trackStore={currentTrackStore} />

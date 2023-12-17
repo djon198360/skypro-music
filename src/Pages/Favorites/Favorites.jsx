@@ -1,16 +1,13 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-no-useless-fragment */
-/* eslint-disable react/jsx-curly-brace-presence */
-/* eslint-disable import/no-cycle */
-/* eslint-disable react/function-component-definition */
-import { useContext, useState,useEffect} from "react";
-
+import { useContext, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setFavoriteAllTrack, setPage } from "../../Store/Slice/Slice";
 import { NavMenuLeftRender } from "../../components/NavLeft/NavLeft";
 import {
   SearchFormRender,
   searchTrack,
 } from "../../components/SearchForm/SearchForm";
-import { useGetAllFavoriteQuery,refreshToken } from "../../Services/ApiTrack";
+import { useGetAllFavoriteQuery, refreshToken } from "../../Services/ApiTrack";
 import {
   TrackDescriptionCaptionRender,
   ErrorDescriptionRender,
@@ -25,37 +22,44 @@ import * as S from "../Main/SMain";
 import * as SS from "../../components/SideBar/style";
 import { Context } from "../../assets/context";
 
-
-
-
-export const FavoritesPageRender = () => {
+export function FavoritesPageRender() {
+  const PAGE = "Favorite";
+  const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [user] = useContext(Context);
-  const [errorGetTrack,setErrorGetTrack] = useState(null);
-
-
-  const { data, error, isLoading , refetch: refetchPosts} = useGetAllFavoriteQuery({
+  const [errorGetTrack, setErrorGetTrack] = useState("");
+  const {
+    data,
+    error,
+    isLoading,
+    refetch: refetchPosts,
+  } = useGetAllFavoriteQuery({
     pollingInterval: 3000,
     keepUnusedDataFor: 120,
     refetchOnReconnect: true,
   });
-  if(error && error.status === Number( 401) ){
-    console.log(error);
-    console.log(data);
+  if (error && error.status === Number(401)) {
     refreshToken();
-   refetchPosts();
-  
- 
-}
+    refetchPosts();
+  }
+  const [FavoriteTrack, setFavoriteTrack] = useState(
+    useSelector((state) => state.handleTrackState.favoriteTrack)
+  );
 
+  useEffect(() => {
+    dispatch(setPage(PAGE));
+    if (data) {
+      dispatch(setFavoriteAllTrack(data));
+      setFavoriteTrack(data);
+    }
+  }, [data]);
 
-/*  useEffect(() => {
- // refreshToken();
+  useEffect(() => {
+    // refreshToken();
 
-  refetchPosts();
-  setErrorGetTrack(null)
-
- },[errorGetTrack])  */
+    refetchPosts();
+    setErrorGetTrack(null);
+  }, [errorGetTrack]);
   return (
     <S.Container>
       <S.Main>
@@ -69,38 +73,34 @@ export const FavoritesPageRender = () => {
           />
           <S.H2>Мои треки</S.H2>
           <S.centerblockContent>
-
-
-
-            {error ? 
-              <ErrorDescriptionRender errors="Error"/* {Object.values(error).map((errors) => errors)} */>
-      {/*           {Object.values(error).map((errors) =>
+            {error && !isLoading ? (
+              <ErrorDescriptionRender
+                errors="Error" /* {Object.values(error).map((errors) => errors)} */
+              >
+                {/*           {Object.values(error).map((errors) =>
                   errors ? (
                     <ErrorDescriptionRender errors ={errors}> */}
-                    </ErrorDescriptionRender>
-               
-               : 
+              </ErrorDescriptionRender>
+            ) : (
               <TrackDescriptionCaptionRender />
-            }
+            )}
 
             {isLoading ? <SkeletonTrackRender /> : null}
             {
-              data?.length  &&
+              FavoriteTrack?.length &&
               !error &&
               searchValue &&
-              searchTrack(searchValue, data).length === 0 ? (
+              searchTrack(searchValue, FavoriteTrack).length === 0 ? (
                 <h2>Ничего не найдено</h2>
               ) : (
                 <>
-                  {data && !isLoading ? (
+                  {FavoriteTrack && !isLoading ? (
                     <PlayListItemRender
                       trackStore={
-                        searchValue ? searchTrack(searchValue, data) : data
+                        searchValue ? searchTrack(searchValue, FavoriteTrack) : FavoriteTrack
                       }
                     />
-                  ) : null
-                    
-                  }
+                  ) : null}
                 </>
               )
 
@@ -128,4 +128,4 @@ export const FavoritesPageRender = () => {
       </S.Main>
     </S.Container>
   );
-};
+}

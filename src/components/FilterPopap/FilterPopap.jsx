@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setFilterAuthors, setFilterGenres } from "../../Store/Slice/Slice";
+import {
+  setFilterAuthors,
+  setFilterGenres,
+  setFilterYears,
+} from "../../Store/Slice/Slice";
 import * as S from "./style";
 
 function FilterPopapRender(event) {
@@ -11,16 +15,9 @@ function FilterPopapRender(event) {
   const [filterGenre, setFilterGenre] = useState(
     useSelector((state) => state?.handleTrackState?.filterGenre)
   );
-
-  /*   const setFilterAuthors = (params) => {
-    if (!filterAuthor.includes(params)) {
-      setFilterAuthor([...filterAuthor, params]);
-    } else {
-      setFilterAuthor(filterAuthor.filter((item) => item !== params));
-    }
-  };
-   */
-
+  const [filterYear, setFilterYear] = useState(
+    useSelector((state) => state?.handleTrackState?.filterYear)
+  );
   useEffect(() => {
     dispatch(setFilterAuthors(filterAuthor));
   }, [filterAuthor]);
@@ -29,6 +26,9 @@ function FilterPopapRender(event) {
     dispatch(setFilterGenres(filterGenre));
   }, [filterGenre]);
 
+  useEffect(() => {
+    dispatch(setFilterYears(filterYear));
+  }, [filterYear]);
   const filters = event.event;
   const filterUnicum = (params) => {
     const result = params?.reduce((acc, item) => {
@@ -44,12 +44,7 @@ function FilterPopapRender(event) {
     case "author":
       return (
         <S.FilterPopapItem>
-          <S.FilterPopaptable>
-            {
-              useSelector((state) => state?.handleTrackState?.filterAuthor)
-                ?.length
-            }
-          </S.FilterPopaptable>
+          <S.FilterPopaptable></S.FilterPopaptable>
           {filterUnicum(event?.data?.data?.map(({ author }) => author))?.map(
             (author) => (
               <S.FilterPopapContent key={author}>
@@ -99,17 +94,16 @@ function FilterPopapRender(event) {
     case "year":
       return (
         <S.FilterPopapItem>
-          <S.FilterPopapContent>
-            <S.FilterPopapLink href="http://">По умолчанию</S.FilterPopapLink>
-          </S.FilterPopapContent>
-
-          <S.FilterPopapContent>
-            <S.FilterPopapLink href="http://">Сначала новые</S.FilterPopapLink>
-          </S.FilterPopapContent>
-
-          <S.FilterPopapContent>
-            <S.FilterPopapLink href="http://">Сначала старые</S.FilterPopapLink>
-          </S.FilterPopapContent>
+          {Object.values(event.data).map((item, value) => (
+            <S.FilterPopapContent>
+              <S.FilterPopapLink
+                onClick={() => setFilterYear([value])}
+                $state={filterYear.includes(value)}
+              >
+                {item}
+              </S.FilterPopapLink>
+            </S.FilterPopapContent>
+          ))}
         </S.FilterPopapItem>
       );
 

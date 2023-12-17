@@ -47,3 +47,21 @@ export const FilterPopap =  styled.div`
   width: 248px;
   padding: 34px;
   gap: 10px;`
+
+  export const CountFilter = styled.div`
+  color: white;
+    background-color: rgb(173, 97, 255);
+    width: 26px;
+    height: 26px;
+    border-radius: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: -4px;
+    top: -4px;
+    font-family: StratosSkyeng;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 13px;`

@@ -1,7 +1,6 @@
 import * as S from "./style";
 
 export function SearchFormRender(setSearchValue) {
-  console.log(setSearchValue.setSearchValue)
   return (
     <S.CenterblockSearch>
       <S.Svg>
@@ -16,8 +15,8 @@ export function SearchFormRender(setSearchValue) {
 }
 
 export const searchTrack = (searchValueText, list) =>
-  list.filter(({ name }) =>
-    name.toLowerCase().includes(searchValueText.toLowerCase())
+  list.filter(({ name,author }) =>
+    name?.toLowerCase().includes(searchValueText.toLowerCase()) || author?.toLowerCase().includes(searchValueText.toLowerCase())
   );
 
 export default SearchFormRender;

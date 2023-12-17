@@ -9,13 +9,17 @@ import {
   useLikeTrackMutation,
   useDislikeTrackMutation,
 } from "../../Services/ApiTrack";
-import { setCurrentTrack } from "../../Store/Slice/Slice";
+import {
+  setCurrentTrack,
+  setPage,
+  setCurrentPlaylist,
+} from "../../Store/Slice/Slice";
 import * as S from "./style";
-
 
 export const RenderItem = (track) => {
   const playlist = track.track;
   const stateHandleTrackState = useSelector((state) => state.handleTrackState);
+  const PAGE = stateHandleTrackState.page;
   const isPlaying = stateHandleTrackState.isPlaying_track;
   const currentTrackStore = stateHandleTrackState.current_track;
   const dispatch = useDispatch();
@@ -32,7 +36,7 @@ export const RenderItem = (track) => {
     } else {
       setIsLiked(true);
     }
-  }, [track]);
+  }, [playlist.stared_user]);
 
   useEffect(() => {}, []);
 
@@ -48,7 +52,21 @@ export const RenderItem = (track) => {
     setIsLiked(refreshToken(() => disLikeTrack({ id })));
   };
 
-  
+  const setCurrentPlaylists = () =>{
+
+    if(stateHandleTrackState.page === "Favorite"){
+    const currentPlaylist = stateHandleTrackState.favoriteTrack;
+    dispatch(setCurrentPlaylist(currentPlaylist));
+    }
+    else if (stateHandleTrackState.page === "Category") {
+      const currentPlaylist = stateHandleTrackState.categoryTrack;
+      dispatch(setCurrentPlaylist(currentPlaylist));
+    }
+    else {
+      null;
+    }
+  }
+
   return (
     <S.ContentPlayList key={playlist.id}>
       <S.PlaylistItem>
@@ -58,6 +76,8 @@ export const RenderItem = (track) => {
               dispatch(
                 setCurrentTrack(creatorCurrentTrack(playlist, track.index))
               );
+              dispatch(setPage(PAGE));
+              setCurrentPlaylists();
             }}
           >
             <S.TrackTitleImage>
@@ -117,7 +137,6 @@ export const RenderItem = (track) => {
                   toogleLikeDislike(playlist.id, false);
                 }}
               >
-                
                 : (
                 <S.Use xlinkHref="../img/icon/sprite.svg#icon-dislike" />)
               </S.TrackTimeSvg>
