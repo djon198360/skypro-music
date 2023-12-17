@@ -1,7 +1,11 @@
+/* eslint-disable no-unused-vars */
 import { useState, StrictMode, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavMenuLeftRender } from "../../components/NavLeft/NavLeft";
-import SearchFormRender from "../../components/SearchForm/SearchForm";
+import {
+  SearchFormRender,
+  searchTrack,
+} from "../../components/SearchForm/SearchForm";
 import {
   ErrorDescriptionRender,
   TrackDescriptionCaptionRender,
@@ -19,15 +23,17 @@ import { useGetAllTrackQuery } from "../../Services/ApiTrack";
 import * as S from "./SMain";
 
 export function MainPageRender() {
+
   const dispatch = useDispatch();
   const { data, error, isLoading } = useGetAllTrackQuery({
-    /*     pollingInterval: 3000,
-    keepUnusedDataFor: 120, */
+        pollingInterval: 3000,
+    keepUnusedDataFor: 120, 
     refetchOnReconnect: true,
   });
   useEffect(() => {
     dispatch(setPage("allTrack"));
   }, []);
+  const [searchValue, setSearchValue] = useState();
   const [errorMessage, seterrorMessage] = useState();
   const isEmptyList = !isLoading && !data?.length;
 
@@ -51,10 +57,15 @@ export function MainPageRender() {
       <S.Main>
         <NavMenuLeftRender />
         <S.mainCenterblock>
-          <SearchFormRender />
+        <SearchFormRender
+            setSearchValue={searchValue}
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+            }}
+          />
           <S.H2>Треки</S.H2>
           <StrictMode>
-            <TrackFilterRender />
+            <TrackFilterRender  array={data}/>
           </StrictMode>
           <S.centerblockContent>
             {errorMessage ? (
@@ -66,9 +77,15 @@ export function MainPageRender() {
             )}
             {isLoading ? (
               <SkeletonTrackRender />
-            ) : (
-              <PlayListItemRender trackStore={allTrack} />
-            )}
+            ) : (<>
+            {searchValue && searchTrack(searchValue, allTrack).length === 0 && data ?  seterrorMessage("Список треков пуст")}
+             :  <PlayListItemRender
+              trackStore={
+                searchValue ? searchTrack(searchValue, data) : data
+              }
+              /> 
+
+            </>)}
             {/* {data !== null ? <PlayListItemRender trackStore={data} /> : null} */}
           </S.centerblockContent>
         </S.mainCenterblock>

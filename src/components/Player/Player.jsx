@@ -17,11 +17,10 @@ import {
 import * as S from "./style";
 
 export function PlayerRender(toggle) {
-//  console.log(toggle);
   const { data, isLoading } = useGetAllTrackQuery({
     refetchOnReconnect: true,
   });
-  const allTrackStore = toggle;
+  const allTrackStore = data;
   const audioRef = useRef(null);
   const stateHandleTrackState = useSelector((state) => state.handleTrackState);
   const currentTrackStore = stateHandleTrackState.current_track;
@@ -194,7 +193,7 @@ export function PlayerRender(toggle) {
   useEffect(() => {
     dispatch(setIsPlaying(true));
     setStart();
-  }, [currentTrackStore.track_file]);
+  }, [toggle]); 
 
   useEffect(() => {
     //  currentTrackStore ? setUrlmp3(currentTrackStore.track_file || false) : null;
@@ -307,10 +306,7 @@ export function PlayerRender(toggle) {
             {isLoading ? (
               <SkeletonTrackPlayRender />
             ) : (
-              <TrackPlayRender
-              trackStore={currentTrackStore}
-
-              />
+              <TrackPlayRender trackStore={currentTrackStore} />
             )}
           </S.BarPlayer>
           <S.BarVolumeBlock>

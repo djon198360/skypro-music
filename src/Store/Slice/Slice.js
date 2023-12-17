@@ -18,7 +18,10 @@ const initialState = {
   favoriteTrack:[],
   category:[],
   allTrack:[],
-  page:"allTrack"
+  page:"allTrack",
+  filterAuthor:[],
+  filterGenre:[],
+  filterYear:[],
 };
 // const count = useSelector((state) => state)
 export const postsSlice = createSlice({
@@ -66,6 +69,26 @@ export const postsSlice = createSlice({
     setPage(state, action) {
       state.page = action.payload;
     },
+    setFilterAuthors(state, action) {
+
+      return {
+        // Again, one less level of nesting to copy
+        ...state,
+        filterAuthor: action.payload
+      }
+    
+
+/*       !state.filterAuthor.includes(action.payload) ?
+...state.filterAuthor = action.payload : ...state.filterAuthor.filter((item) => item !== action.payload)
+   //   state.filterAuthor = action.payload */
+  
+    },
+    setFilterGenres(state, action) {
+      state.filterGenre = action.payload;
+    },
+    setFilterYears(state, action) {
+      state.filterYear = action.payload;
+    },
   },
 });
 
@@ -83,5 +106,8 @@ export const {
   setAllTrack,
   setTrackCategory,
   setPage,
+  setFilterAuthors,
+  setFilterGenres,
+  setFilterYears,
 } = postsSlice.actions;
 export default postsSlice.reducer;

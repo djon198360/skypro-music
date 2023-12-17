@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+import { useGetAllFavoriteQuery } from "../Services/ApiTrack";
+
 const APIHOST = "https://skypro-music-api.skyeng.tech/";
 
 export const getToken = async (userData) => {
@@ -95,10 +97,15 @@ export const delFavoritesTrack = async (id) => {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  const data = await token.json();
+ const data = await token.json();
   if (!token.ok) {
     refreshToken(() => delFavoritesTrack(id));
   }
- /* // getFavoritesTrack() */
-  return data;
+  useGetAllFavoriteQuery({
+    pollingInterval: 3000,
+keepUnusedDataFor: 120, 
+refetchOnReconnect: true,
+});
+
+  return data; 
 };

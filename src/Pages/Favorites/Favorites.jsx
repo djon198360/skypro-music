@@ -1,9 +1,16 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/jsx-no-useless-fragment */
+/* eslint-disable react/jsx-curly-brace-presence */
 /* eslint-disable import/no-cycle */
 /* eslint-disable react/function-component-definition */
-import { useContext, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useContext, useState,useEffect} from "react";
+
 import { NavMenuLeftRender } from "../../components/NavLeft/NavLeft";
-import SearchFormRender from "../../components/SearchForm/SearchForm";
+import {
+  SearchFormRender,
+  searchTrack,
+} from "../../components/SearchForm/SearchForm";
+import { useGetAllFavoriteQuery,refreshToken } from "../../Services/ApiTrack";
 import {
   TrackDescriptionCaptionRender,
   ErrorDescriptionRender,
@@ -17,69 +24,98 @@ import {
 import * as S from "../Main/SMain";
 import * as SS from "../../components/SideBar/style";
 import { Context } from "../../assets/context";
-import { getFavoritesTrack } from "../../API/Api";
-import { setFavoriteAllTrack, setPage } from "../../Store/Slice/Slice";
+
+
+
 
 export const FavoritesPageRender = () => {
+  const [searchValue, setSearchValue] = useState("");
   const [user] = useContext(Context);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const dispatch = useDispatch();
+  const [errorGetTrack,setErrorGetTrack] = useState(null);
 
-  const getFavorite = () => {
-    setIsLoading(true);
-    getFavoritesTrack()
-      .then((data) => { 
-       dispatch(setFavoriteAllTrack(data))
-       
-      })
-      .catch(() => {
-        setError("Произошла ошибка");
-      })
-      .finally(() => {
-        setIsLoading(false);
-       
-      });
-     
-  };
 
-  useEffect(() => {
-    dispatch(setPage("Favorite"));
-    getFavorite();
-  }, []);
+  const { data, error, isLoading , refetch: refetchPosts} = useGetAllFavoriteQuery({
+    pollingInterval: 3000,
+    keepUnusedDataFor: 120,
+    refetchOnReconnect: true,
+  });
+  if(error && error.status === Number( 401) ){
+    console.log(error);
+    console.log(data);
+    refreshToken();
+   refetchPosts();
+  
+ 
+}
 
-  const favoriteTrack = useSelector(
-    (state) => state.handleTrackState.favoriteTrack
-  );
 
+/*  useEffect(() => {
+ // refreshToken();
+
+  refetchPosts();
+  setErrorGetTrack(null)
+
+ },[errorGetTrack])  */
   return (
     <S.Container>
       <S.Main>
         <NavMenuLeftRender />
         <S.mainCenterblock>
-          <SearchFormRender />
+          <SearchFormRender
+            setSearchValue={searchValue}
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+            }}
+          />
           <S.H2>Мои треки</S.H2>
           <S.centerblockContent>
-            {error ? (
-              <ErrorDescriptionRender>
-                {Object.values(error).map((errors) =>
+
+
+
+            {error ? 
+              <ErrorDescriptionRender errors="Error"/* {Object.values(error).map((errors) => errors)} */>
+      {/*           {Object.values(error).map((errors) =>
                   errors ? (
-                    <ErrorDescriptionRender>
-                      {errors} {"\n"}
+                    <ErrorDescriptionRender errors ={errors}> */}
                     </ErrorDescriptionRender>
-                  ) : null
-                )}
-              </ErrorDescriptionRender>
-            ) : (
+               
+               : 
               <TrackDescriptionCaptionRender />
-            )}
+            }
 
             {isLoading ? <SkeletonTrackRender /> : null}
-            {favoriteTrack && favoriteTrack.length > 0 && !isLoading && !error? (
-              <PlayListItemRender trackStore={favoriteTrack} />
+            {
+              data?.length  &&
+              !error &&
+              searchValue &&
+              searchTrack(searchValue, data).length === 0 ? (
+                <h2>Ничего не найдено</h2>
+              ) : (
+                <>
+                  {data && !isLoading ? (
+                    <PlayListItemRender
+                      trackStore={
+                        searchValue ? searchTrack(searchValue, data) : data
+                      }
+                    />
+                  ) : null
+                    
+                  }
+                </>
+              )
+
+              /* (
+              <PlayListItemRender trackStore={data} />
+            ) */
+            }
+
+            {/*             {data && !isLoading && !error ? (
+              <PlayListItemRender trackStore={data} />
             ) : (
-              <ErrorDescriptionRender errors="No track">No Track</ErrorDescriptionRender> // <ErrorDescriptionRender errors={Object.values(error).map((errors) =>errors)}></ErrorDescriptionRender>
-            )}
+              <ErrorDescriptionRender errors="No track">
+                No Track
+              </ErrorDescriptionRender> // <ErrorDescriptionRender errors={Object.values(error).map((errors) =>errors)}></ErrorDescriptionRender>
+            )} */}
           </S.centerblockContent>
         </S.mainCenterblock>
         {isLoading ? (

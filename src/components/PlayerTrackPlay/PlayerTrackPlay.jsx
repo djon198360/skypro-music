@@ -1,20 +1,43 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-use-before-define */
 /* eslint-disable react/function-component-definition */
 /* eslint-disable arrow-body-style */
-import { useState,useEffect} from "react";
+import { useState, useEffect } from "react";
+import {
+  useLikeTrackMutation,
+  useDislikeTrackMutation,
+} from "../../Services/ApiTrack";
 import * as S from "./style";
 
 export const TrackPlayRender = (props) => {
-
-const [isLiked, setIsLiked] = useState(null);
+  const [isLiked, setIsLiked] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
+  const [likeTrack] = useLikeTrackMutation();
+  const [disLikeTrack] = useDislikeTrackMutation();
+const idTrack = props.trackStore.id;
 
-// console.log(isLiked)
-useEffect(() => {
-  if(props.trackStore.stared_user) 
-  {setIsLiked(Boolean(props.trackStore.stared_user.find(({ id }) => id === user.id)))}
-  console.log(isLiked);
- 
-}, [props]);
+  const toogleLikeDislike = (id, isLike) => {
+    isLike ? handleDislike(id) : handleLike(id);
+  }; 
+
+  const handleLike = async (id) => {
+    console.log('1')
+    setIsLiked(likeTrack({ id }));
+  };
+
+  const handleDislike = async (id) => {
+    console.log('0')
+    setIsLiked(disLikeTrack({ id }));
+    
+  }; 
+
+  useEffect(() => {
+    if (props.trackStore.stared_user) {
+      setIsLiked(
+        Boolean(props.trackStore.stared_user.find(({ id }) => id === user.id))
+      );
+    }
+  }, [props]);
   return (
     <S.PlayerTrackPlay>
       <S.TrackPlayContain>
@@ -31,32 +54,40 @@ useEffect(() => {
         </S.TrackPlayImage>
         <S.TrackPlayAlbum>
           <S.TrackPlayLink href={props.name_link}>
-            {props.name_text}
+            {props.trackStore.name}
           </S.TrackPlayLink>
         </S.TrackPlayAlbum>
         <S.TrackPlayAuthor>
           <S.TrackPlayLink href={props.author_link}>
-            {props.author_text}
+            {props.trackStore.author}
           </S.TrackPlayLink>
         </S.TrackPlayAuthor>
       </S.TrackPlayContain>
 
       <S.TrackPlayLikeDis>
-        
-        {isLiked ?  <Dislike />:<Like />}
+        {isLiked ? (
+          <Dislike
+          onClick= { () => toogleLikeDislike(idTrack,false)}
+          />
+        ) : (
+          <Like
+            onClick={() => toogleLikeDislike(idTrack,true)}
+            
+          />
+        )}
       </S.TrackPlayLikeDis>
     </S.PlayerTrackPlay>
   );
 };
 
-export const Dislike = () => {
+export const Like = () => {
   return (
-    <S.TrackPlayDis >
+    <S.TrackPlayDis>
       <S.TrackPlaySvg
         $width="14.34px"
         $height="13px"
-        $fill="#ad61ff"
-       // $stroke="#696969"
+        $stroke="#696969"
+        $fill="#696969"
         alt="dislike"
       >
         <S.Use xlinkHref="../img/icon/sprite.svg#icon-dislike" />
@@ -65,55 +96,18 @@ export const Dislike = () => {
   );
 };
 
-export const Like = () => {
+export const Dislike = () => {
   return (
     <S.TrackPlayLike>
       <S.TrackPlaySvg
         $width="14px"
         $height="12px"
-      //  $fill="transparent"
-        $stroke="#696969"
-        alt="dislike"
+        $stroke="#ad61ff"
+        $fill="#ad61ff"
+        alt="like"
       >
-        <S.Use xlinkHref="../img/icon/sprite.svg#icon-like"  />
+        <S.Use xlinkHref="../img/icon/sprite.svg#icon-like" />
       </S.TrackPlaySvg>
     </S.TrackPlayLike>
   );
 };
-/* 
-{isLiked ? (
-  <S.TrackTimeSvg
-    alt="time"
-    onClick={() => {
-      toogleLikeDislike(playlist.id, true);
-    }}
-  >
-    {loadings ? (
-      <S.UseLoading
-        xlinkHref="../img/icon/sprite.svg#icon-like"
-        fill="#d0ff61"
-      />
-    ) : (
-      <S.Use
-        xlinkHref="../img/icon/sprite.svg#icon-like"
-        fill="#ad61ff"
-      />
-    )}
-  </S.TrackTimeSvg>
-) : (
-  <S.TrackTimeSvg
-    alt="time"
-    onClick={() => {
-      toogleLikeDislike(playlist.id, false);
-    }}
-  >
-    {loadings ? (
-      <S.UseLoading
-        xlinkHref="../img/icon/sprite.svg#icon-dislike"
-        fill="#d0ff61"
-      />
-    ) : (
-      <S.Use xlinkHref="../img/icon/sprite.svg#icon-dislike" />
-    )}
-  </S.TrackTimeSvg>
-)} */

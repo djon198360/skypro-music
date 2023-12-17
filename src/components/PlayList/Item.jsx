@@ -1,19 +1,17 @@
+/* eslint-disable react/function-component-definition */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-use-before-define */
-/* eslint-disable react/function-component-definition */
-/* eslint-disable arrow-body-style */
-/* eslint-disable react/jsx-no-undef */
-/* eslint-disable no-undef */
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { creatorCurrentTrack } from "../../assets/function";
 import {
-  setFavoritesTrack,
-  delFavoritesTrack,
-  getFavoritesTrack,
-} from "../../API/Api";
-import { setFavoriteAllTrack, setCurrentTrack } from "../../Store/Slice/Slice";
+  refreshToken,
+  useLikeTrackMutation,
+  useDislikeTrackMutation,
+} from "../../Services/ApiTrack";
+import { setCurrentTrack } from "../../Store/Slice/Slice";
 import * as S from "./style";
+
 
 export const RenderItem = (track) => {
   const playlist = track.track;
@@ -22,78 +20,35 @@ export const RenderItem = (track) => {
   const currentTrackStore = stateHandleTrackState.current_track;
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("user"));
-  const [isLiked, setIsLiked] = useState(false);
-  const [loadings, setLoadings] = useState(false);
-  const [dis, setDis] = useState(null);
-  const {page} = stateHandleTrackState;
 
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeTrack] = useLikeTrackMutation();
+  const [disLikeTrack] = useDislikeTrackMutation();
   useEffect(() => {
-    if (page === "Favorite") {
-      setIsLiked(true);
-    } else {
+    if (playlist.stared_user) {
       setIsLiked(
         Boolean(playlist.stared_user.find(({ id }) => id === user.id))
-      )  ||
-        setIsLiked(
-          Boolean(
-            stateHandleTrackState.favoriteTrack.find(
-              ({ id }) => id === playlist.id
-            )
-          )
-        ); 
-        console.log(isLiked)
-        console.log(playlist.stared_user.find(({ id }) => id === user.id))
+      );
+    } else {
+      setIsLiked(true);
     }
-  }, []);
+  }, [track]);
 
-  useEffect(() => {
-    stateHandleTrackState.page === "Favorite"
-      ? getFavoritesTrack().then((data) => {
-          dispatch(setFavoriteAllTrack(data));
-          setDis(false);
-        })
-      : null;
-  }, [dis]);
+  useEffect(() => {}, []);
 
-  const toogleLikeDislike = (id, isLike) =>
+  const toogleLikeDislike = (id, isLike) => {
     isLike ? handleDislike(id) : handleLike(id);
+  };
 
   const handleLike = async (id) => {
-    setIsLiked(true);
-    setLoadings(true);
-    setFavoritesTrack(id)
-      .then((result) => {
-        if (result) {
-          setLoadings(false);
-        }
-      })
-      .catch(() => {
-        console.log(`Не удалось удалить трек, попробуйте позже!`);
-      })
-      .finally(() => {
-        setLoadings(false);
-      });
+    setIsLiked(refreshToken(() => likeTrack({ id })));
   };
 
   const handleDislike = async (id) => {
-    setIsLiked(false);
-    setLoadings(true);
-    delFavoritesTrack(id)
-      .then((result) => {
-        if (result) {
-          setLoadings(false);
-
-          stateHandleTrackState.page === "Favorite" ? setDis(true) : null;
-        }
-      })
-      .catch(() => {
-        console.log(`Не удалось удалить трек, попробуйте позже!`);
-      })
-      .finally(() => {
-        setLoadings(false);
-      });
+    setIsLiked(refreshToken(() => disLikeTrack({ id })));
   };
 
+  
   return (
     <S.ContentPlayList key={playlist.id}>
       <S.PlaylistItem>
@@ -148,17 +103,12 @@ export const RenderItem = (track) => {
                   toogleLikeDislike(playlist.id, true);
                 }}
               >
-                {loadings ? (
-                  <S.UseLoading
-                    xlinkHref="../img/icon/sprite.svg#icon-like"
-                    fill="#d0ff61"
-                  />
-                ) : (
-                  <S.Use
-                    xlinkHref="../img/icon/sprite.svg#icon-like"
-                    fill="#ad61ff"
-                  />
-                )}
+                : (
+                <S.Use
+                  xlinkHref="../img/icon/sprite.svg#icon-like"
+                  fill="#ad61ff"
+                />
+                )
               </S.TrackTimeSvg>
             ) : (
               <S.TrackTimeSvg
@@ -167,14 +117,9 @@ export const RenderItem = (track) => {
                   toogleLikeDislike(playlist.id, false);
                 }}
               >
-                {loadings ? (
-                  <S.UseLoading
-                    xlinkHref="../img/icon/sprite.svg#icon-dislike"
-                    fill="#d0ff61"
-                  />
-                ) : (
-                  <S.Use xlinkHref="../img/icon/sprite.svg#icon-dislike" />
-                )}
+                
+                : (
+                <S.Use xlinkHref="../img/icon/sprite.svg#icon-dislike" />)
               </S.TrackTimeSvg>
             )}
 

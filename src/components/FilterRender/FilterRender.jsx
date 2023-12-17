@@ -2,13 +2,13 @@ import { useState } from "react";
 import FilterPopapRender from "../FilterPopap/FilterPopap";
 import * as S from "./style";
 
-function FilterRender() {
+function FilterRender(array) {
   const [state, setState] = useState({ isChecked: null });
-
+  const data = array;
   const handle = (event) => {
     const popapName = event.target.dataset.name;
     if (state.isChecked && state.filter === popapName) {
-      setState({ isChecked: false, filter: null });
+      setState({ isChecked: false, filter: false });
     } else {
       setState({ filter: popapName, isChecked: true });
     }
@@ -26,7 +26,7 @@ function FilterRender() {
         </S.BtnText>
         {state && state.filter === "author" ? (
           <S.FilterPopap>
-            <FilterPopapRender event={state.filter} />
+            <FilterPopapRender event={state.filter} data={data} />
           </S.FilterPopap>
         ) : null}
       </S.FilterItems>
@@ -55,7 +55,7 @@ function FilterRender() {
         </S.BtnText>
         {state && state.filter === "genre" ? (
           <S.FilterPopap>
-            <FilterPopapRender event={state.filter} />
+            <FilterPopapRender event={state.filter} data={data} />
           </S.FilterPopap>
         ) : null}
       </S.FilterItems>

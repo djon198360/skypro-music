@@ -14,7 +14,7 @@ export function App() {
   const userLocal = localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user")).username
     : false;
-  const [user, setUser] = useState(userLocal);
+  const [user, setUser] = useState(userLocal)
 
   const loading = useSelector(loadingSelector);
   const currentTrackStore = useSelector(
