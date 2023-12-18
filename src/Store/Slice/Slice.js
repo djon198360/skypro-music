@@ -68,7 +68,7 @@ export const postsSlice = createSlice({
       state.allTrack = action.payload;
     },
     setTrackCategory(state, action) {
-      state.category = action.payload;
+      state.categoryTrack = action.payload;
     },
     setPage(state, action) {
       state.page = action.payload;

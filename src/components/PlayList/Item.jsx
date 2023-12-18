@@ -36,7 +36,7 @@ export const RenderItem = (track) => {
     } else {
       setIsLiked(true);
     }
-  }, [playlist.stared_user]);
+  }, [stateHandleTrackState]);
 
   useEffect(() => {}, []);
 
@@ -45,27 +45,34 @@ export const RenderItem = (track) => {
   };
 
   const handleLike = async (id) => {
-    setIsLiked(refreshToken(() => likeTrack({ id })));
+    const result = await likeTrack({ id });
+    result.error
+      ? setIsLiked(refreshToken(() => likeTrack({ id })))
+      : setIsLiked(true);
   };
 
   const handleDislike = async (id) => {
-    setIsLiked(refreshToken(() => disLikeTrack({ id })));
+    const result = await disLikeTrack({ id });
+    result.error
+      ? setIsLiked(refreshToken(() => disLikeTrack({ id })))
+      : setIsLiked(false);
   };
 
-  const setCurrentPlaylists = () =>{
-
-    if(stateHandleTrackState.page === "Favorite"){
-    const currentPlaylist = stateHandleTrackState.favoriteTrack;
-    dispatch(setCurrentPlaylist(currentPlaylist));
-    }
-    else if (stateHandleTrackState.page === "Category") {
-      const currentPlaylist = stateHandleTrackState.categoryTrack;
+  const setCurrentPlaylists = () => {
+    if (stateHandleTrackState.page === "Favorite") {
+      const currentPlaylist = stateHandleTrackState.favoriteTrack;
+      dispatch(setCurrentPlaylist(currentPlaylist));
+    } else if (stateHandleTrackState.page === "Category") {
+      const currentPlaylist = stateHandleTrackState.categoryTrack.items;
       dispatch(setCurrentPlaylist(currentPlaylist));
     }
-    else {
+    else{
       null;
     }
-  }
+  };
+  useEffect(() => {
+    setCurrentPlaylists();
+  }, [stateHandleTrackState]);
 
   return (
     <S.ContentPlayList key={playlist.id}>

@@ -32,15 +32,16 @@ export function MainPageRender() {
   const dispatch = useDispatch();
 
   const { data, error, isLoading } = useGetAllTrackQuery({
-    pollingInterval: 3000,
-    keepUnusedDataFor: 120,
+    // pollingInterval: 3000,
+    // keepUnusedDataFor: 120,
     refetchOnReconnect: true,
   });
 
   const [searchValue, setSearchValue] = useState();
   const [errorMessage, seterrorMessage] = useState();
-  const [allTracks, setAllTracks] = useState(useSelector(
-    (state) => state?.handleTrackState.allTrack));
+  const [allTracks, setAllTracks] = useState(
+    useSelector((state) => state?.handleTrackState.allTrack)
+  );
   const isEmptyList = !isLoading && !data?.length;
   const filterAuthor = useSelector(
     (state) => state?.handleTrackState?.filterAuthor
@@ -53,13 +54,22 @@ export function MainPageRender() {
   );
   if (error) {
     seterrorMessage(error.message);
+    return (
+      <h3>
+        Не удалось загрузить плейлист, попробуйте позже:{' '}
+        {JSON.stringify(error.data, null, 2)}
+      </h3>
+    )
   }
   if (isEmptyList) {
     seterrorMessage("Список треков пуст");
   }
 
+  /*   useEffect(() => {
+    dispatch(setAllTrack(data))
+}, []);
+ */
   const filterTracks = () => {
-
     let allFilterTrack = data;
     if (filterGenre.length > 0) {
       allFilterTrack = allFilterTrack?.filter(({ genre }) =>
@@ -96,9 +106,8 @@ export function MainPageRender() {
     dispatch(setPage("allTrack"));
     if (data) {
       dispatch(setCurrentPlaylist(allFilterTrack));
-      //  setAllTracks(data);
     }
-  }, [ allFilterTrack]);
+  }, [allFilterTrack]);
 
   return (
     <S.Container>

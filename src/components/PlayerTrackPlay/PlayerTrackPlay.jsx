@@ -1,5 +1,8 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-use-before-define */
 import { useState, useEffect } from "react";
 import {
+  refreshToken,
   useLikeTrackMutation,
   useDislikeTrackMutation,
 } from "../../Services/ApiTrack";
@@ -12,22 +15,22 @@ export function TrackPlayRender(props) {
   const [disLikeTrack] = useDislikeTrackMutation();
   const idTrack = props.trackStore.id;
 
+  const toogleLikeDislike = (id, isLike) => {
+    isLike ? handleDislike(id) : handleLike(id);
+  };
+
   const handleLike = async (id) => {
-    likeTrack({ id })
-   setIsLiked(true);
+    const result = await likeTrack({ id });
+    result.error
+      ? setIsLiked(refreshToken(() => likeTrack({ id })))
+      : setIsLiked(true);
   };
 
   const handleDislike = async (id) => {
-    disLikeTrack({ id })
-    setIsLiked(false)
-  };
-
-  const toogleLikeDislike = (id,isLike) => {
-    if (isLike) {
-      handleDislike(id);
-    } else {
-      handleLike(id);
-    }
+    const result = await disLikeTrack({ id });
+    result.error
+      ? setIsLiked(refreshToken(() => disLikeTrack({ id })))
+      : setIsLiked(false);
   };
 
   useEffect(() => {
@@ -63,7 +66,8 @@ export function TrackPlayRender(props) {
         </S.TrackPlayAuthor>
       </S.TrackPlayContain>
 
-      <S.TrackPlayLikeDis>{isLiked}
+      <S.TrackPlayLikeDis>
+        {isLiked}
         {isLiked ? (
           <S.TrackPlayDis onClick={() => toogleLikeDislike(idTrack, true)}>
             <S.TrackPlaySvg

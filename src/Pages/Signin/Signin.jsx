@@ -4,6 +4,7 @@
 import { useContext, useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { setCurrentTrack } from "../../Store/Slice/Slice";
 import { validEmail, validPassword } from "../../assets/function";
 import * as S from "../Signup/SSignup";
 import ContainerEnter from "./SSIgnin";
@@ -22,6 +23,8 @@ export const SigninRender = () => {
   const passwordRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  dispatch(setCurrentTrack(false))
 
   const userEmailValidate = () => {
     setEmail(validEmail(emailRef.current.value));

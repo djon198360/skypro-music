@@ -53,7 +53,7 @@ export const allTrackStore = createApi({
         };
       },
       providesTags: (result = []) => [
-        ...result.map(({ id }) => ({ type: "Favorite", id })),
+        ...result.map(({ id }) => ({ type: "Tracks", id })),
         DATA_TAG,
       ],
     }),
@@ -64,7 +64,12 @@ export const allTrackStore = createApi({
           url: `catalog/track/${id}`,
         };
       },
-      providesTags: { type: "Favorite" }
+      providesTags: (result = []) => [
+        ...(Array.isArray(result)
+          ? result.map(( track ) => ({ type: "Tracks", id:track?.id }))
+          : []),
+        DATA_TAG,
+      ],
       
       /*  query: (id) => `catalog/track/${id}`,
       providesTags: (result = []) => [
@@ -81,6 +86,17 @@ export const allTrackStore = createApi({
       ],
     }),
 
+    getCategory: builder.query({
+      query: (data) => `catalog/selection/${data}`,
+      providesTags: (result = []) => [
+        ...(Array.isArray(result)
+          ? result.map(({ id }) => ({ type: "Tracks", id }))
+          : []),
+        DATA_TAG,
+      ],
+      
+    }),
+
     likeTrack: builder.mutation({
       query(data) {
         const { id } = data;
@@ -92,7 +108,7 @@ export const allTrackStore = createApi({
           },
         };
       },
-      invalidatesTags: (track) => [{ type: "Favorite", id: track?.id }],
+      invalidatesTags: (track) => [{ type: "Tracks", id: track?.id }],
     }),
 
     DislikeTrack: builder.mutation({
@@ -106,21 +122,7 @@ export const allTrackStore = createApi({
           },
         };
       },
-
-      /*            async onQueryStarted(id, { queryFulfilled }) {
-        
-        console.log("reading");
-        try {
-          const {datas} = await queryFulfilled;
-          
-          console.log("Post received!");
-        } catch (onError ) {
-          
-          console.log("Error fetching post!");
-        }
-      },  */
-
-      invalidatesTags: (track) => [{ type: "Favorite", id: track?.id }],
+      invalidatesTags: (track) => [{ type: "Tracks", id: track?.id }],
     }),
   }),
 });
@@ -130,6 +132,7 @@ export const {
   useGetAllTrackQuery,
   useLikeTrackMutation,
   useDislikeTrackMutation,
+  useGetCategoryQuery,
   useRefreshTokenMutation,
   useGetTrackIdQuery,
 } = allTrackStore;

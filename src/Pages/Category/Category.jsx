@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
-import { getTrackCategory } from "../../API/Api";
 import { NavMenuLeftRender } from "../../components/NavLeft/NavLeft"; // "../NavLeft/NavLeft";
 import SearchFormRender from "../../components/SearchForm/SearchForm";
 import {
@@ -15,40 +14,33 @@ import {
   SkeletonSideBarRender,
 } from "../../components/Skeleton/Skeleton";
 import { Context } from "../../assets/context";
+import { useGetCategoryQuery } from "../../Services/ApiTrack";
 import { setTrackCategory, setPage } from "../../Store/Slice/Slice";
 import * as S from "../Main/SMain";
 import * as SS from "../../components/SideBar/style";
 
 function CategoryPageRender() {
   const [user] = useContext(Context);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [errors, setErrors] = useState();
   const dispatch = useDispatch();
   const location = useLocation();
+  const idPage = location.pathname.split("/").pop();
+  const { data, error, isLoading } = useGetCategoryQuery(idPage);
 
-  const getCategory = (id) => {
-    setIsLoading(true);
-    getTrackCategory(id)
-      .then((data) => {
-        dispatch(setTrackCategory(data));
-      })
-      .catch(() => {
-        setError("Произошла ошибка");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
-  const categoryTrack = useSelector(
-    (state) => state.handleTrackState.category.items
-  );
+  if (error) {
+    setErrors("Произошла ошибка");
+  }
 
   useEffect(() => {
+    if (data) {
+      dispatch(setTrackCategory(data));
+    }
     dispatch(setPage("Category"));
-    const id = location.pathname.split("/").pop();
-    getCategory(id);
-  }, []);
+  }, [data]);
+
+  const categoryTrack = useSelector(
+    (state) => state.handleTrackState.categoryTrack.items
+  );
 
   return (
     <S.Container>
@@ -60,10 +52,10 @@ function CategoryPageRender() {
           <S.centerblockContent>
             {error ? (
               <ErrorDescriptionRender>
-                {Object.values(error).map((errors) =>
-                  errors ? (
+                {Object.values(errors).map((e) =>
+                  e ? (
                     <ErrorDescriptionRender>
-                      {errors} {"\n"}
+                      {e} {"\n"}
                     </ErrorDescriptionRender>
                   ) : null
                 )}
@@ -72,17 +64,14 @@ function CategoryPageRender() {
               <TrackDescriptionCaptionRender />
             )}
             {isLoading ? <SkeletonTrackRender /> : null}
-
-            {categoryTrack &&
-            categoryTrack.length > 0 &&
-            !isLoading &&
-            !error ? (
-              <PlayListItemRender trackStore={categoryTrack} />
-            ) : (
+            {error ? (
               <ErrorDescriptionRender errors="No track">
-                No Track
-              </ErrorDescriptionRender> // <ErrorDescriptionRender errors={Object.values(error).map((errors) =>errors)}></ErrorDescriptionRender>
-            )}
+                Произошла ошибка
+              </ErrorDescriptionRender>
+            ) : null}
+            {categoryTrack && categoryTrack.length > 0 && !isLoading ? (
+              <PlayListItemRender trackStore={categoryTrack} />
+            ) : null}
           </S.centerblockContent>
         </S.mainCenterblock>
         {isLoading ? (
