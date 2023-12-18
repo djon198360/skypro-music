@@ -16,14 +16,22 @@ const initialState = {
   accessToken:null,
   refreshToken:null,
   favoriteTrack:[],
+  categoryTrack:[],
   allTrack:[],
-  page:"allTrack"
+  currentPlaylist:[],
+  page:"allTrack",
+  filterAuthor:[],
+  filterGenre:[],
+  filterYear:[],
 };
-// const count = useSelector((state) => state)
+
 export const postsSlice = createSlice({
   name: "handleTrackState",
   initialState,
   reducers: {
+    setCurrentPlaylist(state, action) {
+      state.currentPlaylist = action.payload;
+    },
     setCurrentTrack(state, action) {
       state.current_track = action.payload;
     },
@@ -59,13 +67,35 @@ export const postsSlice = createSlice({
     setAllTrack(state, action) {
       state.allTrack = action.payload;
     },
+    setTrackCategory(state, action) {
+      state.categoryTrack = action.payload;
+    },
     setPage(state, action) {
       state.page = action.payload;
+    },
+    setFilterAuthors(state, action) {
+      return {
+        ...state,
+        filterAuthor: action.payload
+      }
+    },
+    setFilterGenres(state, action) {
+      return {
+      ...state,
+      filterGenre:action.payload
+      }
+    },
+    setFilterYears(state, action) {
+      return {
+        ...state,
+     filterYear : action.payload
+      }
     },
   },
 });
 
 export const {
+  setCurrentPlaylist,
   setCurrentTrack,
   setIsPlaying,
   addShuffleTrack,
@@ -77,6 +107,10 @@ export const {
   setRefreshToken,
   setFavoriteAllTrack,
   setAllTrack,
+  setTrackCategory,
   setPage,
+  setFilterAuthors,
+  setFilterGenres,
+  setFilterYears,
 } = postsSlice.actions;
 export default postsSlice.reducer;

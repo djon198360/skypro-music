@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable prefer-const */
 import { createContext } from "react";
+import { useDispatch } from "react-redux";
+import { setIsPlaying } from "../../Store/Slice/Slice";
 
 export const Context = createContext(false);
 export const isShuffle = createContext(false);
 export const refAudios = createContext({ currentTrack: false });
-export const Loading = createContext({ isLoading: true });
+// export const Loading = createContext({ isLoading: true });
 export const setCurrentTrackContext = createContext({ isCurrent: false });
 
 const APIHOST = "https://skypro-music-api.skyeng.tech/user/";
@@ -55,8 +57,11 @@ export async function checkRegisterData(email, password, username) {
 }
 
 export const Logaut = () => {
+  const dispatch = useDispatch()
   localStorage.removeItem("user");
-  return false;
+  dispatch(setIsPlaying(false))
+  alert('44')
+ // return false;
 };
 
 export default Context;

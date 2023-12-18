@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react/jsx-no-constructed-context-values */
-
 import { StrictMode, useState } from "react";
 import { useSelector } from "react-redux";
 import AppRoutes from "./components/Routes/Routes";
@@ -15,7 +14,7 @@ export function App() {
   const userLocal = localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user")).username
     : false;
-  const [user, setUser] = useState(userLocal);
+  const [user, setUser] = useState(userLocal)
 
   const loading = useSelector(loadingSelector);
   const currentTrackStore = useSelector(

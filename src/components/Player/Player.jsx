@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { TrackPlayRender } from "../PlayerTrackPlay/PlayerTrackPlay";
 import { SkeletonTrackPlayRender } from "../Skeleton/Skeleton";
 import { creatorCurrentTrack } from "../../assets/function";
-import { useGetAllTrackQuery } from "../../Services/ApiTrack";
+// import { useGetAllTrackQuery } from "../../Services/ApiTrack";
 import {
   setIsPlaying,
   setCurrentTrack,
@@ -15,17 +15,16 @@ import {
   setIsMuted,
 } from "../../Store/Slice/Slice";
 import * as S from "./style";
-import { setCurrentTrackContext } from "../AuthForm/AuthForm";
 
 export function PlayerRender(toggle) {
-console.log(toggle)
-  const { data, isLoading } = useGetAllTrackQuery({
+  const dispatch = useDispatch();
+/*   const { data, isLoading } = useGetAllTrackQuery({
     refetchOnReconnect: true,
-  });
-  const allTrackStore = data;
+  }); */
+
   const audioRef = useRef(null);
-console.dir(allTrackStore)
   const stateHandleTrackState = useSelector((state) => state.handleTrackState);
+  const allTrackStore = stateHandleTrackState.currentPlaylist;
   const currentTrackStore = stateHandleTrackState.current_track;
   const isPlaying = stateHandleTrackState.isPlaying_track;
   const isShuffle = stateHandleTrackState.shuffle;
@@ -36,7 +35,7 @@ console.dir(allTrackStore)
   const [isVolume, setIsVolume] = useState(0.2);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const dispatch = useDispatch();
+ 
 
   const shuffleTrack = () => {
     dispatch(addShuffleTrack(true));
@@ -44,7 +43,7 @@ console.dir(allTrackStore)
       Math.random() * Object.keys(allTrackStore).length
     );
     dispatch(
-      setCurrentTrack(creatorCurrentTrack(data[randomTrack], randomTrack))
+      setCurrentTrack(creatorCurrentTrack(allTrackStore[randomTrack], randomTrack))
     );
   };
 
@@ -65,7 +64,7 @@ console.dir(allTrackStore)
           dispatch(addNextTrack(creatorCurrentTrack(currentTrackStore)))
         : shuffleTrack();
     } else {
-      allTrackStore[(currentTrackStore.key - 1)]
+      allTrackStore[currentTrackStore.key - 1]
         ? dispatch(
             setCurrentTrack(
               creatorCurrentTrack(
@@ -196,7 +195,7 @@ console.dir(allTrackStore)
   useEffect(() => {
     dispatch(setIsPlaying(true));
     setStart();
-  }, [currentTrackStore.track_file]);
+  }, [toggle]); 
 
   useEffect(() => {
     //  currentTrackStore ? setUrlmp3(currentTrackStore.track_file || false) : null;
@@ -208,11 +207,7 @@ console.dir(allTrackStore)
         ? audioRef.current.removeEventListener("timeupdate", setTimeUpdate)
         : null;
     };
-  }, [props.current.url]);
-
-const noFunct = () => {
-  alert("Ещё не реализовано")
-}
+  }, [currentTrackStore, isShuffle]);
 
   return (
     <S.Bar>
@@ -243,7 +238,7 @@ const noFunct = () => {
                   $width="15px"
                   $height="14px"
                   $fill="transparent"
-                 // $stroke={allTrackStore[(currentTrackStore.key - 1)] ? "#fff" : "red" }
+                  // $stroke={allTrackStore[(currentTrackStore.key - 1)] ? "#fff" : "red" }
                   alt="prev"
                 >
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-prev" />
@@ -277,7 +272,7 @@ const noFunct = () => {
                   $width="15px"
                   $height="14px"
                   $fill="transparent"
-/*                   $stroke={
+                  /*                   $stroke={
                     allTrackStore[currentTrackStore.key + 1] ? "#fff" : "red"
                   } */
                   alt="next"
@@ -285,32 +280,20 @@ const noFunct = () => {
                   <S.Use xlinkHref="../img/icon/sprite.svg#icon-next" />
                 </S.PlayerBtnSvg>
               </S.PlayerControlsBtnNext>
-              {isLoop ? (
-                <S.PlayerControlsBtnRepeat onClick={toggleLoop}>
-                  <S.PlayerBtnSvg
-                    $width="18px"
-                    $height="12px"
-                    $fill="transparent"
-                    $stroke="#fff"
-                    alt="repeat"
-                  >
-                    <S.Use xlinkHref="../img/icon/sprite.svg#icon-repeat" />
-                  </S.PlayerBtnSvg>
-                </S.PlayerControlsBtnRepeat>
-              ) : (
-                <S.PlayerControlsBtnRepeat onClick={toggleLoop}>
-                  <S.PlayerBtnSvg
-                    $width="18px"
-                    $height="12px"
-                    $fill="transparent"
-                    $stroke="#696969"
-                    alt="repeat"
-                  >
-                    <S.Use xlinkHref="../img/icon/sprite.svg#icon-repeat" />
-                  </S.PlayerBtnSvg>
-                </S.PlayerControlsBtnRepeat>
-              )}
-              <S.PlayerControlsBtnShuffle onClick={noFunct}>
+
+              <S.PlayerControlsBtnRepeat onClick={toggleLoop}>
+                <S.PlayerBtnSvg
+                  $width="18px"
+                  $height="12px"
+                  $fill="transparent"
+                  $stroke={isLoop ? "#fff" : "#696969"}
+                  alt="repeat"
+                >
+                  <S.Use xlinkHref="../img/icon/sprite.svg#icon-repeat" />
+                </S.PlayerBtnSvg>
+              </S.PlayerControlsBtnRepeat>
+
+              <S.PlayerControlsBtnShuffle onClick={toggleShuffle}>
                 <S.PlayerBtnSvg
                   $width="19px"
                   $height="12px"
@@ -322,17 +305,10 @@ const noFunct = () => {
                 </S.PlayerBtnSvg>
               </S.PlayerControlsBtnShuffle>
             </S.PlayerControls>
-            {isLoading ? (
+            {!currentTrackStore ? (
               <SkeletonTrackPlayRender />
             ) : (
-              <TrackPlayRender
-                name_link="http://"
-                name_text={currentTrackStore ? currentTrackStore.name : null}
-                author_link="http://"
-                author_text={
-                  currentTrackStore ? currentTrackStore.author : null
-                }
-              />
+              <TrackPlayRender trackStore={currentTrackStore} />
             )}
           </S.BarPlayer>
           <S.BarVolumeBlock>

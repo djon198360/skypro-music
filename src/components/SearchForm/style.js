@@ -21,6 +21,7 @@ export const SearchText = styled.input.attrs(() => ({
   type: "search",
   name: "search",
 }))`
+outline: none;
   -webkit-box-flex: 100;
   -ms-flex-positive: 100;
   flex-grow: 100;

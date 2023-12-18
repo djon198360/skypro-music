@@ -25,13 +25,27 @@ export const FilterPopapItem = styled.div`
 `;
 
 export const FilterPopapContent = styled.div``;
-export const FilterPopapLink = styled.a.attrs()`
-  color: #fff;
+
+export const FilterPopaptable = styled.div.attrs((props) => ({
+  "data-name": props.name,
+  "aria-hidden": "true",
+  "onClick":props.onClick
+}))`
+`;
+
+export const FilterPopapLink = styled.a.attrs((props) => ({
+  "data-name": props.name,
+  "aria-hidden": "true",
+  "onClick":props.onClick
+}))`
+ // color: #fff;
   font-family: StratosSkyeng;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: 24px;
+ color: ${(props) => (props.$state ? '#ad61ff' : " #fff")};
+
   &:hover {border-color: #d9b6ff;
   color: #d9b6ff;
   cursor: pointer;}
